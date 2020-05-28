@@ -284,6 +284,18 @@ class _ProductItemCardStatefulState extends State<ProductItemCardStateful> {
 
                           onPressed: () {
                             print('ProductItemCard -> CartButton -> onPressed');
+                            Scaffold.of(context).hideCurrentSnackBar();
+                            Scaffold.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                'Added Item to the Cart',
+                                textAlign: TextAlign.center,
+                              ),
+                              duration: Duration(seconds: 2),
+                              backgroundColor: Colors.pink,
+                            ),
+                          
+                        );
                           },
                           onLongPress: () {
                             print('ProductItemCard -> CartButton -> onLongPress');

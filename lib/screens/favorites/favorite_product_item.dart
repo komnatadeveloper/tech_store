@@ -216,8 +216,21 @@ class _FavoriteProductItemStatefulState extends State<FavoriteProductItemStatefu
                             color: Colors.white,
                           ),                        
                         ),
-                      onPressed: () {},
                       color: Colors.green,
+                      onPressed: () {
+                        Scaffold.of(context).hideCurrentSnackBar();
+                        Scaffold.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              'Added Item to the Cart',
+                              textAlign: TextAlign.center,
+                            ),
+                            duration: Duration(seconds: 2),
+                            backgroundColor: Colors.pink,
+                          ),
+                          
+                        );
+                      },
                     ),
                   ),
 
@@ -225,7 +238,64 @@ class _FavoriteProductItemStatefulState extends State<FavoriteProductItemStatefu
                   Container(
                     height: rightWidth - 2 * rightPaddingAll,
                     child: RaisedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: ( ctx ) => AlertDialog(   
+                            contentPadding: EdgeInsets.zero,
+                            // actionsPadding: EdgeInsets.zero,   
+                            buttonPadding: EdgeInsets.zero,   
+                            titlePadding: EdgeInsets.only(
+                              top: 20,
+                              left: 15,
+                              right: 15,
+                              bottom: 26,
+                            ),                  
+                            title: Container(
+                              alignment: Alignment.center,
+                              // color: Colors.pink,
+                              child: Text(
+                                'Are you sure you want to remove  from favorites?' 
+                              ),
+                            ),
+
+                            content:Container(
+                              // color: Colors.pink,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: <Widget>[
+                                  FlatButton(
+                                    child: Text(
+                                      'No',
+                                      style: TextStyle(
+                                        fontSize: 21
+                                      ),
+                                    ),
+                                    textColor: Colors.blue,
+                                    onPressed: () {
+                                      print('FavoriteProductItem -> Remove Button -> AlertDialog -> No');
+                                      Navigator.of(ctx).pop();
+                                    },
+                                  ),
+                                  FlatButton(
+                                    child: Text(
+                                      'Yes',
+                                      style: TextStyle(
+                                        fontSize: 21
+                                      ),
+                                    ),
+                                    textColor: Colors.blue,
+                                    onPressed: () {
+                                      print('FavoriteProductItem -> Remove Button -> AlertDialog -> Yes');
+                                      Navigator.of(ctx).pop();
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ), 
+                          )
+                        );
+                      },
                       color: Colors.red,
                       padding: EdgeInsets.zero,
                       child: Icon(

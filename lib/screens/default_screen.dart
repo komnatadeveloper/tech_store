@@ -19,6 +19,7 @@ class _DefaultScreenState extends State<DefaultScreen> {
 
   List<Map<String, Object>> _pages;
   int _selectedPageIndex = 0;
+  final _appbarBackgroundColor = Color.fromRGBO(208, 57, 28, 1);
 
 
 
@@ -61,23 +62,88 @@ class _DefaultScreenState extends State<DefaultScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color.fromRGBO(208, 57, 28, 1),
-        actions: <Widget>[
+      // appBar: AppBar(
+      //   backgroundColor: Color.fromRGBO(208, 57, 28, 1),
+      //   flexibleSpace: Container(
+      //     height: 150,
+      //     child: null,
+      //   ),
+      //   actions: <Widget>[
 
-        ],
-        title: Container(
-          color: Colors.yellow,
-          width: double.infinity,
-          margin: EdgeInsets.only(right: 60),
-          child: Text(
-            _pages[_selectedPageIndex]['title'],
-            textAlign: TextAlign.center,
-          ),
+      //   ],
+      //   title: Container(
+      //     color: Colors.yellow,
+      //     width: double.infinity,
+      //     margin: EdgeInsets.only(right: 60),
+      //     child: Column(
+      //       children: <Widget>[
+      //         Text(
+      //           _pages[_selectedPageIndex]['title'],
+      //           textAlign: TextAlign.center,
+      //         ),
+      //         TextField(
+      //           decoration: InputDecoration(
+      //             fillColor: Colors.pink,
+      //             filled: true
+      //           ),
+      //         )
+      //       ],
+      //     ),
+      //   ),
+      // ),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(101.0),
+        
+        child: Column(
+          children: <Widget>[
+            AppBar(
+              backgroundColor: _appbarBackgroundColor,
+              // flexibleSpace: Container(
+              //   height: 100,
+              //   child: null,
+              // ),
+              actions: <Widget>[
+                
+              ],
+              title: Container(
+                color: Colors.yellow,
+                width: double.infinity,
+                margin: EdgeInsets.only(right: 60),
+                child: Column(
+                  children: <Widget>[
+                    Text(
+                      _pages[_selectedPageIndex]['title'],
+                      textAlign: TextAlign.center,
+                    ),                    
+                  ],
+                ),
+              ),
+            ),
+            Container(
+              color: _appbarBackgroundColor,
+              height: 30,
+              padding: EdgeInsets.symmetric(horizontal: 15),
+              child: TextField(
+                cursorColor: Colors.pink,
+                decoration: InputDecoration(
+                  fillColor: Colors.white,
+                  filled: true,  
+                  prefixIcon: Icon(
+                    Icons.search,
+                    color: Colors.grey,
+                  ),                  
+                  border: InputBorder.none,          
+                                  
+                ),
+                
+              ),
+            ),
+            Container(
+              color: _appbarBackgroundColor,
+              height: 15,
+            )
+          ] 
         ),
-
-        
-        
       ),
       drawer: MainDrawer(),
 

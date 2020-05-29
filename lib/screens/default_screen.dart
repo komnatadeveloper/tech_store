@@ -61,6 +61,62 @@ class _DefaultScreenState extends State<DefaultScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    var varAppBar = Builder(
+      builder: ( BuildContext ctx) {
+        return PreferredSize(
+          preferredSize: Size.fromHeight(101.0),
+          
+          child: Container(
+            padding: EdgeInsets.only(
+              top: MediaQuery.of(ctx).padding.top
+            ),
+            color: _appbarBackgroundColor,
+            child: Column(
+              children: <Widget>[
+                Container(
+                  height: 40,
+                  padding: EdgeInsets.only(
+                    left: 20,
+                    right: 20
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      IconButton(
+                        icon: Icon(
+                          Icons.menu,
+                          size: 28,
+                        ),
+                        color: Colors.white,
+                        onPressed: () {
+                          Scaffold.of(context).openDrawer();
+                        },
+                      ),
+                      Text(
+                        _pages[_selectedPageIndex]['title'],
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 24
+                        ),
+                        //  textAlign: TextAlign.center,
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.shopping_cart),
+                        color: Colors.white,
+                        onPressed: () {},
+                      ),
+                    ],
+                  ),
+                )
+              ] 
+            ),
+          ),
+        );
+      },
+    ); 
+
     return Scaffold(
       // appBar: AppBar(
       //   backgroundColor: Color.fromRGBO(208, 57, 28, 1),
@@ -91,30 +147,40 @@ class _DefaultScreenState extends State<DefaultScreen> {
       //     ),
       //   ),
       // ),
+      
+
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(101.0),
         
         child: Column(
           children: <Widget>[
             AppBar(
+              centerTitle: false,
+
               backgroundColor: _appbarBackgroundColor,
-              // flexibleSpace: Container(
-              //   height: 100,
-              //   child: null,
-              // ),
-              actions: <Widget>[
-                
+              actions: <Widget>[                
               ],
               title: Container(
-                color: Colors.yellow,
+                
+                // color: Colors.yellow,
                 width: double.infinity,
-                margin: EdgeInsets.only(right: 60),
-                child: Column(
+                // margin: EdgeInsets.only(right: 60),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text(
-                      _pages[_selectedPageIndex]['title'],
-                      textAlign: TextAlign.center,
-                    ),                    
+                    Expanded(                      
+                      child: Text(
+                        _pages[_selectedPageIndex]['title'],
+                        textAlign: TextAlign.center,
+                      ),
+                    ),  
+                    IconButton(
+                      icon: Icon(
+                        Icons.shopping_cart,
+                        size: 24,
+                      ),
+                      onPressed: () {},
+                    )                
                   ],
                 ),
               ),
@@ -145,6 +211,7 @@ class _DefaultScreenState extends State<DefaultScreen> {
           ] 
         ),
       ),
+
       drawer: MainDrawer(),
 
       body: _pages[_selectedPageIndex]['page'],

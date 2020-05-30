@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 // Screens
 import './screens/default_screen.dart';
+import './screens/product_detail/product_detail_screen.dart';
 
 
 void main() {
@@ -43,7 +44,8 @@ class _MyAppState extends State<MyApp> {
       ),
       initialRoute: '/',
       routes: {
-        '/' : (ctx) => DefaultScreen()
+        '/' : (ctx) => DefaultScreen(),
+        ProductDetailScreen.routeName : (ctx) => ProductDetailScreen()
       },
     );
   }

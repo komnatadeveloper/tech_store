@@ -189,18 +189,35 @@ class _DefaultScreenState extends State<DefaultScreen> {
               color: _appbarBackgroundColor,
               height: 30,
               padding: EdgeInsets.symmetric(horizontal: 15),
-              child: TextField(
+              child: TextField(                
                 cursorColor: Colors.pink,
+                // textAlign: TextAlign.start,
+                style: TextStyle(
+                  fontSize: 12,
+                ),
+                
+                
                 decoration: InputDecoration(
                   fillColor: Colors.white,
                   filled: true,  
+                  // labelText: 'Search in Tech Store',
+                  hintText: 'Search in Tech Store',
+                  
+                  contentPadding: EdgeInsets.only(
+                    bottom: 10
+                  ),
+                  
+                  
                   prefixIcon: Icon(
                     Icons.search,
                     color: Colors.grey,
                   ),                  
-                  border: InputBorder.none,          
+                  border: InputBorder.none,  
+                  
+                          
                                   
                 ),
+                
                 
               ),
             ),

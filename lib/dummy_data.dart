@@ -179,3 +179,30 @@ List<DrawerMenuItem> dummyDrawerMenuList = [
   //   title: 'Computers & Tablets',
   //   parentId: '-2'
   // ),
+
+
+
+
+var   dummySampleProductDetailsItem = {
+  'imageUrlList' : [
+    'https://warungkomputer.com/wp-content/uploads/2019/02/iStock_000005414770Medium1.jpg',
+    'https://3.bp.blogspot.com/-bgaRxVcT7gM/VITRlmiLstI/AAAAAAAAAbw/B-7WHpQUTV0/s1600/Merawat%2BKomputer.jpg',
+    'https://impuls-it.ru/upload/iblock/572/2a9/1.jpg'
+  ],
+  'brand': 'Lenovo',
+  'productNo': '90LX004DTX',
+  'keyProperties': '510S CI5 2.90 GHz 9400F 4GB 256GB SSD Ubuntu',
+  'specifications': [
+    {'Processor Family': 'Intel CI5'},
+    {'Processor Model': 'Intel CI5-9100 3.6GHz'},
+    {'Screen Size': '15.6"' },
+    {'Screen Resolution': '1920x1080'},
+    {'Operating System': 'Ubuntu'},
+    {'Optical Readers': 'None'},
+    {'Webcam': 'Exists'},
+    {'Wi-Fi': 'Exists'},
+    {'Warranty': '2 Years'}
+  ],
+  'price': 485.25,
+  'stockStatus': '5'
+};

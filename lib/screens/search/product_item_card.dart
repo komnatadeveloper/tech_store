@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../product_detail/product_detail_screen.dart';
+
 class ProductItemCard  extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -81,6 +83,7 @@ class _ProductItemCardStatefulState extends State<ProductItemCardStateful> {
       child: GestureDetector(
         onTap: () {
           print( 'ProductItemCard ->  GestureDetector -> onTap' );
+          Navigator.of(context).pushNamed( ProductDetailScreen.routeName );
         },
         child: AnimatedOpacity(
           duration: Duration(milliseconds: 500),

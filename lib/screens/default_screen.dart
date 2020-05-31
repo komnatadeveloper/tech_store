@@ -10,6 +10,7 @@ import './account/account_screen.dart';
 
 
 class DefaultScreen extends StatefulWidget {
+  static const routeName = '/';
   @override
   _DefaultScreenState createState() => _DefaultScreenState();
 }

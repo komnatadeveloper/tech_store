@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 // Screens
 import './screens/default_screen.dart';
 import './screens/product_detail/product_detail_screen.dart';
+import './screens/auth/auth_screen.dart';
 
 
 void main() {
@@ -42,10 +43,12 @@ class _MyAppState extends State<MyApp> {
           height: 15
         )
       ),
-      initialRoute: '/',
+      // initialRoute: '/',
+      initialRoute: AuthScreen.routeName,
       routes: {
         '/' : (ctx) => DefaultScreen(),
-        ProductDetailScreen.routeName : (ctx) => ProductDetailScreen()
+        ProductDetailScreen.routeName : (ctx) => ProductDetailScreen(),
+        AuthScreen.routeName : (ctx) => AuthScreen(),
       },
     );
   }

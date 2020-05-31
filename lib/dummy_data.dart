@@ -71,101 +71,166 @@ List<DrawerMenuItem> dummyDrawerMenuList = [
     title: 'Tablets',
     parentId: '1',
   ),
+  // Sub Items
+    DrawerMenuItem(
+    id: '14',
+    title: 'Storage Discs',
+    parentId: '2',
+  ),
+    DrawerMenuItem(
+    id: '15',
+    title: 'Network',
+    parentId: '2',
+  ),
+    DrawerMenuItem(
+    id: '16',
+    title: 'RAM',
+    parentId: '2',
+  ),
+    DrawerMenuItem(
+    id: '17',
+    title: 'Mainboards',
+    parentId: '2',
+  ),
+  // Gaming Sub Items
+    DrawerMenuItem(
+    id: '18',
+    title: 'Gaming Notebook',
+    parentId: '3',
+  ),
+    DrawerMenuItem(
+    id: '19',
+    title: 'Gaming Desktop',
+    parentId: '3',
+  ),
+  // Office Consumed Products Sub items
+    DrawerMenuItem(
+    id: '20',
+    title: 'Consumer Products',
+    parentId: '4',
+  ),
+    DrawerMenuItem(
+    id: '21',
+    title: '3D Printer Equipments',
+    parentId: '4',
+  ),
+  // Enterprise Sub items
+    DrawerMenuItem(
+    id: '22',
+    title: 'Thin Client',
+    parentId: '8',
+  ),
+    DrawerMenuItem(
+    id: '23',
+    title: 'Workstation',
+    parentId: '8',
+  ),
+  // Security Sub items
+    DrawerMenuItem(
+    id: '24',
+    title: 'AHD Security Systems',
+    parentId: '9',
+  ),
+    DrawerMenuItem(
+    id: '25',
+    title: 'IP - Network CCTV Systems',
+    parentId: '9',
+  ),
 
   //  Droppable Items
       DrawerMenuItem(
-    id: '14',
+    id: '26',
     title: 'Notebooks',
     parentId: '12',
   ),
     DrawerMenuItem(
-    id: '15',
+    id: '27',
     title: 'Two-in-One',
     parentId: '12',
   ),
     DrawerMenuItem(
-    id: '16',
+    id: '28',
     title: 'Notebook Accessories',
     parentId: '12',
   ),
 
   DrawerMenuItem(
-    id: '15',
+    id: '29',
     title: 'TEST1',
     parentId: '13',
   ),
     DrawerMenuItem(
-    id: '16',
+    id: '30',
     title: 'TEST2',
     parentId: '13',
   ),
   DrawerMenuItem(
-    id: '15',
+    id: '31',
     title: 'TEST1',
     parentId: '13',
   ),
     DrawerMenuItem(
-    id: '16',
+    id: '32',
     title: 'TEST2',
     parentId: '13',
   ),
   DrawerMenuItem(
-    id: '15',
+    id: '33',
     title: 'TEST1',
     parentId: '13',
   ),
     DrawerMenuItem(
-    id: '16',
+    id: '34',
     title: 'TEST2',
     parentId: '13',
   ),
   DrawerMenuItem(
-    id: '15',
+    id: '35',
     title: 'TEST1',
     parentId: '13',
   ),
     DrawerMenuItem(
-    id: '16',
+    id: '36',
     title: 'TEST2',
     parentId: '13',
   ),
   DrawerMenuItem(
-    id: '15',
+    id: '37',
     title: 'TEST1',
     parentId: '13',
   ),
     DrawerMenuItem(
-    id: '16',
+    id: '38',
     title: 'TEST2',
     parentId: '13',
   ),
   DrawerMenuItem(
-    id: '15',
+    id: '39',
     title: 'TEST1',
     parentId: '13',
   ),
     DrawerMenuItem(
-    id: '16',
+    id: '40',
     title: 'TEST2',
     parentId: '13',
   ),
   DrawerMenuItem(
-    id: '15',
+    id: '41',
     title: 'TEST1',
     parentId: '13',
   ),
     DrawerMenuItem(
-    id: '16',
+    id: '42',
     title: 'TEST2',
     parentId: '13',
   ),
   DrawerMenuItem(
-    id: '15',
+    id: '43',
     title: 'TEST1',
     parentId: '13',
   ),
     DrawerMenuItem(
-    id: '16',
+    id: '44',
     title: 'TEST2',
     parentId: '13',
   ),

@@ -6,6 +6,7 @@ import './home/home_screen.dart';
 import './search/search_screen.dart';
 import './favorites/favorites_screen.dart';
 import './account/account_screen.dart';
+import './cart/cart_screen.dart';
 
 
 
@@ -180,7 +181,11 @@ class _DefaultScreenState extends State<DefaultScreen> {
                         Icons.shopping_cart,
                         size: 24,
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).pushNamed(
+                          CartScreen.routeName
+                        );
+                      },
                     )                
                   ],
                 ),

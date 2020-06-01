@@ -1,17 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+// Providers
+import '../../providers/cart_provider.dart';
+
+
+// Screens
 import '../product_detail/product_detail_screen.dart';
+// Models
+import '../../models/product.dart';
+
 
 class ProductItemCard  extends StatelessWidget {
+  final ProductModel productModel;
+
+  ProductItemCard(
+    this.productModel
+  );
+
   @override
   Widget build(BuildContext context) {
     return ProductItemCardStateful(
-      
+      productModel
     );
   }
 }
 
 class ProductItemCardStateful extends StatefulWidget {
+  final ProductModel productModel;
+
+  ProductItemCardStateful(
+    this.productModel
+  );
   @override
   _ProductItemCardStatefulState createState() => _ProductItemCardStatefulState();
 }
@@ -105,7 +125,8 @@ class _ProductItemCardStatefulState extends State<ProductItemCardStateful> {
                     
                     children: <Widget>[
                       Image.network(
-                        'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1502&q=80',
+                        // 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1502&q=80',
+                        widget.productModel.imageUrl,
                         width: 80,
                         height: 80,
                         fit: BoxFit.cover,
@@ -139,7 +160,7 @@ class _ProductItemCardStatefulState extends State<ProductItemCardStateful> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          'ProductBrand',
+                          widget.productModel.brand,
                           style: TextStyle(
                             fontSize: 16,
                             color: Colors.blue[700]
@@ -151,7 +172,7 @@ class _ProductItemCardStatefulState extends State<ProductItemCardStateful> {
                             bottom: 5
                           ),
                           child: Text(
-                            'ProductCode',
+                            widget.productModel.productNo,
                             style: TextStyle(
                               fontSize: 14,
                               color: Colors.grey[700]
@@ -160,7 +181,7 @@ class _ProductItemCardStatefulState extends State<ProductItemCardStateful> {
                         ),
                         Expanded(
                           child: Text(
-                            'CI7-8700 3.20 Ghz 16GB 240GB SSD Free Dos Mini PC',
+                            widget.productModel.keyProperties,
                             style: TextStyle(
                               fontSize: 14,
                               color: Colors.grey[700]
@@ -186,7 +207,7 @@ class _ProductItemCardStatefulState extends State<ProductItemCardStateful> {
                             bottom:10
                           ),
                           child: Text(
-                            'Price: \$725.85',
+                            'Price: \$${widget.productModel.price}',
                             style: TextStyle(
                               fontSize: 15,
                               color: Colors.red[700]
@@ -287,6 +308,18 @@ class _ProductItemCardStatefulState extends State<ProductItemCardStateful> {
 
                           onPressed: () {
                             print('ProductItemCard -> CartButton -> onPressed');
+                            Provider.of<CartProvider>(context, listen: false)
+                              .addToCart(
+                                  CartItem(
+                                    brand: widget.productModel.brand,
+                                    id: widget.productModel.id,
+                                    productNo: widget.productModel.productNo,
+                                    imageUrl: widget.productModel.imageUrl,
+                                    keyProperties: widget.productModel.keyProperties,
+                                    price: widget.productModel.price,
+                                    quantity: int.parse(_quantityTextController.text)
+                                  )
+                            );
                             Scaffold.of(context).hideCurrentSnackBar();
                             Scaffold.of(context).showSnackBar(
                             SnackBar(

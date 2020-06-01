@@ -271,3 +271,49 @@ var   dummySampleProductDetailsItem = {
   'price': 485.25,
   'stockStatus': '5'
 };
+
+
+
+
+var dummyProductList = [
+  {
+    'id': '150',
+    'brand': 'Dell',
+    'productNo': 'N109VD3670BTO_UBU',
+    'keyProperties': 'Vostro 3670 CI5 2.90 GHz 8400 4GB 1TB HDD Ubuntu',
+    'imageUrl': 'https://www.vladtime.ru/uploads/posts/2016-04/1460473513_1.jpg',
+    'price': 455.85
+  },
+  {
+    'id': '151',
+    'brand': 'Dell',
+    'productNo': '5070MT9700',
+    'keyProperties': 'OptiPlex 5070 CI7 4.70 GHz 9700 32GB 1TB HDD + 512GB SSD  Win 10 Pro',
+    'imageUrl': 'https://im0-tub-ru.yandex.net/i?id=e7b02a9dd42ca1583c7626473cdb43fc&n=13',
+    'price': 1095.58
+  },
+  {
+    'id': '152',
+    'brand': 'Asus',
+    'productNo': '90PD01J5-M06330',
+    'keyProperties': 'M32CD 3670 CI5 2.70 GHz 6400 8GB GeForce GTX 950 1TB HDD Ubuntu',
+    'imageUrl': 'https://best-practice.ru/itemimages/2aa307d6-b566-11e5-a110-001fc65a13f4/90PD01J5-M06330_001.jpg',
+    'price': 750.85
+  },
+  {
+    'id': '153',
+    'brand': 'Asus',
+    'productNo': 'K20CD-DE032T',
+    'keyProperties': '6098 CI3 3.60 GHz 6098 16GB GeForce GTX 720  1TB HDD Ubuntu',
+    'imageUrl': 'https://i.simpalsmedia.com/999.md/BoardImages/900x900/821cc1967ab0a80930e0dad8923eda71.jpg',
+    'price': 625.99
+  },
+  {
+    'id': '154',
+    'brand': 'Acer',
+    'productNo': 'ES2730G',
+    'keyProperties': 'Veriton ES2730G CI5 2.80 GHz 8400 8GB 128GB SDD Windows 10 Pro',
+    'imageUrl': 'https://avatars.mds.yandex.net/get-pdb/1412649/9aa612f6-83b2-479e-843d-6aaac6468fa7/s1200',
+    'price': 700.50
+  },
+];

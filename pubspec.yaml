@@ -24,6 +24,8 @@ dependencies:
   flutter:
     sdk: flutter
 
+  provider: ^3.2.0
+
   # for TOP slider on home screen
   carousel_slider: ^2.1.0
 

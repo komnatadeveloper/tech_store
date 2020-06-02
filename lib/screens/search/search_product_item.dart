@@ -1,22 +1,44 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class ProductItemCard  extends StatelessWidget {
+// Providers
+import '../../providers/cart_provider.dart';
+
+
+// Screens
+import '../product_detail/product_detail_screen.dart';
+// Models
+import '../../models/product.dart';
+
+
+class SearchProductItem  extends StatelessWidget {
+  final ProductModel productModel;
+
+  SearchProductItem(
+    this.productModel
+  );
+
   @override
   Widget build(BuildContext context) {
-    return ProductItemCardStateful(
-      
+    return SearchProductItemStateful(
+      productModel
     );
   }
 }
 
-class ProductItemCardStateful extends StatefulWidget {
+class SearchProductItemStateful extends StatefulWidget {
+  final ProductModel productModel;
+
+  SearchProductItemStateful(
+    this.productModel
+  );
   @override
-  _ProductItemCardStatefulState createState() => _ProductItemCardStatefulState();
+  _SearchProductItemStatefulState createState() => _SearchProductItemStatefulState();
 }
 
 
 //  -------------   STATE   ----------------------
-class _ProductItemCardStatefulState extends State<ProductItemCardStateful> {
+class _SearchProductItemStatefulState extends State<SearchProductItemStateful> {
   final cardHeight = 135.0;
   final rightWidth = 50.0;
   final rightPaddingAll = 8.0;
@@ -81,6 +103,7 @@ class _ProductItemCardStatefulState extends State<ProductItemCardStateful> {
       child: GestureDetector(
         onTap: () {
           print( 'ProductItemCard ->  GestureDetector -> onTap' );
+          Navigator.of(context).pushNamed( ProductDetailScreen.routeName );
         },
         child: AnimatedOpacity(
           duration: Duration(milliseconds: 500),
@@ -102,7 +125,8 @@ class _ProductItemCardStatefulState extends State<ProductItemCardStateful> {
                     
                     children: <Widget>[
                       Image.network(
-                        'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1502&q=80',
+                        // 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1502&q=80',
+                        widget.productModel.imageUrl,
                         width: 80,
                         height: 80,
                         fit: BoxFit.cover,
@@ -136,7 +160,7 @@ class _ProductItemCardStatefulState extends State<ProductItemCardStateful> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          'ProductBrand',
+                          widget.productModel.brand,
                           style: TextStyle(
                             fontSize: 16,
                             color: Colors.blue[700]
@@ -148,7 +172,7 @@ class _ProductItemCardStatefulState extends State<ProductItemCardStateful> {
                             bottom: 5
                           ),
                           child: Text(
-                            'ProductCode',
+                            widget.productModel.productNo,
                             style: TextStyle(
                               fontSize: 14,
                               color: Colors.grey[700]
@@ -157,7 +181,7 @@ class _ProductItemCardStatefulState extends State<ProductItemCardStateful> {
                         ),
                         Expanded(
                           child: Text(
-                            'CI7-8700 3.20 Ghz 16GB 240GB SSD Free Dos Mini PC',
+                            widget.productModel.keyProperties,
                             style: TextStyle(
                               fontSize: 14,
                               color: Colors.grey[700]
@@ -183,7 +207,7 @@ class _ProductItemCardStatefulState extends State<ProductItemCardStateful> {
                             bottom:10
                           ),
                           child: Text(
-                            'Price: \$725.85',
+                            'Price: \$${widget.productModel.price}',
                             style: TextStyle(
                               fontSize: 15,
                               color: Colors.red[700]
@@ -284,6 +308,30 @@ class _ProductItemCardStatefulState extends State<ProductItemCardStateful> {
 
                           onPressed: () {
                             print('ProductItemCard -> CartButton -> onPressed');
+                            Provider.of<CartProvider>(context, listen: false)
+                              .addToCart(
+                                  CartItem(
+                                    brand: widget.productModel.brand,
+                                    id: widget.productModel.id,
+                                    productNo: widget.productModel.productNo,
+                                    imageUrl: widget.productModel.imageUrl,
+                                    keyProperties: widget.productModel.keyProperties,
+                                    price: widget.productModel.price,
+                                    quantity: int.parse(_quantityTextController.text)
+                                  )
+                            );
+                            Scaffold.of(context).hideCurrentSnackBar();
+                            Scaffold.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                'Added Item to the Cart',
+                                textAlign: TextAlign.center,
+                              ),
+                              duration: Duration(seconds: 2),
+                              backgroundColor: Colors.pink,
+                            ),
+                          
+                        );
                           },
                           onLongPress: () {
                             print('ProductItemCard -> CartButton -> onLongPress');

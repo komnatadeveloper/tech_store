@@ -44,6 +44,70 @@ class _CartProductItemState extends State<CartProductItem> {
     super.initState();
   }
 
+  //--------------------------------------------------------------------------
+  void _showRemoveAlert (BuildContext context) {
+    showDialog(
+      context: context,
+      builder: ( ctx ) => AlertDialog(   
+        contentPadding: EdgeInsets.zero,
+        // actionsPadding: EdgeInsets.zero,   
+        buttonPadding: EdgeInsets.zero,   
+        titlePadding: EdgeInsets.only(
+          top: 20,
+          left: 15,
+          right: 15,
+          bottom: 26,
+        ),                  
+        title: Container(
+          alignment: Alignment.center,
+          // color: Colors.pink,
+          child: Text(
+            'Are you sure you want to remove from Cart?' 
+          ),
+        ),
+
+        content:Container(
+          // color: Colors.pink,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              FlatButton(
+                child: Text(
+                  'No',
+                  style: TextStyle(
+                    fontSize: 21
+                  ),
+                ),
+                textColor: Colors.blue,
+                onPressed: () {
+                  print('CartProductItem -> Remove Button -> AlertDialog -> No');
+                  Navigator.of(ctx).pop();
+                },
+              ),
+              FlatButton(
+                child: Text(
+                  'Yes',
+                  style: TextStyle(
+                    fontSize: 21
+                  ),
+                ),
+                textColor: Colors.blue,
+                onPressed: () {
+                  print('CartProductItem -> Remove Button -> AlertDialog -> Yes');
+                  Provider.of<CartProvider>(context, listen: false).removeFromCart(
+                    id: widget.cartItem.id
+                  );
+                  Navigator.of(ctx).pop();
+                },
+              ),
+            ],
+          ),
+        ), 
+      )
+    );
+  }
+  //--------------------------------------------------------------------------
+
   @override
   Widget build(BuildContext context) {
     if( _isInited ) {
@@ -59,13 +123,14 @@ class _CartProductItemState extends State<CartProductItem> {
       },
       child: Card(
         margin: EdgeInsets.only(
-          bottom: 12
+          left: 12,
+          right: 12,
+          bottom: 12,
         ),
         color: Colors.white,
         // elevation: 4,
         
         child: Container(
-          // height: cardHeight,
           decoration: BoxDecoration(
             border: Border(
               bottom: BorderSide(
@@ -74,38 +139,26 @@ class _CartProductItemState extends State<CartProductItem> {
               )
             )
           ),
+          padding: EdgeInsets.only(
+            top:10
+          ),
           child: Row(
             children: <Widget>[
               // Left side - Image & Existence
               Container(            
-                padding: EdgeInsetsDirectional.only(
-                  top: 10
+                padding: EdgeInsets.only(
+                  left: 10,
+                  top: 8
                 ),
                 width: 100,
+                height: cardHeight,
+                alignment: Alignment.topLeft,
                 // color: Colors.pink,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  
-                  children: <Widget>[
-                    Image.network(
-                      widget.cartItem.imageUrl,
-                      width: 80,
-                      height: 80,
-                      fit: BoxFit.cover,
-                    ),
-
-                    Container(
-                      height: 45,
-                      alignment: Alignment.center,
-                      child: Text(
-                        'In Stock',
-                        style: TextStyle(
-                          color: Colors.green[500]
-                        ),
-                      ) // In Stock -OR- Out of Stock
-                      ), 
-                  ],
+                child:  Image.network(
+                  widget.cartItem.imageUrl,
+                  width: 80,
+                  height: 80,
+                  fit: BoxFit.cover,
                 ),
               ), // End of Left side - Image & Existence
 
@@ -115,7 +168,7 @@ class _CartProductItemState extends State<CartProductItem> {
                   width: double.infinity,
                   height: cardHeight,
                   padding: EdgeInsets.only(
-                    top: 8,
+                    top: 0,
                     left: 8.0
                   ),
                   // color: Colors.orange,
@@ -170,7 +223,9 @@ class _CartProductItemState extends State<CartProductItem> {
                               alignment: Alignment.topRight,
                               child: IconButton(
                                 icon: Icon(Icons.delete),
-                                onPressed: () {},
+                                onPressed: () {
+                                  _showRemoveAlert(context);
+                                },
                               ),
                             )
                             
@@ -184,108 +239,126 @@ class _CartProductItemState extends State<CartProductItem> {
                           children: <Widget>[
 
                             Expanded(
-                              child: Column(  // col No: 5
-                                children: <Widget>[
-                                  Row(  // Row no: 6
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[                                    
-                                      Text(
-                                        'Unit Price:',
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          color: Colors.red[700]
+                              child: Padding(
+                                padding: const EdgeInsets.only(right: 12),
+                                child: Column(  // col No: 5
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Row(  // Row no: 6
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[                                    
+                                        Text(
+                                          'Unit Price:',
+                                          style: TextStyle(
+                                            fontSize: 13,
+                                            color: Colors.red[700]
+                                          ),
                                         ),
-                                      ),
-                                      Text(
-                                        '\$${widget.cartItem.price}',
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          color: Colors.red[700]
+                                        Text(
+                                          '\$${widget.cartItem.price.toStringAsFixed(2)}',
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            color: Colors.red[700]
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(  // Row no: 7
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[                                    
-                                      Text(
-                                        'Total Price:',
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          color: Colors.red[700]
+                                      ],
+                                    ),
+                                    Row(  // Row no: 7
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[                                    
+                                        Text(
+                                          'Total Price:',
+                                          style: TextStyle(
+                                            fontSize: 13,
+                                            color: Colors.red[700]
+                                          ),
                                         ),
-                                      ),
-                                      Text(
-                                        // '\$725.85',
-                                        '\$${widget.cartItem.price * widget.cartItem.quantity}',
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          color: Colors.red[700]
+                                        Text(
+                                          // '\$725.85',
+                                          '\$${(widget.cartItem.price * widget.cartItem.quantity).toStringAsFixed(2)}',
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            color: Colors.red[700]
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
 
                             Container(
-                              width: 100,
-                              color: Colors.pink,
-                              padding: EdgeInsets.only(
-                                right: 0
+                              // width: 110,
+                              // color: Colors.pink,
+                              margin: EdgeInsets.only(
+                                right: 10
                               ),
-                              alignment: Alignment.center,
-                              child: Row(
-                                children: <Widget>[
-                                  RaisedButton(
-                                    padding: EdgeInsets.all(5),
-                                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                    child: Icon(Icons.remove),
-                                    onPressed: () {
-                                      Provider.of<CartProvider>(context, listen: false)
-                                        .changeItemQuantity(
-                                          id: widget.cartItem.id,
-                                          newQuantity: widget.cartItem.quantity-1
-                                      );
-                                    },
-                                  ),
-                                  Container(
-                                    width: 30,
-                                    height: 34,
-                                    color: Colors.orange,
-                                    child: TextField(
-                                      decoration: InputDecoration(
-                                        border: InputBorder.none,
-                                        contentPadding: EdgeInsets.only(
-                                          bottom:17
-                                        )
-                                      ),
-                                      textAlign: TextAlign.center,
-                                      keyboardType: TextInputType.number, 
-                                      controller: _quantityTextController,
-                                      onSubmitted: ( val ) {
+                              alignment: Alignment.centerLeft,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Colors.grey[200],                                  
+                                    width: 2.5
+                                  )
+                                ),
+                                child: Row(
+                                  children: <Widget>[
+                                    RaisedButton(
+                                      padding: EdgeInsets.all(5),
+                                      color: Colors.grey[300],
+                                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                      child: Icon(Icons.remove),
+                                      onPressed: () {
+                                        if( widget.cartItem.quantity == 1 ) {
+                                          _showRemoveAlert(context);
+                                        } else {
                                           Provider.of<CartProvider>(context, listen: false)
+                                            .changeItemQuantity(
+                                              id: widget.cartItem.id,
+                                              newQuantity: widget.cartItem.quantity-1
+                                          );
+                                        }
+                                      },
+                                    ),
+                                    Container(
+                                      width: 30,
+                                      height: 34,
+                                      color: Colors.white,
+                                      child: TextField(
+                                        decoration: InputDecoration(
+                                          border: InputBorder.none,
+                                          contentPadding: EdgeInsets.only(
+                                            bottom:17
+                                          )
+                                        ),
+                                        textAlign: TextAlign.center,
+                                        keyboardType: TextInputType.number, 
+                                        controller: _quantityTextController,
+                                        onSubmitted: ( val ) {
+                                            Provider.of<CartProvider>(context, listen: false)
+                                            .changeItemQuantity(
+                                              id: widget.cartItem.id,
+                                              newQuantity: int.parse( val )
+                                          );
+                                        },                                
+                                      )
+                                    ),
+                                    RaisedButton(
+                                      padding: EdgeInsets.all(5),
+                                      color: Colors.grey[300],
+                                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                      child: Icon(Icons.add),
+                                      onPressed: () {
+                                        Provider.of<CartProvider>(context, listen: false)
                                           .changeItemQuantity(
                                             id: widget.cartItem.id,
-                                            newQuantity: int.parse( val )
+                                            newQuantity: widget.cartItem.quantity+1
                                         );
-                                      },                                
-                                    )
-                                  ),
-                                  RaisedButton(
-                                    padding: EdgeInsets.all(5),
-                                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                    child: Icon(Icons.add),
-                                    onPressed: () {
-                                      Provider.of<CartProvider>(context, listen: false)
-                                        .changeItemQuantity(
-                                          id: widget.cartItem.id,
-                                          newQuantity: widget.cartItem.quantity+1
-                                      );
-                                    },
-                                  ),
-                                ],
+                                      },
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
 

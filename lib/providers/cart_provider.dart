@@ -30,17 +30,36 @@ class CartProvider with ChangeNotifier {
   double get totalAmount {
     var total = 0.0;
     _items.forEach(( cartItem ) {
-      total += cartItem.price * cartItem.quantity;
+      total += double.parse((cartItem.price * cartItem.quantity).toStringAsFixed(2));
     });
-    return total;
+    return double.parse(total.toStringAsFixed(2));
   }
 
-  addToCart( CartItem cartItem ) {
-    _items.add( cartItem  );
+  void addToCart( CartItem cartItem ) {
+    // Check if this id already exists
+    var index = _items.indexWhere((element) => element.id == cartItem.id);
+    if( index >= 0 ) {
+      changeItemQuantity(
+        id: cartItem.id,
+        newQuantity: _items[index].quantity + cartItem.quantity
+      );
+    } else {
+      _items.add( cartItem  );
+    }
     notifyListeners();    
   }
 
-  changeItemQuantity ({
+  void removeFromCart ({
+    String id
+  }) {
+    var index = _items.indexWhere((element) => element.id == id);
+    if( index >= 0 ) {
+      _items.removeAt(index);
+      notifyListeners();
+    }
+  }
+
+  void changeItemQuantity ({
     String id,
     int newQuantity
   }) {

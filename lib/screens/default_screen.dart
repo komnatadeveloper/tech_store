@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import '../components/drawer/main_drawer.dart';
+// Providers
+import '../providers/cart_provider.dart';
 // Screens
 import './home/home_screen.dart';
 import './search/search_screen.dart';
 import './favorites/favorites_screen.dart';
 import './account/account_screen.dart';
 import './cart/cart_screen.dart';
+// Components
+import '../components/drawer/main_drawer.dart';
+import '../components/badge.dart';
 
 
 
@@ -57,6 +62,20 @@ class _DefaultScreenState extends State<DefaultScreen> {
     ];
     super.initState();
   } // End of initState
+
+  Widget _goToCartButton ( BuildContext context ) {
+    return IconButton(
+      icon: Icon(
+        Icons.shopping_cart,
+        size: 24,
+      ),
+      onPressed: () {
+        Navigator.of(context).pushNamed(
+          CartScreen.routeName
+        );
+      },
+    );
+  }
 
   
 
@@ -175,18 +194,16 @@ class _DefaultScreenState extends State<DefaultScreen> {
                         _pages[_selectedPageIndex]['title'],
                         textAlign: TextAlign.center,
                       ),
-                    ),  
-                    IconButton(
-                      icon: Icon(
-                        Icons.shopping_cart,
-                        size: 24,
-                      ),
-                      onPressed: () {
-                        Navigator.of(context).pushNamed(
-                          CartScreen.routeName
-                        );
-                      },
-                    )                
+                    ),
+                    Consumer<CartProvider>(
+                      builder: (_, cartProvider, customChild) => cartProvider.items.length > 0
+                       ? Badge(
+                          child: customChild,
+                          value: cartProvider.items.length.toString(),
+                        )
+                      : _goToCartButton( context ),
+                      child: _goToCartButton( context ),
+                    ),   
                   ],
                 ),
               ),

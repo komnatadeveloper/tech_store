@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import './product_item_card.dart';
+import './search_product_item.dart';
 import '../../models/product.dart';
 
 
@@ -103,7 +103,7 @@ class _SearchScreenState extends State<SearchScreen> {
       color: Colors.grey[400],      
       child: ListView.builder(
           itemCount: _productList.length,
-          itemBuilder: (ctx, index) => ProductItemCard(
+          itemBuilder: (ctx, index) => SearchProductItem(
             _productList[index]
           )
         ),

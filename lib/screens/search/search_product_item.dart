@@ -11,34 +11,34 @@ import '../product_detail/product_detail_screen.dart';
 import '../../models/product.dart';
 
 
-class ProductItemCard  extends StatelessWidget {
+class SearchProductItem  extends StatelessWidget {
   final ProductModel productModel;
 
-  ProductItemCard(
+  SearchProductItem(
     this.productModel
   );
 
   @override
   Widget build(BuildContext context) {
-    return ProductItemCardStateful(
+    return SearchProductItemStateful(
       productModel
     );
   }
 }
 
-class ProductItemCardStateful extends StatefulWidget {
+class SearchProductItemStateful extends StatefulWidget {
   final ProductModel productModel;
 
-  ProductItemCardStateful(
+  SearchProductItemStateful(
     this.productModel
   );
   @override
-  _ProductItemCardStatefulState createState() => _ProductItemCardStatefulState();
+  _SearchProductItemStatefulState createState() => _SearchProductItemStatefulState();
 }
 
 
 //  -------------   STATE   ----------------------
-class _ProductItemCardStatefulState extends State<ProductItemCardStateful> {
+class _SearchProductItemStatefulState extends State<SearchProductItemStateful> {
   final cardHeight = 135.0;
   final rightWidth = 50.0;
   final rightPaddingAll = 8.0;

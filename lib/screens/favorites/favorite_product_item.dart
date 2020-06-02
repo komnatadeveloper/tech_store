@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+//Providers
+import '../../providers/cart_provider.dart';
 
+// Screens
 import '../product_detail/product_detail_screen.dart';
 
 class FavoriteProductItem  extends StatelessWidget {
@@ -225,6 +229,19 @@ class _FavoriteProductItemStatefulState extends State<FavoriteProductItemStatefu
                           ),
                         color: Colors.green,
                         onPressed: () {
+                          // Provider
+                          //   .of<CartProvider>(context, listen: false)
+                          //   .addToCart(
+                          //     CartItem(
+                          //       brand: widget.productModel.brand,
+                          //           id: widget.productModel.id,
+                          //           productNo: widget.productModel.productNo,
+                          //           imageUrl: widget.productModel.imageUrl,
+                          //           keyProperties: widget.productModel.keyProperties,
+                          //           price: widget.productModel.price,
+                          //           quantity: int.parse(_quantityTextController.text)
+                          //     )
+                          // );
                           Scaffold.of(context).hideCurrentSnackBar();
                           Scaffold.of(context).showSnackBar(
                             SnackBar(

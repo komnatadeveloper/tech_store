@@ -25,8 +25,12 @@ class CartScreen extends StatelessWidget {
       ),
       body: Container(
         height: double.infinity,
+        color: Colors.grey[200],
         child: Column(
           children: <Widget>[
+            SizedBox(
+              height: 20,
+            ),
             Expanded(
               child: SingleChildScrollView(
                 child: Consumer<CartProvider>(
@@ -63,14 +67,25 @@ class CartScreen extends StatelessWidget {
                 children: <Widget>[
                   Container(
                     width: 120,
-                    color: Colors.pink,                    
+                    // color: Colors.pink,                    
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text('Total'),
+                        Text(
+                          'Total',
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 18,
+                          ),
+                        ),
                         Consumer<CartProvider>(
                           builder: ( ctx2,  cartProvider, child ) => Text(                            
-                            '\$${cartProvider.totalAmount}'
+                            '\$${cartProvider.totalAmount.toStringAsFixed(2)}',
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 19
+                            ),
                           ),
                         ),
                         // Text('\$852.25')

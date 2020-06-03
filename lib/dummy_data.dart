@@ -317,3 +317,46 @@ var dummyProductList = [
     'price': 700.50
   },
 ];
+
+var dummyProductGroupList = [
+  {
+    'imageUrl': 'https://avatars.mds.yandex.net/get-zen_doc/1875939/pub_5d0ba322b34feb00af5ddb26_5d0baae62d23ae00af68c06b/scale_1200',
+    'title': 'Computers and Tablets'
+  },
+  {
+    'imageUrl': 'https://banner2.cleanpng.com/20180605/hhr/kisspng-computer-keyboard-peripheral-dell-laptop-peripherals-5b1633d56028f8.3970810315281817173939.jpg',
+    'title': 'OEM - Peripheral Devices'
+  },
+  {
+    'imageUrl': 'https://avatars.mds.yandex.net/get-mpic/175985/img_id4454483274191757751/orig',
+    'title': 'Gaming Products'
+  },
+  {
+    'imageUrl': 'https://avatars.mds.yandex.net/get-pdb/1606385/4cb40823-ef2a-4155-a83e-b97ce7de4e45/s1200',
+    'title': 'Printers'
+  },
+  {
+    'imageUrl': 'https://i.simpalsmedia.com/999.md/BoardImages/900x900/3d4c5b8cde1dc7044e141cbc9fa6721a.jpg',
+    'title': 'Office - Consumable Products'
+  },
+  {
+    'imageUrl': 'http://4.bp.blogspot.com/-Sdg3pPdlXzc/U_SlKcCZc5I/AAAAAAAAAKw/euyG39STAlk/s1600/shutterstock_102382234-1024x1024.jpg',
+    'title': 'Mobile Phones'
+  },
+];
+
+var dummyMostPopularImageList = [
+  'https://avatars.mds.yandex.net/get-mpic/1626700/img_id7735018695857307227.jpeg/orig',
+  'https://bigbunce.ru/img/detail/1b0/1b0eaa0e569f94f3b14ed4c028364251.jpg',
+  'https://tyumen-market.ru/images/tmnmart/pp/1454679971_542_1280.jpeg',
+  'https://cdn1.ozone.ru/multimedia/1032105472.jpg',
+  'https://www.lostelecom.ru/image/cache/catalog/product/3/ru-Pdb-40071118b1-1000x1000.jpg',
+  'https://ae01.alicdn.com/kf/HTB1EYOodNiH3KVjSZPfq6xBiVXah/LeadingStar-ZLRC-Beast-SG906-5G-Wifi-GPS-FPV-Drone-with-4K-Camera.jpg'
+];
+
+var dummyFeaturesList = [
+  'https://s.sellercheck.ru/pic/4f/c4/kotin-z2-igrovoy-pk-intel-i7-9700-k-gtx1060-6-4fc416e9f17cb06e8cbf3f7f5b71d6ba-500.jpg',
+  'https://img.fasttechcdn.com/962/9625235/9625235-1.jpg',
+  
+  
+];

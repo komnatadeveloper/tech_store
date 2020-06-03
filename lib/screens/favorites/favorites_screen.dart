@@ -17,13 +17,15 @@ class FavoritesScreen extends StatelessWidget {
       height: double.infinity,
       padding: EdgeInsets.only(
         top: 8,
-        left: 8,
-        right: 8
+        // left: 8,
+        // right: 8
       ),
-      color: Color.fromRGBO(239, 239, 239, 1),
+      // color: Color.fromRGBO(239, 239, 239, 1),
+      color: Colors.grey[300],
       child: SingleChildScrollView(
         child: Column(
           children: <Widget>[
+            SizedBox(height: 15,),
             FavoriteProductItem(),
             FavoriteProductItem(),
             // FavoriteProductItem(),

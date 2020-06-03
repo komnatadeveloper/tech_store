@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:tech_store/screens/product_detail/carousel_with_arrows.dart' as carousel;
-
-import './technical_specifications.dart';
-
+import 'package:provider/provider.dart';
+// Dummy Data
 import '../../dummy_data.dart' as dummyData;
-
-
+// Providers
+import '../../providers/cart_provider.dart';
+// Screens
+import '../cart/cart_screen.dart';
+// Components
+import './carousel_with_arrows.dart' as carousel;
+import './technical_specifications.dart';
+import '../../components/badge.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   static const routeName = '/product-detail-screen';
@@ -26,6 +30,20 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     super.initState();
   }
 
+    Widget _goToCartButton ( BuildContext context ) {
+    return IconButton(
+      icon: Icon(
+        Icons.shopping_cart,
+        size: 24,
+      ),
+      onPressed: () {
+        Navigator.of(context).pushNamed(
+          CartScreen.routeName
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,10 +55,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               Expanded(
                 child: Center(child: Text('Product Details')),
               ),
-              IconButton(
-                icon: Icon(Icons.shopping_cart),
-                onPressed: () {},
-              )
+              Consumer<CartProvider>(
+                builder: (_, cartProvider, customChild) => cartProvider.items.length > 0
+                  ? Badge(
+                    child: customChild,
+                    value: cartProvider.items.length.toString(),
+                  )
+                : _goToCartButton( context ),
+                child: _goToCartButton( context ),
+              ), 
             ],
           ),
         ), 
@@ -162,11 +185,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               keyboardType: TextInputType.numberWithOptions(decimal: false),
                               decoration: InputDecoration(
                                 filled: true,
-                                fillColor: Colors.pink[200],
+                                fillColor: Colors.grey[300],
                                 border: InputBorder.none,
                                 hintStyle: TextStyle(
-                                  fontSize: 10,
-                                  backgroundColor: Colors.blue,
+                                  fontSize: 12,
+                                  // backgroundColor: Colors.blue,
                                 ),  
                                 contentPadding: EdgeInsets.only(
                                   bottom: (35 )/2,
@@ -176,8 +199,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               ), 
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                fontSize: 10,
-                                backgroundColor: Colors.blue, 
+                                fontSize: 12,
+                                // backgroundColor: Colors.blue, 
                               ),
                             ),
                           ),
@@ -202,7 +225,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                             textAlign: TextAlign.center,
                                           ),
                                           duration: Duration(seconds: 2),
-                                          backgroundColor: Colors.pink,
+                                          backgroundColor: Colors.orange,
                                         ),
                                         
                                       );

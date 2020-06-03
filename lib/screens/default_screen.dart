@@ -35,7 +35,6 @@ class _DefaultScreenState extends State<DefaultScreen> {
     setState(() {
       _selectedPageIndex = newIndex;
     });
-
   }
 
 
@@ -44,7 +43,9 @@ class _DefaultScreenState extends State<DefaultScreen> {
     // TODO: implement initState
     _pages = [
       {
-        'page':HomeScreen(), 
+        'page':HomeScreen(
+          changeTab: _selectPage
+        ), 
         'title':'Main'
       },
       {

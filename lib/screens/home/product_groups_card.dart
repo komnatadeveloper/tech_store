@@ -1,6 +1,18 @@
 import 'package:flutter/material.dart';
 
+// dummy
+import '../../dummy_data.dart' as dummy;
+// Components
+import './product_group_item.dart';
+
+
 class ProductGroupsCard extends StatelessWidget {
+  final Function changeTab;
+  ProductGroupsCard({
+    this.changeTab
+  });
+
+  List<Map<String, String>> _dummyProductsGroupList = dummy.dummyProductGroupList;
 
   final List<String> imgList = [
     'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80',
@@ -39,7 +51,7 @@ class ProductGroupsCard extends StatelessWidget {
             print(isFocus);
           },
           onLongPress: () {
-            print('Lobg Press');
+            print('Long Press');
           },
 
 
@@ -137,6 +149,42 @@ class ProductGroupsCard extends StatelessWidget {
           )
         );
       } 
+    }  
+    // end of for loop
+    List<Widget> rowsList2 = [];
+    for( int i = 0; i< _dummyProductsGroupList.length; i++ ) {
+      if(  i.remainder(2) == 0 && imgList.length >= i+2 ) {
+        rowsList2.add(
+          Row(
+            children: <Widget>[
+              ProductGroupItem(
+                imageUrl: _dummyProductsGroupList[i]['imageUrl'],
+                title: _dummyProductsGroupList[i]['title'],
+                changeTab: this.changeTab
+              ),
+              ProductGroupItem(
+                imageUrl: _dummyProductsGroupList[i+1]['imageUrl'],
+                title: _dummyProductsGroupList[i+1]['title'],
+                changeTab: this.changeTab
+              ),
+              
+              
+            ],
+          )
+        );
+      } else if( i.remainder(2) == 0 ) {
+        rowsList2.add(
+          Row(
+            children: <Widget>[
+              ProductGroupItem(
+                imageUrl: _dummyProductsGroupList[i]['imageUrl'],
+                title: _dummyProductsGroupList[i]['title'],
+                changeTab: this.changeTab
+              ),
+            ],
+          )
+        );
+      } 
     }  // end of for loop
 
 
@@ -145,7 +193,7 @@ class ProductGroupsCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
-          children: rowsList,
+          children: rowsList2,
         ),
       )
       

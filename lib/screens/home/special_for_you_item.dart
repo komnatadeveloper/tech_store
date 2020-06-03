@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+// Screens
+import '../product_detail/product_detail_screen.dart';
+
 class SpecialForYouItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -65,6 +68,9 @@ class SpecialForYouItem extends StatelessWidget {
                 textColor: Colors.white,
                 child: Text('View'),
                 onPressed: () {
+                  Navigator.of(context).pushNamed(
+                    ProductDetailScreen.routeName
+                  );
                 },
                 
                 

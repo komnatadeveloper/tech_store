@@ -185,11 +185,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               keyboardType: TextInputType.numberWithOptions(decimal: false),
                               decoration: InputDecoration(
                                 filled: true,
-                                fillColor: Colors.pink[200],
+                                fillColor: Colors.grey[300],
                                 border: InputBorder.none,
                                 hintStyle: TextStyle(
-                                  fontSize: 10,
-                                  backgroundColor: Colors.blue,
+                                  fontSize: 12,
+                                  // backgroundColor: Colors.blue,
                                 ),  
                                 contentPadding: EdgeInsets.only(
                                   bottom: (35 )/2,
@@ -199,8 +199,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               ), 
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                fontSize: 10,
-                                backgroundColor: Colors.blue, 
+                                fontSize: 12,
+                                // backgroundColor: Colors.blue, 
                               ),
                             ),
                           ),
@@ -225,7 +225,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                             textAlign: TextAlign.center,
                                           ),
                                           duration: Duration(seconds: 2),
-                                          backgroundColor: Colors.pink,
+                                          backgroundColor: Colors.orange,
                                         ),
                                         
                                       );

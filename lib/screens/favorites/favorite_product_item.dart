@@ -46,7 +46,9 @@ class _FavoriteProductItemStatefulState extends State<FavoriteProductItemStatefu
       },
       child: Card(
         margin: EdgeInsets.only(
-          bottom: 12
+          left: 15,
+          right: 15,
+          bottom: 20
         ),
         color: Colors.white,
         // elevation: 4,
@@ -194,11 +196,11 @@ class _FavoriteProductItemStatefulState extends State<FavoriteProductItemStatefu
                         keyboardType: TextInputType.numberWithOptions(decimal: false),
                         decoration: InputDecoration(
                           filled: true,
-                          fillColor: Colors.pink[200],
+                          fillColor: Colors.grey[300],
                           border: InputBorder.none,
                           hintStyle: TextStyle(
                             fontSize: 10,
-                            backgroundColor: Colors.blue,
+                            // backgroundColor: Colors.blue,
                           ),                      
                           contentPadding: EdgeInsets.only(
                             bottom: (rightWidth - 2 * rightPaddingAll )/2,
@@ -210,7 +212,7 @@ class _FavoriteProductItemStatefulState extends State<FavoriteProductItemStatefu
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 10,
-                          backgroundColor: Colors.blue,  
+                          // backgroundColor: Colors.blue,  
                         ),
                       ),
                     ),
@@ -218,6 +220,7 @@ class _FavoriteProductItemStatefulState extends State<FavoriteProductItemStatefu
                     // Right Center
                     Container(
                       height: rightWidth - 2 * rightPaddingAll,
+                      width: rightWidth - 2 * rightPaddingAll,
                       child: RaisedButton(
                         padding: EdgeInsets.zero,
                         child: Container(
@@ -250,7 +253,7 @@ class _FavoriteProductItemStatefulState extends State<FavoriteProductItemStatefu
                                 textAlign: TextAlign.center,
                               ),
                               duration: Duration(seconds: 2),
-                              backgroundColor: Colors.pink,
+                              backgroundColor: Colors.orange,
                             ),
                             
                           );

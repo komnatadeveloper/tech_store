@@ -13,13 +13,14 @@ import './cart_product_item.dart';
 
 class CartScreen extends StatelessWidget {
   static const routeName = '/cart';
+  final _appbarBackgroundColor = Color.fromRGBO(208, 57, 28, 1);
 
   @override
   Widget build(BuildContext context) {
-    var cartProvider = Provider.of<CartProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: _appbarBackgroundColor,
         title: Text('My Cart'),
         centerTitle: true,
       ),
@@ -32,21 +33,32 @@ class CartScreen extends StatelessWidget {
               height: 20,
             ),
             Expanded(
-              child: SingleChildScrollView(
-                child: Consumer<CartProvider>(
-                  builder: ( ctx2, cartProvider, customChild ) => Column(
-                  children: <Widget>[
-                    // CartProductItem()
-                      ...cartProvider.items.map(
-                        (cartItem) => CartProductItem(
-                          cartItem
-                        )
-                      ).toList()
-                    ],
-                  ),
-                ) 
+              child: Consumer<CartProvider>(
+                builder: ( ctx2, cartProvider, customChild ) => cartProvider.items.length > 0
+                  ? SingleChildScrollView(
+                    child: Column(
+                      children: <Widget>[
+                        // CartProductItem()
+                          ...cartProvider.items.map(
+                            (cartItem) => CartProductItem(
+                              cartItem
+                            )
+                          ).toList()
+                        ],
+                      ),
+                  )
+                  : Center(
+                    child: Text(
+                      'No Item in your Cart!',
+                      style: TextStyle(
+                        fontSize: 24
+                      ),
+                    ),
+                  )
               )
+               
             ),
+            //---------------------------------
             Container(
               height: 60,
               padding: EdgeInsets.symmetric(

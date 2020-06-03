@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
 
+// Components
 import './features_carousel.dart';
 import './special_for_you_item.dart';
-import './most_popular_products_carousel.dart';
 import './product_groups_card.dart';
+import './most_popular_products_carousel.dart';
+import './most_popular_products_listview.dart';
+
 
 
 class HomeScreen extends StatefulWidget {
+  final Function changeTab;
+  HomeScreen({
+    this.changeTab
+  });
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -17,20 +25,22 @@ class _HomeScreenState extends State<HomeScreen> {
     return SingleChildScrollView(
       child: Container(
         padding: EdgeInsetsDirectional.only(bottom: 20, top: 20),
-        color: Color.fromRGBO(239, 239, 239, 1),
+        color: Colors.grey[300],
         child: Column(
           children: <Widget>[
             // Text('HomeScreen'),
-            FeaturesCarousel(),
+            FeaturesCarousel(
+              changeTab: widget.changeTab,
+            ),
             SpecialForYouItem(),
             SpecialForYouItem(),
 
             // Most Popular Title
             Container(
-              height: 40,
+              height: 50,
               alignment: Alignment.centerLeft,
               padding: EdgeInsets.only(left: 20),
-              color: Colors.pink,
+              // color: Colors.pink,
               child: Text(
                 'Most Popular',
                 style: TextStyle(
@@ -40,20 +50,30 @@ class _HomeScreenState extends State<HomeScreen> {
               )
             ),
 
-            MostPopularProductsCarousel(),
+            // MostPopularProductsCarousel(),
+            MostPopularProductsListView(
+              changeTab: widget.changeTab,
+            ),
 
             // Picture Below will be Discounts Picture
             Container(
               margin: EdgeInsets.symmetric(vertical: 20),
-              child: Image.network(
-                'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80',
-                width: double.infinity,
-                height: 200,
-                fit: BoxFit.cover,
+              child: GestureDetector(
+                onTap: ( ) {
+                  widget.changeTab(1);
+                },
+                child: Image.network(
+                  'https://gloimg.gbtcdn.com/soa/gb/pdm-provider-img/straight-product-img/20180914/T017597/T0175970025/source-img/160240-3829.jpg',
+                  width: double.infinity,
+                  height: 200,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
 
-            ProductGroupsCard()
+            ProductGroupsCard(
+              changeTab: widget.changeTab
+            )
 
           ],
           // child: Text('HomeScreen'),

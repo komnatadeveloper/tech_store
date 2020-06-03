@@ -102,11 +102,15 @@ class _SearchScreenState extends State<SearchScreen> {
       height: double.infinity,
       color: Colors.grey[400],      
       child: ListView.builder(
-          itemCount: _productList.length,
-          itemBuilder: (ctx, index) => SearchProductItem(
-            _productList[index]
-          )
-        ),
+        itemCount: _productList.length,
+        itemBuilder: (ctx, index) => SearchProductItem(
+          productModel: _productList[index],
+          isFirstItem: index == 0 ? true : false,
+          isLastItem: index == _productList.length-1 ? true : false,
+          
+        )
+      ),
+       
     );
   }
 }

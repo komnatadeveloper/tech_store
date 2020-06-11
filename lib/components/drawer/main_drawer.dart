@@ -1,14 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:tech_store/components/drawer/main_drawer_button2.dart';
+import 'package:tech_store/components/drawer/second_level_drawer_button.dart';
+
+
+// Providers
+import '../../providers/category_provider.dart';
 
 // Components
 import './main_drawer_button.dart';
 import './main_drawer_header_button.dart';
 
 
+
+
 import '../../dummy_data.dart';
 
 // Models
 import 'package:tech_store/models/drawer_menu_item.dart';
+import 'package:tech_store/models/category_model.dart';
+
 
 
 class MainDrawer extends StatefulWidget {
@@ -21,11 +32,33 @@ class MainDrawer extends StatefulWidget {
 class _MainDrawerState extends State<MainDrawer> {
   List<DrawerMenuItem> menuItemsList = [];
   List<TransformedDrawerMenuItem> _transformedChildrenList = [];
+  List<TransformedDrawerMenuItem> _transformedChildrenList2 = [];
   // List<TransformedDrawerMenuItem> _filteredItemsList = [];
   String _currentMenuId;
   bool _isHeaderExists = false;
   List _visibleSubItemsList = [];
 
+  var _showMainItems = true;
+  String _mainCategoryId;
+
+
+  void goToSecondLevel ({
+    String mainCategoryId,    
+  }) {
+    setState(() {
+      _mainCategoryId = mainCategoryId;
+      _showMainItems = false;
+      _isHeaderExists = true;
+    });
+  }
+
+  void goToMainLevel () {
+    setState(() {
+      _mainCategoryId = null;
+      _showMainItems = true;
+      _isHeaderExists = false;
+    });
+  }
 
   @override
   void initState() {
@@ -92,12 +125,50 @@ class _MainDrawerState extends State<MainDrawer> {
     }
   }
 
+  List<TransformedDrawerMenuItem> handleCalculateTransformedChildrenList2 ({
+     List<DrawerMenuItem> inputList,
+     List<DrawerMenuItem> allItemsList,
+     String id
+  }) {
+    if( _isHeaderExists ) {
+      // if _isHeaderExists, so _currentMenuId is not NULL
+      // var tempFilteredList = findRawChildren( _currentMenuId );
+      return  List.generate(
+        inputList.length, (index)  {
+          return TransformedDrawerMenuItem(
+            drawerMenuItem: inputList[index],
+            hasChildren: doesItemHaveChildren(
+              inputList: allItemsList,
+              id: inputList[index].id
+            ),
+            isSubItem: true
+          );
+        }
+      );
+    } else {   // So we are at top Level
+      // var tempFilteredList = findRawChildren( '-2' );
+      return List.generate(
+        inputList.length, (index)  {
+          return TransformedDrawerMenuItem(
+            drawerMenuItem: inputList[index],
+            hasChildren: doesItemHaveChildren(
+              inputList: allItemsList,
+              id: inputList[index].id
+            ),
+            isSubItem: false
+          );
+        }
+      );
+    }
+  }
+
   List<DrawerMenuItem> findRawChildren ( String id ) {
     return menuItemsList
       .where(
         (element) => element.parentId == id
     ).toList();
   }
+
 
   void handleClickButton ( {
     String id,
@@ -209,16 +280,42 @@ class _MainDrawerState extends State<MainDrawer> {
               // MainDrawerButton(),
 
               if( _isHeaderExists ) MainDrawerHeaderButton(
-                drawerMenuItem:  menuItemsList.firstWhere((element) => element.id == _currentMenuId),
-                handleClickButton: this.handleClickButton
+                mainCategory: Provider.of<CategoryProvider>(context)
+                  .mainCategoryList.firstWhere((element) => element.id == _mainCategoryId),
+                handleClickButton: goToMainLevel
               ),
 
 
-              ..._transformedChildrenList.map(
-                (item) {
-                  return buildMainDrawerButton( item );
-                }
-              ).toList(),
+              // ..._transformedChildrenList.map(
+              //   (item) {
+              //     return buildMainDrawerButton( item );
+              //   }
+              // ).toList(),
+
+              if (
+                Provider.of<CategoryProvider>(context).mainCategoryList.length > 0 
+                && !_showMainItems
+                && _mainCategoryId != null
+                ) ...Provider
+                  .of<CategoryProvider>(context).mainCategoryList.firstWhere(
+                    (element) => element.id == _mainCategoryId
+                    ).childrenList.map(
+                      (secondLevelCategory) => SecondLevelDrawerButton(
+                        handleClickButton: null,
+                        secondLevelCategory: secondLevelCategory,
+                      )
+                    ).toList(),
+
+              if (
+                Provider.of<CategoryProvider>(context).mainCategoryList.length > 0 
+                && _showMainItems
+                ) ...Provider
+                .of<CategoryProvider>(context).mainCategoryList.map((item) {
+                  return MainDrawerButton2 (
+                    handleClickButton: goToSecondLevel,
+                    mainCategory: item
+                  );
+                }).toList(),
 
 
               // buildListTile(

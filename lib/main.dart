@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 
 // Providers
 import './providers/cart_provider.dart';
+import './providers/category_provider.dart';
+
 
 // Screens
 import './screens/default_screen.dart';
@@ -29,7 +31,10 @@ class _MyAppState extends State<MyApp> {
       providers: [
         ChangeNotifierProvider.value(
           value: CartProvider()
-        )
+        ),
+        ChangeNotifierProvider.value(
+          value: CategoryProvider()
+        ),
       ],
       child: MaterialApp(
         title: 'MainDartTitle',
@@ -57,9 +62,9 @@ class _MyAppState extends State<MyApp> {
         // initialRoute: '/',
         initialRoute: AuthScreen.routeName,
         routes: {
-          '/' : (ctx) => DefaultScreen(),
-          ProductDetailScreen.routeName : (ctx) => ProductDetailScreen(),
           AuthScreen.routeName : (ctx) => AuthScreen(),
+          DefaultScreen.routeName : (ctx) => DefaultScreen(),
+          ProductDetailScreen.routeName : (ctx) => ProductDetailScreen(),
           CartScreen.routeName : (ctx) => CartScreen(),
         },
       ),

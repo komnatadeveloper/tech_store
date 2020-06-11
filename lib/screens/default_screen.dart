@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 
 // Providers
 import '../providers/cart_provider.dart';
+import '../providers/category_provider.dart';
+
 // Screens
 import './home/home_screen.dart';
 import './search/search_screen.dart';
@@ -16,14 +18,14 @@ import '../components/badge.dart';
 
 
 class DefaultScreen extends StatefulWidget {
-  static const routeName = '/';
+  static const routeName = '/default';
   @override
   _DefaultScreenState createState() => _DefaultScreenState();
 }
 
 // ------------- STATE -----------------
 class _DefaultScreenState extends State<DefaultScreen> {
-
+  var _isInited = false;
   List<Map<String, Object>> _pages;
   int _selectedPageIndex = 0;
   final _appbarBackgroundColor = Color.fromRGBO(208, 57, 28, 1);
@@ -41,6 +43,8 @@ class _DefaultScreenState extends State<DefaultScreen> {
   @override
   void initState() {
     // TODO: implement initState
+    Provider.of<CategoryProvider>(context, listen: false).fetchCategoryList();
+
     _pages = [
       {
         'page':HomeScreen(
@@ -63,6 +67,29 @@ class _DefaultScreenState extends State<DefaultScreen> {
     ];
     super.initState();
   } // End of initState
+
+  // @override
+  // void didChangeDependencies() {
+  //   // TODO: implement didChangeDependencies
+  //   if( !_isInited ) {
+
+  //     setState(() {        
+  //       _isLoading = true;
+  //     });
+
+  //     Provider.of<ProductsProvider>(context).fetchAndSetProducts()
+  //     .then( ( _ ) {
+
+  //       setState(() {          
+  //         _isLoading = false;
+  //       });
+
+  //     } 
+  //   );
+  //     _isInit = false;
+  //   }
+  //   super.didChangeDependencies();
+  // }
 
   Widget _goToCartButton ( BuildContext context ) {
     return IconButton(

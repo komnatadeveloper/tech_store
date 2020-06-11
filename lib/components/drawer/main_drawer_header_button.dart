@@ -2,20 +2,22 @@ import 'package:flutter/material.dart';
 
 // Models
 import '../../models/drawer_menu_item.dart';
+import '../../models/category_model.dart';
+
 
 class MainDrawerHeaderButton extends StatelessWidget {
   final rgbValue = 53;
   final rgbBorderValue = 20;
 
 
-  final DrawerMenuItem drawerMenuItem;
+  final MainCategoryModel mainCategory;
   final Function handleClickButton;
   // final String id;
   // final String title;
   // final String  parentId;    // if no parent this will be -2 "minus 2"
 
   MainDrawerHeaderButton({
-    this.drawerMenuItem,
+    this.mainCategory,
     this.handleClickButton
   });
 
@@ -62,7 +64,7 @@ class MainDrawerHeaderButton extends StatelessWidget {
             Padding(
               padding: EdgeInsets.only(left: 12),
               child: Text(
-                drawerMenuItem.title,
+                mainCategory.title,
                 style: TextStyle(
                   fontSize: 20,
                   color: Color.fromRGBO(226, 197, 55, 1)
@@ -77,10 +79,7 @@ class MainDrawerHeaderButton extends StatelessWidget {
       // icon: Icon(Icons.chevron_right),
       // label: Text('Computers & Tablets'),
       onPressed: (){
-        this.handleClickButton(
-           id: drawerMenuItem.parentId,
-           isHeaderButton: true 
-        );
+        this.handleClickButton();
       },  
     );
   }

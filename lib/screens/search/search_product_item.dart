@@ -4,11 +4,16 @@ import 'package:provider/provider.dart';
 // Providers
 import '../../providers/cart_provider.dart';
 
+// helpers
+import '../../helpers/helpers.dart' as helpers;
+
 
 // Screens
 import '../product_detail/product_detail_screen.dart';
 // Models
 import '../../models/product.dart';
+// Constants
+import '../../constants/constants.dart' as constants;
 
 
 class SearchProductItem  extends StatelessWidget {
@@ -56,6 +61,10 @@ class _SearchProductItemStatefulState extends State<SearchProductItemStateful> {
 
   var _cardOpacity  = 1.0;
 
+
+
+
+
   @override
   void initState() {
     // TODO: implement initState
@@ -65,6 +74,8 @@ class _SearchProductItemStatefulState extends State<SearchProductItemStateful> {
 
   @override
   Widget build(BuildContext context) {
+
+  
     
 
     return Container(
@@ -120,7 +131,12 @@ class _SearchProductItemStatefulState extends State<SearchProductItemStateful> {
         child: GestureDetector(
           onTap: () {
             print( 'ProductItemCard ->  GestureDetector -> onTap' );
-            Navigator.of(context).pushNamed( ProductDetailScreen.routeName );
+            Navigator.of(context).pushNamed( 
+              ProductDetailScreen.routeName,
+              arguments: {
+                'productModel': widget.productModel
+              }
+            );
           },
           child: AnimatedOpacity(
             duration: Duration(milliseconds: 500),
@@ -144,7 +160,7 @@ class _SearchProductItemStatefulState extends State<SearchProductItemStateful> {
                       children: <Widget>[
                         Image.network(
                           // 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1502&q=80',
-                          widget.productModel.imageUrl,
+                          helpers.mainImageUrlHelper(productModel: widget.productModel),
                           width: 80,
                           height: 80,
                           fit: BoxFit.cover,
@@ -227,7 +243,7 @@ class _SearchProductItemStatefulState extends State<SearchProductItemStateful> {
                               bottom:10
                             ),
                             child: Text(
-                              'Price: \$${widget.productModel.price}',
+                              'Price: \$${widget.productModel.price.toStringAsFixed(2)}',
                               style: TextStyle(
                                 fontSize: 15,
                                 color: Colors.red[700]
@@ -333,12 +349,7 @@ class _SearchProductItemStatefulState extends State<SearchProductItemStateful> {
                               Provider.of<CartProvider>(context, listen: false)
                                 .addToCart(
                                     CartItem(
-                                      brand: widget.productModel.brand,
-                                      id: widget.productModel.id,
-                                      productNo: widget.productModel.productNo,
-                                      imageUrl: widget.productModel.imageUrl,
-                                      keyProperties: widget.productModel.keyProperties,
-                                      price: widget.productModel.price,
+                                      productModel: widget.productModel,
                                       quantity: int.parse(_quantityTextController.text)
                                     )
                               );

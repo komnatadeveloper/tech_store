@@ -28,11 +28,11 @@ class CategoryProvider with ChangeNotifier {
 
       // var mapData = extractedData.cast()
 
-      print('CategoryProvider -> fetchCategoryList -> res ->');
+      // print('CategoryProvider -> fetchCategoryList -> res ->');
       // print(extractedData);
-      print('CategoryProvider -> fetchCategoryList -> transFormedCategoryList ->');
+      // print('CategoryProvider -> fetchCategoryList -> transFormedCategoryList ->');
       // var mappedData = extractedData as List<Map<String, dynamic>>;
-      print(handleTransformRawCategory(mappedList ));
+      // print(handleTransformRawCategory(mappedList ));
       _mainCategoryList = handleTransformRawCategory(mappedList);
       notifyListeners();
 

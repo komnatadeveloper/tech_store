@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:tech_store/providers/product_provider.dart';
 
 // Models
 import '../../models/drawer_menu_item.dart';
@@ -257,6 +259,10 @@ class _SecondLevelDrawerButtonState extends State<SecondLevelDrawerButton> with 
               //   hasChildren: widget.transformedDrawerMenuItem.hasChildren
                 
               // );
+
+              Provider.of<ProductProvider>(context).getProductsByCategory(
+                categoryId: widget.secondLevelCategory.id
+              );
             }
             // ----------------------------------------------------------------
 

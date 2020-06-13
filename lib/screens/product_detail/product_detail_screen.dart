@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 // Dummy Data
 import '../../dummy_data.dart' as dummyData;
+// helpers
+import '../../helpers/helpers.dart' as helpers;
 // Providers
 import '../../providers/cart_provider.dart';
+// Models
+import '../../models/product.dart';
 // Screens
 import '../cart/cart_screen.dart';
 // Components
@@ -22,15 +26,35 @@ class ProductDetailScreen extends StatefulWidget {
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
   final _appbarBackgroundColor = Color.fromRGBO(208, 57, 28, 1);
   TextEditingController _quantityTextController;
+  ProductModel _productModel;
 
   @override
   void initState() {
-    // TODO: implement initState
     _quantityTextController = TextEditingController(text: '1');
+    // TODO: implement initState
     super.initState();
+
   }
 
-    Widget _goToCartButton ( BuildContext context ) {
+  @override
+  void didChangeDependencies() {
+    print('ProductDetailScreen -> initState');
+    final routeArgs = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
+    print('routeArgs ->');
+    print(routeArgs);
+    if(routeArgs['productModel'] != null) {
+      print('ProductDetailScreen -> initState -> routeArgs -> productModel ->');
+      print(routeArgs['productModel'].toString());
+      _productModel = routeArgs['productModel'] as ProductModel;
+    }
+    super.didChangeDependencies();
+  }
+
+
+
+  
+
+  Widget _goToCartButton ( BuildContext context ) {
     return IconButton(
       icon: Icon(
         Icons.shopping_cart,
@@ -46,6 +70,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    
+
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: _appbarBackgroundColor,
@@ -81,7 +108,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       right: 20
                     ),
                     child: Text(
-                      dummyData.dummySampleProductDetailsItem['brand'],
+                      // dummyData.dummySampleProductDetailsItem['brand'],
+                      _productModel.brand,
                       style: TextStyle(
                         color: Color.fromRGBO(164, 41, 48, 1)
                       ),
@@ -89,7 +117,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   ),
                   Expanded(                    
                     child: Text(
-                      dummyData.dummySampleProductDetailsItem['productNo']
+                      // dummyData.dummySampleProductDetailsItem['productNo']
+                      _productModel.productNo
                     ),
                   ),
                   IconButton(
@@ -109,13 +138,18 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   bottom:20
                 ),
                 child: Text(
-                  dummyData.dummySampleProductDetailsItem['keyProperties'],
+                  // dummyData.dummySampleProductDetailsItem['keyProperties'],
+                  _productModel.keyProperties,
                   style: TextStyle(
                     fontSize: 22
                   ),
                 ),
               ), 
-              carousel.CarouselWithArrows(),
+              carousel.CarouselWithArrows(
+                imageList: List.generate(_productModel.imageList.length, (index) => helpers.imageUrlHelper(
+                  imageId: _productModel.imageList[index].imageId
+                )),
+              ),
               SizedBox(height: 20),
               // Stock Row
               Container(
@@ -131,7 +165,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           ),
                           SizedBox(width: 30),
                           Text(
-                            dummyData.dummySampleProductDetailsItem['stockStatus'],
+                            // dummyData.dummySampleProductDetailsItem['stockStatus'],
+                            _productModel.stockStatus.stockQuantity.toString(),
                             style: TextStyle(
                               color: Colors.green,
                               fontSize: 16
@@ -161,7 +196,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           ),
                           SizedBox(width: 30),
                           Text(
-                            '\$${dummyData.dummySampleProductDetailsItem['price'].toString()}',
+                            // '\$${dummyData.dummySampleProductDetailsItem['price'].toString()}',
+                            '\$${_productModel.price.toStringAsFixed(2)}',
                             style: TextStyle(
                               color: Colors.red,
                               fontSize: 16
@@ -217,6 +253,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                     color: Colors.green,
                                     textColor: Colors.white,
                                     onPressed: () {
+                                      Provider.of<CartProvider>(context, listen: false).addToCart(
+                                        CartItem(
+                                          productModel: _productModel,
+                                          quantity: int.parse(_quantityTextController.text),
+                                          
+                                          
+                                        )
+                                      );
                                       Scaffold.of(ctx).hideCurrentSnackBar();
                                       Scaffold.of(ctx).showSnackBar(
                                         SnackBar(
@@ -241,7 +285,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   ],
                 ),
               ),
-              TechnicalSpecifications(dummyData.dummySampleProductDetailsItem['specifications'])
+              // TechnicalSpecifications(dummyData.dummySampleProductDetailsItem['specifications'])
+              TechnicalSpecifications(
+                List.generate(_productModel.specifications.length, (index) => 
+                  {
+                    _productModel.specifications[index].key : _productModel.specifications[index].value
+                  }
+                )
+              )
             ],
           ),
         ),

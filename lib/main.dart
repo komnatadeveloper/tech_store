@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 // Providers
 import './providers/cart_provider.dart';
 import './providers/category_provider.dart';
+import './providers/product_provider.dart';
 
 
 // Screens
@@ -34,6 +35,9 @@ class _MyAppState extends State<MyApp> {
         ),
         ChangeNotifierProvider.value(
           value: CategoryProvider()
+        ),
+        ChangeNotifierProvider.value(
+          value: ProductProvider()
         ),
       ],
       child: MaterialApp(

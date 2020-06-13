@@ -9,6 +9,9 @@ import '../../providers/cart_provider.dart';
 // Screens
 import '../product_detail/product_detail_screen.dart';
 
+// helpers
+import '../../helpers/helpers.dart' as helpers;
+
 class CartProductItem extends StatefulWidget {
   final CartItem cartItem;
 
@@ -95,7 +98,7 @@ class _CartProductItemState extends State<CartProductItem> {
                 onPressed: () {
                   print('CartProductItem -> Remove Button -> AlertDialog -> Yes');
                   Provider.of<CartProvider>(context, listen: false).removeFromCart(
-                    id: widget.cartItem.id
+                    id: widget.cartItem.productModel.id
                   );
                   Navigator.of(ctx).pop();
                 },
@@ -112,7 +115,7 @@ class _CartProductItemState extends State<CartProductItem> {
   Widget build(BuildContext context) {
     if( _isInited ) {
       _quantityTextController.text = Provider.of<CartProvider>(context)
-        .items.firstWhere((element) => element.id == widget.cartItem.id ).quantity.toString();
+        .items.firstWhere((element) => element.productModel.id == widget.cartItem.productModel.id ).quantity.toString();
     }
     
     //--------------------------------------------------------------------------------------------------------
@@ -155,7 +158,11 @@ class _CartProductItemState extends State<CartProductItem> {
                 alignment: Alignment.topLeft,
                 // color: Colors.pink,
                 child:  Image.network(
-                  widget.cartItem.imageUrl,
+                  // widget.cartItem.imageUrl,
+                  helpers.mainImageUrlHelper(
+                    productModel: widget.cartItem.productModel
+                  ),
+                  
                   width: 80,
                   height: 80,
                   fit: BoxFit.cover,
@@ -189,7 +196,7 @@ class _CartProductItemState extends State<CartProductItem> {
                                     child: Row(  // Row no: 4
                                       children: <Widget>[
                                         Text(
-                                          widget.cartItem.brand,
+                                          widget.cartItem.productModel.brand,
                                           style: TextStyle(
                                             fontSize: 16,
                                             color: Colors.blue[700]
@@ -197,7 +204,7 @@ class _CartProductItemState extends State<CartProductItem> {
                                         ),
                                         SizedBox(width: 20),
                                         Text(
-                                          widget.cartItem.productNo,
+                                          widget.cartItem.productModel.productNo,
                                           style: TextStyle(
                                             fontSize: 14,
                                             color: Colors.grey[700]
@@ -208,7 +215,7 @@ class _CartProductItemState extends State<CartProductItem> {
                                   ),
                                   Expanded(
                                     child: Text(
-                                      widget.cartItem.keyProperties,
+                                      widget.cartItem.productModel.keyProperties,
                                       style: TextStyle(
                                         fontSize: 14,
                                         color: Colors.grey[700]
@@ -255,7 +262,7 @@ class _CartProductItemState extends State<CartProductItem> {
                                           ),
                                         ),
                                         Text(
-                                          '\$${widget.cartItem.price.toStringAsFixed(2)}',
+                                          '\$${widget.cartItem.productModel.price.toStringAsFixed(2)}',
                                           style: TextStyle(
                                             fontSize: 14,
                                             color: Colors.red[700]
@@ -275,7 +282,7 @@ class _CartProductItemState extends State<CartProductItem> {
                                         ),
                                         Text(
                                           // '\$725.85',
-                                          '\$${(widget.cartItem.price * widget.cartItem.quantity).toStringAsFixed(2)}',
+                                          '\$${(widget.cartItem.productModel.price * widget.cartItem.quantity).toStringAsFixed(2)}',
                                           style: TextStyle(
                                             fontSize: 14,
                                             color: Colors.red[700]
@@ -315,7 +322,7 @@ class _CartProductItemState extends State<CartProductItem> {
                                         } else {
                                           Provider.of<CartProvider>(context, listen: false)
                                             .changeItemQuantity(
-                                              id: widget.cartItem.id,
+                                              id: widget.cartItem.productModel.id,
                                               newQuantity: widget.cartItem.quantity-1
                                           );
                                         }
@@ -338,7 +345,7 @@ class _CartProductItemState extends State<CartProductItem> {
                                         onSubmitted: ( val ) {
                                             Provider.of<CartProvider>(context, listen: false)
                                             .changeItemQuantity(
-                                              id: widget.cartItem.id,
+                                              id: widget.cartItem.productModel.id,
                                               newQuantity: int.parse( val )
                                           );
                                         },                                
@@ -352,7 +359,7 @@ class _CartProductItemState extends State<CartProductItem> {
                                       onPressed: () {
                                         Provider.of<CartProvider>(context, listen: false)
                                           .changeItemQuantity(
-                                            id: widget.cartItem.id,
+                                            id: widget.cartItem.productModel.id,
                                             newQuantity: widget.cartItem.quantity+1
                                         );
                                       },

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tech_store/models/category_model.dart';
+import 'package:tech_store/providers/product_provider.dart';
 
 // Models
 import '../../models/drawer_menu_item.dart';
@@ -143,6 +145,16 @@ class _MainDrawerButtonState2 extends State<MainDrawerButton2> with SingleTicker
               mainCategoryId: widget.mainCategory.id
             );
             print('MainDrawerButton2 Click');
+            print('widget.mainCategory.title ->');
+            print(widget.mainCategory.title);
+            print('widget.mainCategory.childrenList.length -> ');
+            print(widget.mainCategory.childrenList.length);
+
+            if(widget.mainCategory.childrenList.length == 0) {
+              Provider.of<ProductProvider>(context, listen: false).getProductsByCategory(
+                categoryId: widget.mainCategory.id
+              );
+            }
           },  
         ),
         

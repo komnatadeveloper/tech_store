@@ -7,17 +7,32 @@ import 'dart:convert';
 import '../constants/constants.dart' as constants;
 // models
 import '../models/category_model.dart';
+import '../models/customer_model.dart';
 // helpers
 import '../helpers/helpers.dart' as helpers;
 
 class CategoryProvider with ChangeNotifier {
+
+  final String authToken;
+  final CustomerModel customerModel;
+
   List<MainCategoryModel> _mainCategoryList;
+
+  CategoryProvider(
+    this.authToken,
+    this.customerModel,
+    this._mainCategoryList,
+  );
+
+
+
   List<MainCategoryModel> get mainCategoryList {
-    return [ ..._mainCategoryList];
+    return [ ..._mainCategoryList ];
   }
 
   Future<void> fetchCategoryList () async {
     print('CategoryProvider -> fetchCategoryList FIRED ->');
+    print( authToken );
     final url = '${constants.apiUrl}/api/category/';
     print('url ->');
     print(url);

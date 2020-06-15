@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -6,6 +7,7 @@ import 'package:provider/provider.dart';
 import './providers/cart_provider.dart';
 import './providers/category_provider.dart';
 import './providers/product_provider.dart';
+import './providers/auth_provider.dart';
 
 
 // Screens
@@ -31,11 +33,29 @@ class _MyAppState extends State<MyApp> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(
+          value: AuthProvider()
+        ),
+
+        // ChangeNotifierProvider.value(
+        //   value: CategoryProvider()
+        // ),
+
+        ChangeNotifierProxyProvider< AuthProvider, CategoryProvider > (
+          create: ( ctx ) => CategoryProvider( null, null, []  ),
+          update: ( _, authProvider, previousCategoryProvider ) => CategoryProvider(
+            authProvider.token,
+            authProvider.customerModel,
+            previousCategoryProvider == null
+              ? []
+              : previousCategoryProvider.mainCategoryList
+          ),
+        ),
+
+
+        ChangeNotifierProvider.value(
           value: CartProvider()
         ),
-        ChangeNotifierProvider.value(
-          value: CategoryProvider()
-        ),
+
         ChangeNotifierProvider.value(
           value: ProductProvider()
         ),

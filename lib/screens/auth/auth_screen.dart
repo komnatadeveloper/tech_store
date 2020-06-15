@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 // import 'dart:math';
 
+// Providers
+import '../../providers/auth_provider.dart';
+
+// Screens
 import '../default_screen.dart';
 
 
@@ -157,6 +162,24 @@ class _AuthCardState extends State<AuthCard> with SingleTickerProviderStateMixin
 
   Future<void> _submit() async {
     print(' AuthScreen -> AuthCard -> Submit Button');
+    _formKey.currentState.save();
+    try {
+      if (_authMode == AuthMode.Login) {
+        // Log user in
+        await Provider.of<AuthProvider>(context, listen: false).signin(
+          _authData['email'],
+          _authData['password']
+        );
+      } else {
+        // Sign user up
+        await Provider.of<AuthProvider>(context, listen: false).signup(
+          _authData['email'],
+          _authData['password']
+        );
+      }
+    } catch (err) {
+      print('AuthScreen -> Submit Button -> errors');
+    }
     Navigator.of(context).pushReplacementNamed(
       DefaultScreen.routeName
     );

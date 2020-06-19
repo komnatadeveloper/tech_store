@@ -108,7 +108,11 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container (
+
+    if(Provider.of<ProductProvider>(context).isLoadingProducts) {
+      return Center(child: CircularProgressIndicator(),);
+    }
+    return Container ( 
       height: double.infinity,
       color: Colors.grey[400],      
       child: ListView.builder(

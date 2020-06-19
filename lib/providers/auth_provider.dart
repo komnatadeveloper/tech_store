@@ -111,6 +111,30 @@ class AuthProvider with ChangeNotifier {
     
   }  // End of signin
 
+  // add product to favorites
+  Future<void> addRemoveProductToFavorites (String id) async {
+    print('AuthProvider -> addRemoveProductToFavorites ->id ->');
+    print(id);
+    try {
+      var url = constants.apiUrl + '/api/customer/product/addToFav/$id';
+      final res = await http.post(
+        url,
+        headers: {
+          'token': token
+        }
+      );
+      final responseData = json.decode( res.body ) ;
+      print('responseData ->');
+      print(responseData);
+      _customerModel.favorites = helpers.convertDynamicToListString(responseData['favorites']);
+      notifyListeners();
+    } catch (err) {
+      print( 'authProvider -> addRemoveProductToFavorites -> Errors ->'  );
+      print(err);
+    }
+  }
+
+
 
 
 

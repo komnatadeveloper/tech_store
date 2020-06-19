@@ -163,6 +163,10 @@ class _AuthCardState extends State<AuthCard> with SingleTickerProviderStateMixin
   Future<void> _submit() async {
     print(' AuthScreen -> AuthCard -> Submit Button');
     _formKey.currentState.save();
+
+    setState(() {
+      _isLoading = true;
+    });
     try {
       if (_authMode == AuthMode.Login) {
         // Log user in
@@ -180,6 +184,9 @@ class _AuthCardState extends State<AuthCard> with SingleTickerProviderStateMixin
     } catch (err) {
       print('AuthScreen -> Submit Button -> errors');
     }
+    setState(() {
+      _isLoading = false;
+    });
     Navigator.of(context).pushReplacementNamed(
       DefaultScreen.routeName
     );

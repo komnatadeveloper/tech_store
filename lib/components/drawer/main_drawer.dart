@@ -23,6 +23,11 @@ import 'package:tech_store/models/category_model.dart';
 
 
 class MainDrawer extends StatefulWidget {
+  final Function selectPage;
+
+  MainDrawer({
+    this.selectPage
+  });
 
   @override
   _MainDrawerState createState() => _MainDrawerState();
@@ -302,6 +307,7 @@ class _MainDrawerState extends State<MainDrawer> {
                     ).childrenList.map(
                       (secondLevelCategory) => SecondLevelDrawerButton(
                         handleClickButton: null,
+                        selectPage: widget.selectPage,
                         secondLevelCategory: secondLevelCategory,
                       )
                     ).toList(),

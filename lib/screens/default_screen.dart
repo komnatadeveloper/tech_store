@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 // Providers
 import '../providers/cart_provider.dart';
+import '../providers/product_provider.dart';
 import '../providers/category_provider.dart';
 
 // Screens
@@ -56,8 +57,21 @@ class _DefaultScreenState extends State<DefaultScreen> {
         'page':SearchScreen( ), 
         'title':'Search'
       }, 
+      // {
+      //   'page':  Provider.of<ProductProvider>(context).isFavoritesFetched 
+      //     ? FavoritesScreen( )
+      //     : FutureBuilder(
+      //       future: Provider.of<ProductProvider>(context).fetchFavoriteProducts(),
+      //       builder: (_, fetchFavoriteSnapShot ) => fetchFavoriteSnapShot.connectionState == ConnectionState.waiting
+      //       ? Center(
+      //         child: CircularProgressIndicator(),
+      //         )
+      //       : FavoritesScreen(),
+      //     ), 
+      //   'title':'Favorites'
+      // }, 
       {
-        'page':FavoritesScreen( ), 
+        'page':   FavoritesScreen(),          
         'title':'Favorites'
       }, 
       {
@@ -165,6 +179,7 @@ class _DefaultScreenState extends State<DefaultScreen> {
         );
       },
     ); 
+    
 
     return Scaffold(
       // appBar: AppBar(
@@ -280,7 +295,9 @@ class _DefaultScreenState extends State<DefaultScreen> {
         ),
       ),
 
-      drawer: MainDrawer(),
+      drawer: MainDrawer(
+        selectPage: _selectPage
+      ),
 
       body: _pages[_selectedPageIndex]['page'],
 

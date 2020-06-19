@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tech_store/providers/product_provider.dart';
 // Dummy Data
 import '../../dummy_data.dart' as dummyData;
 // helpers
 import '../../helpers/helpers.dart' as helpers;
 // Providers
 import '../../providers/cart_provider.dart';
+import '../../providers/auth_provider.dart';
 // Models
 import '../../models/product.dart';
 // Screens
@@ -121,14 +123,37 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       _productModel.productNo
                     ),
                   ),
-                  IconButton(
-                    icon: Icon(
-                      Icons.star
+                  Consumer<AuthProvider> (
+                    builder: (ctx, authProvider, child ) => IconButton(
+                      icon: Icon(
+                        Icons.star,
+                        color: authProvider.customerModel.favorites.indexOf(_productModel.id) >= 0 
+                          ? Colors.blue
+                          : Colors.black,
+                      ),
+                      onPressed: () async {
+                        print('Add to favorites');
+                        await Provider.of<AuthProvider>(context).addRemoveProductToFavorites(
+                          _productModel.id
+                        );
+                        Provider.of<ProductProvider>(context,listen: false).compareFavoriteListWithCustomerModel();
+
+                      },
                     ),
-                    onPressed: () {
-                      print('Add to favorites');
-                    },
-                  )
+
+                  ),
+                  // IconButton(
+                  //   icon: Icon(
+                  //     Icons.star
+                  //   ),
+                  //   onPressed: () {
+                  //     print('Add to favorites');
+                  //     Provider.of<AuthProvider>(context).addRemoveProductToFavorites(
+                  //       _productModel.id
+                  //     );
+
+                  //   },
+                  // )
                 ],
               ), 
               Container(

@@ -13,12 +13,14 @@ import '../../helpers/color_helper.dart' as colorHelper;
 class SecondLevelDrawerButton extends StatefulWidget {
   final SecondLevelCategoryModel secondLevelCategory;
   final Function handleClickButton;
+  final Function selectPage;
   // final bool isSubItemsVisible;
   
 
 
   SecondLevelDrawerButton({
     this.secondLevelCategory,
+    this.selectPage,
     this.handleClickButton
     // this.isSubItemsVisible
   });
@@ -259,6 +261,8 @@ class _SecondLevelDrawerButtonState extends State<SecondLevelDrawerButton> with 
               //   hasChildren: widget.transformedDrawerMenuItem.hasChildren
                 
               // );
+              widget.selectPage(1); // 1 is Search Tab in DefaultScreen
+              Navigator.of(context).pop();
 
               Provider.of<ProductProvider>(context).getProductsByCategory(
                 categoryId: widget.secondLevelCategory.id

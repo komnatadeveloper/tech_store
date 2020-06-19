@@ -51,14 +51,37 @@ class _MyAppState extends State<MyApp> {
           ),
         ),
 
+        ChangeNotifierProxyProvider< AuthProvider, ProductProvider > (
+          create: ( ctx ) => ProductProvider(
+             null, null, [], false, false, false, []  
+            ),
+          update: ( _, authProvider, previousProductProvider ) => ProductProvider(
+            authProvider.token,
+            authProvider.customerModel,
+            previousProductProvider == null
+              ? []
+              : previousProductProvider.searchedProductsList,
+            previousProductProvider == null
+              ? false
+              : previousProductProvider.isLoadingProducts,
+            previousProductProvider == null
+              ? false
+              : previousProductProvider.isLoadingFavorites,
+            previousProductProvider == null
+              ? false
+              : previousProductProvider.isFavoritesFetched,
+            previousProductProvider == null
+              ? []
+              : previousProductProvider.favoriteProducts,
+          ),
+        ),
+
+
 
         ChangeNotifierProvider.value(
           value: CartProvider()
         ),
 
-        ChangeNotifierProvider.value(
-          value: ProductProvider()
-        ),
       ],
       child: MaterialApp(
         title: 'MainDartTitle',

@@ -122,7 +122,12 @@ class _CartProductItemState extends State<CartProductItem> {
     return GestureDetector(
       onTap: () {
         print( 'CartProductItem ->  GestureDetector -> onTap' );
-        Navigator.of(context).pushNamed( ProductDetailScreen.routeName );
+        Navigator.of(context).pushNamed( 
+          ProductDetailScreen.routeName,
+          arguments: {
+            'productModel': widget.cartItem.productModel
+          }
+        );
       },
       child: Card(
         margin: EdgeInsets.only(

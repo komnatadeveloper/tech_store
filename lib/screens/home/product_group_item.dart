@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+// Providers
+import '../../providers/product_provider.dart';
 
 
 class ProductGroupItem extends StatefulWidget {
   final String imageUrl;
   final String title;
   final Function changeTab;
+  final String categoryId;
 
   ProductGroupItem({
     this.imageUrl,
     this.title,
-    this.changeTab
+    this.changeTab,
+    this.categoryId,
   });
 
   @override
@@ -45,6 +51,9 @@ class _ProductGroupItemState extends State<ProductGroupItem> {
         child: GestureDetector(
           onTap: () {
             print( 'HomeScreen -> ProductGroupItem ->  GestureDetector -> onTap' );
+            Provider.of<ProductProvider>(context, listen: false).getProductsByCategory(
+              categoryId: widget.categoryId
+            );
             widget.changeTab(1);  // this 1 is index of Search in HomeScreen
           },
           child: AnimatedOpacity(

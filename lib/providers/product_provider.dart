@@ -203,4 +203,33 @@ class ProductProvider with ChangeNotifier {
     notifyListeners();
   }  // End of getProductsByCategory
 
+
+  Future<void> queryProducts ({
+    String search
+  }) async {
+    final url = '${constants.apiUrl}/api/customer/product/query?search=$search';
+    print('ProductProvider -> queryProducts -> url ->');
+    print(url);
+    // print('url ->');
+    // print(url);
+    _isLoadingProducts = true;
+    notifyListeners();
+
+    try {
+      final res = await http.post(
+        url,
+        headers: {
+          'token': authToken,
+          'Content-Type': 'application/json'
+        },
+      );  
+      searchedProductsList = convertResponseToProductList(res);  
+    } catch (err) {
+      print('ProductProvider -> queryProducts -> errors');
+      print(err);
+    }
+    _isLoadingProducts = false;
+    notifyListeners();
+  }  // End of getProductsByCategory
+
 }  // End of ProductProvider

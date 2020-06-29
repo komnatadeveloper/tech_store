@@ -61,14 +61,16 @@ class MainDrawerHeaderButton extends StatelessWidget {
               ),
             ),
 
-            Padding(
-              padding: EdgeInsets.only(left: 12),
-              child: Text(
-                mainCategory.title,
-                style: TextStyle(
-                  fontSize: 20,
-                  color: Color.fromRGBO(226, 197, 55, 1)
-                )
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.only(left: 12),
+                child: Text(
+                  mainCategory.title,
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Color.fromRGBO(226, 197, 55, 1)
+                  ),
+                ),
               ),
             ),                         
           ],

@@ -41,13 +41,16 @@ class _MyAppState extends State<MyApp> {
         // ),
 
         ChangeNotifierProxyProvider< AuthProvider, CategoryProvider > (
-          create: ( ctx ) => CategoryProvider( null, null, []  ),
+          create: ( ctx ) => CategoryProvider( null, null, [], []  ),
           update: ( _, authProvider, previousCategoryProvider ) => CategoryProvider(
             authProvider.token,
             authProvider.customerModel,
             previousCategoryProvider == null
               ? []
-              : previousCategoryProvider.mainCategoryList
+              : previousCategoryProvider.mainCategoryList,
+            previousCategoryProvider == null
+              ? []
+              : previousCategoryProvider.specialCategoryOnHomePageList,
           ),
         ),
 

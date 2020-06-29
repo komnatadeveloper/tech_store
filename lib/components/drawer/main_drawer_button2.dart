@@ -90,11 +90,11 @@ class _MainDrawerButtonState2 extends State<MainDrawerButton2> with SingleTicker
           elevation: 5,
           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
           color: Color.fromRGBO(rgbValue , rgbValue, rgbValue, 1),
-          child:  Container(
-          padding: EdgeInsetsDirectional.only(
-            top: 10,
-            bottom: 10
-          ),
+          child:  Container(            
+            padding: EdgeInsets.only(
+              top: 10,
+              bottom: 10
+            ),
             width: double.infinity,
             decoration: BoxDecoration(
               border: Border(
@@ -112,15 +112,17 @@ class _MainDrawerButtonState2 extends State<MainDrawerButton2> with SingleTicker
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(left: 10),
-                  child: Text(
-                    widget.mainCategory.title,
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w700,
-                      color: Color.fromRGBO(222, 222, 222, 1)
-                    )
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 10),                
+                    child: Text(
+                      widget.mainCategory.title,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700,
+                        color: Color.fromRGBO(222, 222, 222, 1)
+                      ),
+                    ),                  
                   ),
                 ),
                 Icon(

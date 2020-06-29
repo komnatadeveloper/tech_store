@@ -260,29 +260,41 @@ class _DefaultScreenState extends State<DefaultScreen> {
                 // textAlign: TextAlign.start,
                 style: TextStyle(
                   fontSize: 12,
-                ),
-                
-                
+                ), 
                 decoration: InputDecoration(
                   fillColor: Colors.white,
                   filled: true,  
                   // labelText: 'Search in Tech Store',
-                  hintText: 'Search in Tech Store',
-                  
+                  hintText: 'Search in Tech Store',                  
                   contentPadding: EdgeInsets.only(
                     bottom: 10
                   ),
-                  
-                  
                   prefixIcon: Icon(
                     Icons.search,
                     color: Colors.grey,
                   ),                  
                   border: InputBorder.none,  
-                  
-                          
-                                  
                 ),
+                // onChanged: (search) {
+                //   if( _selectedPageIndex != 1 ) {
+                //     _selectPage(1);
+                //   }
+                //   Provider.of<ProductProvider>(
+                //     context, 
+                //     listen: false
+                //   ).queryProducts(search: search);
+                // },
+                textInputAction: TextInputAction.send,
+                onSubmitted: (search) {
+                  if( _selectedPageIndex != 1 ) {
+                    _selectPage(1);
+                  }
+                  Provider.of<ProductProvider>(
+                    context, 
+                    listen: false
+                  ).queryProducts(search: search);
+                },
+                
                 
                 
               ),

@@ -3,12 +3,14 @@ class MainCategoryModel {
   final String title;
   final bool isSpecial;
   final List<SecondLevelCategoryModel> childrenList;
+  final String imageId;
 
   MainCategoryModel({
     this.id,
     this.title,
     this.isSpecial,
     this.childrenList,
+    this.imageId,
   });
   bool isMainCategory = true;
   bool isSecondLevelCategory = false;
@@ -52,4 +54,20 @@ class ThirdLevelCategoryModel {
   bool isMainCategory = false;
   bool isSecondLevelCategory = false;
   bool isThirdLevelCategory = true;
+}
+
+class SpecialCategoryOnHomePageModel {
+  final String id;
+  final String title;
+  final bool isSpecial;
+  final bool showOnHomePage;
+  final String imageId;
+
+  SpecialCategoryOnHomePageModel({
+    this.id,
+    this.isSpecial,
+    this.showOnHomePage,
+    this.title,
+    this.imageId
+  });
 }

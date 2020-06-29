@@ -17,17 +17,22 @@ class CategoryProvider with ChangeNotifier {
   final CustomerModel customerModel;
 
   List<MainCategoryModel> _mainCategoryList;
+  List<SpecialCategoryOnHomePageModel> _specialCategoryOnHomePageList;
 
   CategoryProvider(
     this.authToken,
     this.customerModel,
     this._mainCategoryList,
+    this._specialCategoryOnHomePageList
   );
 
 
 
   List<MainCategoryModel> get mainCategoryList {
     return [ ..._mainCategoryList ];
+  }
+  List<SpecialCategoryOnHomePageModel> get specialCategoryOnHomePageList {
+    return [ ..._specialCategoryOnHomePageList ];
   }
 
   Future<void> fetchCategoryList () async {
@@ -49,6 +54,8 @@ class CategoryProvider with ChangeNotifier {
       // var mappedData = extractedData as List<Map<String, dynamic>>;
       // print(handleTransformRawCategory(mappedList ));
       _mainCategoryList = handleTransformRawCategory(mappedList);
+      _specialCategoryOnHomePageList = handleTransformRawSpecialCategory(mappedList);
+
       notifyListeners();
 
     } catch (err) {
@@ -60,6 +67,7 @@ class CategoryProvider with ChangeNotifier {
     final mainRawCategoryList = rawCategory.where((element) => element['isMainCategory'] == true).toList();
     final secondLevelRawCategoryList = rawCategory.where((element) => element['isSecondLevelCategory'] == true).toList();
     final thirdLevelRawCategoryList = rawCategory.where((element) => element['isThirdLevelCategory'] == true).toList();
+
 
     List<MainCategoryModel> mainCategoryList = [];
 
@@ -102,12 +110,34 @@ class CategoryProvider with ChangeNotifier {
         MainCategoryModel(
           title: mainRawCategoryList[i]['title'],
           id: mainRawCategoryList[i]['_id'],
+          imageId: mainRawCategoryList[i]['imageId'],
           isSpecial: mainRawCategoryList[i]['isSpecial'],
           childrenList: [...secondChildrenList]
         )
       );
+
     }
+
     return [...mainCategoryList];
+  }
+
+  List<SpecialCategoryOnHomePageModel> handleTransformRawSpecialCategory (List<Map<String, dynamic>> rawCategory) {
+    final specialOnHomePageRawCategoryList = rawCategory.where(
+      (element) => element['showOnHomePage'] == true
+      && element['isSpecial'] == true
+    ).toList();
+    List<SpecialCategoryOnHomePageModel>  tempSpecialList  = [];
+    for( int i = 0; i < specialOnHomePageRawCategoryList.length; i++ ) {
+      tempSpecialList.add(
+        SpecialCategoryOnHomePageModel(
+          id: specialOnHomePageRawCategoryList[i]['_id'],
+          imageId: specialOnHomePageRawCategoryList[i]['imageId'],
+          isSpecial:  specialOnHomePageRawCategoryList[i]['isSpecial'],
+          title:  specialOnHomePageRawCategoryList[i]['title'],
+        )
+      );
+    }
+    return [ ...tempSpecialList ];
   }
 
 

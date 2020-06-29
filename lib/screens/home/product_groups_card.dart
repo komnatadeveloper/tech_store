@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 
+// Models
+import '../../models/category_model.dart';
+// helpers
+import '../../helpers/helpers.dart' as  helpers;
+
 // dummy
 import '../../dummy_data.dart' as dummy;
 // Components
@@ -8,10 +13,13 @@ import './product_group_item.dart';
 
 class ProductGroupsCard extends StatelessWidget {
   final Function changeTab;
+  final List<MainCategoryModel> mainCategoryList;
   ProductGroupsCard({
-    this.changeTab
+    this.changeTab,
+    this.mainCategoryList
   });
 
+  // List<Map<String, String>> _dummyProductsGroupList = dummy.dummyProductGroupList;
   List<Map<String, String>> _dummyProductsGroupList = dummy.dummyProductGroupList;
 
   final List<String> imgList = [
@@ -128,44 +136,62 @@ class ProductGroupsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> rowsList = [];
-    for( int i = 0; i< imgList.length; i++ ) {
-      if(  i.remainder(2) == 0 && imgList.length >= i+2 ) {
-        rowsList.add(
-          Row(
-            children: <Widget>[
-              productGroupItem(imgList[i]),
-              productGroupItem(imgList[i+1]),
+    // List<Widget> rowsList = [];
+    // for( int i = 0; i< mainCategoryList.length; i++ ) {
+    //   if(  i.remainder(2) == 0 && mainCategoryList.length >= i+2 ) {
+    //     rowsList.add(
+    //       Row(
+    //         children: <Widget>[
+    //           productGroupItem(
+    //             helpers.imageUrlHelper(
+    //               imageId: mainCategoryList[i].imageId
+    //             )                
+    //           ),
+    //           productGroupItem(
+    //             helpers.imageUrlHelper(
+    //               imageId: mainCategoryList[i+1].imageId
+    //             )  
+    //           ),
               
-            ],
-          )
-        );
-      } else if( i.remainder(2) == 0 ) {
-        rowsList.add(
-          Row(
-            children: <Widget>[
-              productGroupItem(imgList[i]),
-            ],
-          )
-        );
-      } 
-    }  
-    // end of for loop
+    //         ],
+    //       )
+    //     );
+    //   } else if( i.remainder(2) == 0 ) {
+    //     rowsList.add(
+    //       Row(
+    //         children: <Widget>[
+    //           productGroupItem(
+    //             helpers.imageUrlHelper(
+    //               imageId: mainCategoryList[i].imageId
+    //             )  
+    //           ),
+    //         ],
+    //       )
+    //     );
+    //   } 
+    // }  
+    // // end of for loop
     List<Widget> rowsList2 = [];
-    for( int i = 0; i< _dummyProductsGroupList.length; i++ ) {
-      if(  i.remainder(2) == 0 && imgList.length >= i+2 ) {
+    for( int i = 0; i< mainCategoryList.length; i++ ) {
+      if(  i.remainder(2) == 0 && mainCategoryList.length >= i+2 ) {
         rowsList2.add(
           Row(
             children: <Widget>[
               ProductGroupItem(
-                imageUrl: _dummyProductsGroupList[i]['imageUrl'],
-                title: _dummyProductsGroupList[i]['title'],
-                changeTab: this.changeTab
+                imageUrl: helpers.imageUrlHelper(
+                  imageId: mainCategoryList[i].imageId
+                ),
+                title: mainCategoryList[i].title,
+                changeTab: this.changeTab,
+                categoryId: mainCategoryList[i].id,
               ),
               ProductGroupItem(
-                imageUrl: _dummyProductsGroupList[i+1]['imageUrl'],
-                title: _dummyProductsGroupList[i+1]['title'],
-                changeTab: this.changeTab
+                imageUrl: helpers.imageUrlHelper(
+                  imageId: mainCategoryList[i+1].imageId
+                ),
+                title: mainCategoryList[i+1].title,
+                changeTab: this.changeTab,
+                categoryId: mainCategoryList[i+1].id,
               ),
               
               
@@ -177,9 +203,12 @@ class ProductGroupsCard extends StatelessWidget {
           Row(
             children: <Widget>[
               ProductGroupItem(
-                imageUrl: _dummyProductsGroupList[i]['imageUrl'],
-                title: _dummyProductsGroupList[i]['title'],
-                changeTab: this.changeTab
+                imageUrl: helpers.imageUrlHelper(
+                  imageId: mainCategoryList[i].imageId
+                ),
+                title: mainCategoryList[i].title,
+                changeTab: this.changeTab,
+                categoryId: mainCategoryList[i].id,
               ),
             ],
           )

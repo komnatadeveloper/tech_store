@@ -117,15 +117,24 @@ class _SecondLevelDrawerButtonState extends State<SecondLevelDrawerButton> with 
                 ),            
                 onPressed: () {
 
-                  if(
-                    widget.secondLevelCategory.childrenList.length > 0                
-                  ) {
-                    if (  !_isSubItemsVisible ) {
-                      _animationController.forward();
-                    } else {
-                      _animationController.reverse();
-                    }
-                  } else {
+                  Provider.of<ProductProvider>(
+                    context,
+                    listen: false
+                  ).getProductsByCategory(
+                    categoryId: subItem.id
+                  );
+                  widget.selectPage(1); // 1 is Search Tab in DefaultScreen
+                  Navigator.of(context).pop();
+
+                  // if(
+                  //   widget.secondLevelCategory.childrenList.length > 0                
+                  // ) {
+                  //   if (  !_isSubItemsVisible ) {
+                  //     _animationController.forward();
+                  //   } else {
+                  //     _animationController.reverse();
+                  //   }
+                  // } else {
                     // this.widget.handleClickButton(
                     //   isHeaderButton: false,
                     //   id: widget.transformedDrawerMenuItem.drawerMenuItem.id,
@@ -136,7 +145,7 @@ class _SecondLevelDrawerButtonState extends State<SecondLevelDrawerButton> with 
                     //   hasChildren: widget.transformedDrawerMenuItem.hasChildren
                       
                     // );
-                  }
+                  // }
                 },  
               )
             ).toList()

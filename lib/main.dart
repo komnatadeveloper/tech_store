@@ -15,6 +15,9 @@ import './screens/default_screen.dart';
 import './screens/product_detail/product_detail_screen.dart';
 import './screens/auth/auth_screen.dart';
 import './screens/cart/cart_screen.dart';
+import './screens/order_details/order_details_screen.dart';
+import './screens/order_address_details/order_address_details_screen.dart';
+import './screens/create_new_address/create_new_address_screen.dart';
 
 
 void main() {
@@ -116,6 +119,9 @@ class _MyAppState extends State<MyApp> {
           DefaultScreen.routeName : (ctx) => DefaultScreen(),
           ProductDetailScreen.routeName : (ctx) => ProductDetailScreen(),
           CartScreen.routeName : (ctx) => CartScreen(),
+          OrderDetailsScreen.routeName : (ctx) => OrderDetailsScreen(),
+          OrderAddressDetailsScreen.routeName : (ctx) => OrderAddressDetailsScreen(),
+          CreateNewAddressScreen.routeName : (ctx) => CreateNewAddressScreen(),
         },
       ),
     );

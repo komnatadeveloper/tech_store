@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+// Screens
+import '../order_details/order_details_screen.dart';
+
 // Providers
 import '../../providers/cart_provider.dart';
 
@@ -116,7 +119,11 @@ class CartScreen extends StatelessWidget {
                           color: Colors.white
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).pushNamed(
+                          OrderDetailsScreen.routeName
+                        );
+                      },
                     ),
                   )
                 ],

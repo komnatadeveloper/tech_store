@@ -33,6 +33,8 @@ dependencies:
   # For most popular products slider
   flutter_mobile_carousel: ^1.0.3
 
+  flutter_credit_card: ^0.1.3
+
 
 
 

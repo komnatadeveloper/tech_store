@@ -16,6 +16,9 @@ class AuthProvider with ChangeNotifier {
   String _token;
   String _userId;
   CustomerModel _customerModel;
+  AddressModel _oneTimeAddress;
+  int _selectedAddressIndex = 0;
+  String _orderDeliverOption; // 'from-tech-store-warehouse' || 'shipment-to-address'
 
   bool get isAuth {
     return _token != null;
@@ -25,6 +28,31 @@ class AuthProvider with ChangeNotifier {
   }
   CustomerModel get customerModel {
     return _customerModel;
+  }
+  int get selectedAddressIndex {
+    return _selectedAddressIndex ;
+  }
+  void setSelectedAddressIndex (int newIndex) {
+    if( _customerModel.addressList.length > newIndex  ) {
+      _selectedAddressIndex = newIndex;
+      notifyListeners();
+    }
+  }
+  String get orderDeliverOption {
+    return _orderDeliverOption;
+  }
+  void setOrderDeliveryOption (
+    String newDeliveryOption
+  ) {
+    if ( newDeliveryOption != _orderDeliverOption) {
+      if( 
+        newDeliveryOption == 'from-tech-store-warehouse'
+        || newDeliveryOption == 'shipment-to-address'
+       ) {
+         _orderDeliverOption = newDeliveryOption;
+         notifyListeners();
+       }
+    }
   }
 
   // signup
@@ -79,6 +107,7 @@ class AuthProvider with ChangeNotifier {
         balance: double.parse(double.parse(balance.toString()).toStringAsFixed(2))
              
       );
+      _customerModel.addressList = [];
       for(final name in responseData['customer'].keys) {
         // print(name);
         // print(rawItem[name]);
@@ -94,12 +123,35 @@ class AuthProvider with ChangeNotifier {
             print('_customerModel.orders ->');
             print(_customerModel.orders);
             break;
+          case  'addressList':
+            var rawAddressList = helpers.convertListDynamicToListMap(
+              responseData['customer'][name] as List<dynamic>
+            );
+            for( int i = 0; i < rawAddressList.length; i++ ) {
+              var tempAddressItem = AddressModel(
+                definition: rawAddressList[i]['definition'],
+                receiver: rawAddressList[i]['receiver'],
+                addressString: rawAddressList[i]['addressString'],
+                city: rawAddressList[i]['city'],
+              );
+              if( rawAddressList[i]['_id'] != null ) {
+                tempAddressItem.id = rawAddressList[i]['_id'];
+              }
+              _customerModel.addressList.add(tempAddressItem);
+            }
+            print('_customerModel.addressList.length ->');
+            print(_customerModel.addressList.length);
+            break;
           
           default:
           print(responseData['customer'][name]);
         }
         
       }
+      _orderDeliverOption = _customerModel.addressList.length == 0 
+        ? 'from-tech-store-warehouse' 
+        : 'shipment-to-address';
+      
       // _customerModel.favorites = responseData['customer']['favorites'];
       notifyListeners();
       print('userId ->');
@@ -133,6 +185,53 @@ class AuthProvider with ChangeNotifier {
       print(err);
     }
   }
+
+  Future<void> addAddress ({
+    AddressModel addressModel
+  }) async {
+    try {
+      var url = constants.apiUrl + '/api/customer/address/add';
+      final res = await http.post(
+        url,
+        headers: {
+          'token': token,
+          'Content-Type': 'application/json'
+        },
+        body: json.encode({
+          'definition': addressModel.definition.trim(),
+          'receiver': addressModel.receiver.trim(),
+          'addressString': addressModel.addressString.trim(),
+          'city': addressModel.city.trim(),
+        }),
+      );
+      final responseData = json.decode( res.body ) ;
+      print('responseData ->');
+      print(responseData);
+      var rawAddressList = helpers.convertListDynamicToListMap(
+        responseData['addressList'] as List<dynamic>
+      );
+      List<AddressModel> tempAddressList = [];
+      for( int i = 0; i < rawAddressList.length; i++ ) {
+        var tempAddressItem = AddressModel(
+          definition: rawAddressList[i]['definition'],
+          receiver: rawAddressList[i]['receiver'],
+          addressString: rawAddressList[i]['addressString'],
+          city: rawAddressList[i]['city'],
+        );
+        if( rawAddressList[i]['_id'] != null ) {
+          tempAddressItem.id = rawAddressList[i]['_id'];
+        }
+        tempAddressList.add(tempAddressItem);
+      }
+      _customerModel.addressList = tempAddressList;
+      notifyListeners();
+      print( 'authProvider -> addAddress -> _customerModel.addressList.length ->'  );
+      print(_customerModel.addressList.length);
+    } catch (err) {
+      print( 'authProvider -> addAddress -> Errors ->'  );
+      print(err);
+    }
+  } // End of addAddress
 
 
 

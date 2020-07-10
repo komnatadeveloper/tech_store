@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+// Models
+import '../../models/customer_model.dart';
+// Providers
+import '../../providers/auth_provider.dart';
 // Screens
 import '../create_new_address/create_new_address_screen.dart';
+
+
 
 class OrderAddressDetailsScreen extends StatefulWidget {
   static const routeName = '/order-address-details';
@@ -15,16 +22,75 @@ class OrderAddressDetailsScreen extends StatefulWidget {
 class _OrderAddressDetailsScreenState extends State<OrderAddressDetailsScreen> {
   final _appbarBackgroundColor = Color.fromRGBO(208, 57, 28, 1);
   String _deliverOption;  // 'from-tech-store-warehouse' || 'shipment-to-address'
+   List<AddressModel> _customerAddressList;
+  //  int _selectedAddressIndex = 0;
+   AddressModel _selectedAddress;
   @override
   void initState() {
     // TODO: implement initState
-    _deliverOption = 'from-tech-store-warehouse';
+    
+    // _customerAddressList = Provider.of<AuthProvider>(context, listen: false).customerModel.addressList;
+    // if ( _customerAddressList.length != 0 ) {
+    //   _selectedAddress = _customerAddressList[0];
+    // }
     super.initState();
+  }
+
+  Widget _customerAddressItemWidget ({
+    AddressModel addressModel
+  }) {
+    return Container(
+      margin: EdgeInsets.only(
+        left: 12,
+        right: 12
+
+      ),
+      child: Card(
+        margin: EdgeInsets.only(
+          top:3,
+          left:0,
+          right:0,
+          bottom: 0
+        ),
+        child: Row(
+          children: <Widget>[
+            Radio(
+              value: addressModel.definition,
+              groupValue: _selectedAddress.definition,
+              onChanged: ( val ) {
+                print(val);
+                print('OrderAddressDetailsScreen -> _customerAddressItemWidget -> CLICK');
+                var index = _customerAddressList.indexOf(addressModel);
+                Provider.of<AuthProvider>(context, listen: false).setSelectedAddressIndex(index);
+                // setState((  ) {                            
+                //   _deliverOption = val;
+                // });
+              },
+            ),
+            Text(
+              addressModel.definition,
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: 16
+              ),
+            )
+          ],
+        )
+      ),
+    );
   }
 
 
   @override
   Widget build(BuildContext context) {
+    _deliverOption =  Provider.of<AuthProvider>(context).orderDeliverOption;
+    _customerAddressList = Provider.of<AuthProvider>(context).customerModel.addressList;
+    if ( _customerAddressList.length != 0 ) {
+      _selectedAddress = _customerAddressList[
+        Provider.of<AuthProvider>(context).selectedAddressIndex
+      ];
+    }
     return Scaffold(
       appBar: AppBar(
         backgroundColor: _appbarBackgroundColor,
@@ -78,9 +144,9 @@ class _OrderAddressDetailsScreenState extends State<OrderAddressDetailsScreen> {
                         groupValue: _deliverOption,
                         onChanged: ( val ) {
                           print(val);
-                          setState((  ) {
-                            _deliverOption = val;
-                          });
+                          Provider.of<AuthProvider>(context,listen: false).setOrderDeliveryOption(
+                            'from-tech-store-warehouse'
+                          );
                         },
                       ),
                       Text(
@@ -110,9 +176,9 @@ class _OrderAddressDetailsScreenState extends State<OrderAddressDetailsScreen> {
                         groupValue: _deliverOption,
                         onChanged: ( val ) {
                           print(val);
-                          setState((  ) {
-                            _deliverOption = val;
-                          });
+                          Provider.of<AuthProvider>(context,listen: false).setOrderDeliveryOption(
+                            'shipment-to-address'
+                          );
                         },
                       ),
                       Text(
@@ -127,43 +193,67 @@ class _OrderAddressDetailsScreenState extends State<OrderAddressDetailsScreen> {
                   )
                 ),
               ),
-              Container(
+              if (_customerAddressList.length > 0) ..._customerAddressList.map(
+                (addressItem ) => _customerAddressItemWidget(
+                  addressModel: addressItem
+                )
+              ).toList(),
+              // Text('This is a test'),
+              // Consumer<AuthProvider>(
+              //   builder: ( _, authInstance, child ) => authInstance.customerModel.addressList.length > 0
+              //     ?
+              //     Column(
+              //       children: authInstance.customerModel.addressList.map(
+              //         (addressItem ) => _customerAddressItemWidget(
+              //           addressModel: addressItem
+              //         )
+              //       ).toList(),
+              //     )                  
+              //     : SizedBox(height: 0.2,)
+              // ),
+              if (_customerAddressList.length == 0) Container(
                 margin: EdgeInsets.only(
+                  // top: 20,
                   left: 12,
-                  right: 12
-
+                  right: 12,
+                  bottom: 20
                 ),
-                child: Card(
-                  margin: EdgeInsets.only(
-                    top:3,
-                    left:0,
-                    right:0,
-                    bottom: 0
+                width: double.infinity,
+                child: RaisedButton(
+                  padding: EdgeInsets.symmetric(
+                    vertical: 10
                   ),
-                  child: Row(
-                    children: <Widget>[
-                      Radio(
-                        value: 'customer-adress-1',
-                        groupValue: 'customer-adress-1',
-                        onChanged: ( val ) {
-                          print(val);
-                          // setState((  ) {                            
-                          //   _deliverOption = val;
-                          // });
-                        },
-                      ),
-                      Text(
-                        'customer-adress-1',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16
-                        ),
-                      )
-                    ],
-                  )
+                  color: Colors.white,
+                  child: Text(
+                    'No Addresses. Please Add!',
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(
+                      CreateNewAddressScreen.routeName
+                    );
+                  },
                 ),
-              ),
+              )
+
+                  
+    //               label: Text('Add New Address'),
+    //               color: Colors.grey,
+    //               padding: EdgeInsets.symmetric(
+    //                 vertical: 12
+    //               ),
+    //               onPressed: () {
+    //                 Navigator.of(context).pushNamed(
+    //                   CreateNewAddressScreen.routeName
+    //                 );
+    //               },
+    //             ) ,
+    // )
+              
 
               
             ],

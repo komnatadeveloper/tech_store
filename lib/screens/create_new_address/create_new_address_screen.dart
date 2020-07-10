@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:tech_store/providers/auth_provider.dart';
 // Models
-import '../../models/address_model.dart';
+import '../../models/customer_model.dart';
 
 
 class CreateNewAddressScreen extends StatefulWidget {
@@ -19,6 +21,7 @@ class _CreateNewAddressScreenState extends State<CreateNewAddressScreen> {
     city: ''
   );
   bool _willSaveAddress = true;
+  bool _isLoading = true;
   // focus nodes
   final _definitionFocusNode = FocusNode();
   final _receiverFocusNode = FocusNode();
@@ -26,6 +29,13 @@ class _CreateNewAddressScreenState extends State<CreateNewAddressScreen> {
   final _cityFocusNode = FocusNode();
   // global key
   final _addAddressFormGlobalKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    _isLoading = false;
+    super.initState();
+  }
 
 
   @override
@@ -41,7 +51,7 @@ class _CreateNewAddressScreenState extends State<CreateNewAddressScreen> {
 
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) {    
     return Scaffold(
       appBar: AppBar(
         backgroundColor: _appbarBackgroundColor,
@@ -59,8 +69,23 @@ class _CreateNewAddressScreenState extends State<CreateNewAddressScreen> {
                   fontSize: 18
                 ),
               ),
-              onPressed: () {
-
+              onPressed: () async {
+                _addAddressFormGlobalKey.currentState.save();
+                if( _willSaveAddress ) {
+                  setState(() {
+                    _isLoading = true;                  
+                  });
+                  await Provider.of<AuthProvider>(context, listen: false).addAddress(
+                    addressModel: _formData
+                  );
+                  setState(() {
+                    _isLoading = false;                  
+                  });
+                  Navigator.of(context).pop();
+                } else {
+                  print('CreateNewAddressScreen -> addAddressWithoutSaving ->');
+                  Navigator.of(context).pop();
+                }
               },
             )
           ],
@@ -84,117 +109,119 @@ class _CreateNewAddressScreenState extends State<CreateNewAddressScreen> {
         // ],
         centerTitle: true,
       ),
-      body: Container(
-        height: double.infinity,
-        width: double.infinity,
-        padding: EdgeInsets.symmetric(horizontal: 12),
-        child: Form(
-          key: _addAddressFormGlobalKey,
-          child: SingleChildScrollView(
-            child: Container(
-              width: double.infinity,
-              child: Column(
-                children: <Widget>[
-                  SizedBox(height: 18,),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      labelText: 'Definition'
-                    ),
-                    focusNode: _definitionFocusNode,
-                    textInputAction: TextInputAction.next,
-                    onFieldSubmitted: ( _ ) {
-                      FocusScope.of(context).requestFocus(
-                        _receiverFocusNode
-                      );
-                    },
-                    onSaved: ( val ) {
-                      _formData = AddressModel(
-                        definition: val,
-                        receiver: _formData.receiver,
-                        addressString: _formData.addressString,
-                        city: _formData.city
-                      );
-                    },
-                  ),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      labelText: 'Receiver'
-                    ),
-                    focusNode: _receiverFocusNode,
-                    textInputAction: TextInputAction.next,
-                    onFieldSubmitted: ( _ ) {
-                      FocusScope.of(context).requestFocus(
-                        _addressStringFocusNode
-                      );
-                    },
-                    onSaved: ( val ) {
-                      _formData = AddressModel(
-                        definition: _formData.definition,
-                        receiver: val,
-                        addressString: _formData.addressString,
-                        city: _formData.city
-                      );
-                    },
-                  ),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      labelText: 'Address',                      
-                    ),
-                    focusNode: _addressStringFocusNode,
-                    maxLines: 4,
-                    textInputAction: TextInputAction.newline,
-                    
-                    onSaved: ( val ) {
-                      _formData = AddressModel(
-                        definition: _formData.definition,
-                        receiver: _formData.receiver,
-                        addressString: val,
-                        city: _formData.city
-                      );
-                    },
-                  ),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      labelText: 'City',                      
-                    ),
-                    focusNode: _cityFocusNode,
-                    
-                    onSaved: ( val ) {
-                      _formData = AddressModel(
-                        definition: _formData.definition,
-                        receiver: _formData.receiver,
-                        addressString: _formData.addressString,
-                        city: val
-                      );
-                    },
-                  ),
-
-                  Container(
-                    height: 40,
-                    margin: EdgeInsets.only(
-                      top: 18
-                    ),
-                    child: new SwitchListTile(
-                      title: const Text('Save Address'),
-                      value: _willSaveAddress,
-                      onChanged: (value) {
-                        setState(() {
-                          _willSaveAddress = !_willSaveAddress;
-                        });
+      body:  _isLoading 
+        ? 
+        Center(
+          child: CircularProgressIndicator(),
+        )
+        : Container(
+          height: double.infinity,
+          width: double.infinity,
+          padding: EdgeInsets.symmetric(horizontal: 12),
+          child: Form(
+            key: _addAddressFormGlobalKey,
+            child: SingleChildScrollView(
+              child: Container(
+                width: double.infinity,
+                child: Column(
+                  children: <Widget>[
+                    SizedBox(height: 18,),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        labelText: 'Definition'
+                      ),
+                      focusNode: _definitionFocusNode,
+                      textInputAction: TextInputAction.next,
+                      onFieldSubmitted: ( _ ) {
+                        FocusScope.of(context).requestFocus(
+                          _receiverFocusNode
+                        );
+                      },
+                      onSaved: ( val ) {
+                        _formData = AddressModel(
+                          definition: val,
+                          receiver: _formData.receiver,
+                          addressString: _formData.addressString,
+                          city: _formData.city
+                        );
                       },
                     ),
-                  ),
-                 
-                  SizedBox(height: 18,),
-                ],
+                    TextFormField(
+                      decoration: InputDecoration(
+                        labelText: 'Receiver'
+                      ),
+                      focusNode: _receiverFocusNode,
+                      textInputAction: TextInputAction.next,
+                      onFieldSubmitted: ( _ ) {
+                        FocusScope.of(context).requestFocus(
+                          _addressStringFocusNode
+                        );
+                      },
+                      onSaved: ( val ) {
+                        _formData = AddressModel(
+                          definition: _formData.definition,
+                          receiver: val,
+                          addressString: _formData.addressString,
+                          city: _formData.city
+                        );
+                      },
+                    ),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        labelText: 'Address',                      
+                      ),
+                      focusNode: _addressStringFocusNode,
+                      maxLines: 4,
+                      textInputAction: TextInputAction.newline,
+                      
+                      onSaved: ( val ) {
+                        _formData = AddressModel(
+                          definition: _formData.definition,
+                          receiver: _formData.receiver,
+                          addressString: val,
+                          city: _formData.city
+                        );
+                      },
+                    ),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        labelText: 'City',                      
+                      ),
+                      focusNode: _cityFocusNode,
+                      
+                      onSaved: ( val ) {
+                        _formData = AddressModel(
+                          definition: _formData.definition,
+                          receiver: _formData.receiver,
+                          addressString: _formData.addressString,
+                          city: val
+                        );
+                      },
+                    ),
+
+                    Container(
+                      height: 40,
+                      margin: EdgeInsets.only(
+                        top: 18
+                      ),
+                      child: new SwitchListTile(
+                        title: const Text('Save Address'),
+                        value: _willSaveAddress,
+                        onChanged: (value) {
+                          setState(() {
+                            _willSaveAddress = !_willSaveAddress;
+                          });
+                        },
+                      ),
+                    ),
+                  
+                    SizedBox(height: 18,),
+                  ],
+                ),
               ),
             ),
           ),
         ),
-
-
-      ),
-      
     );
   }
 }

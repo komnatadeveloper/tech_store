@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+// Models
+import '../../models/customer_model.dart';
 // Credit Card Imports
 import 'package:flutter_credit_card/credit_card_form.dart';
 import 'package:flutter_credit_card/credit_card_model.dart';
 import 'package:flutter_credit_card/flutter_credit_card.dart';
 // Screens
 import '../order_address_details/order_address_details_screen.dart';
+// Providers
+import '../../providers/auth_provider.dart';
 
 class OrderDetailsScreen extends StatefulWidget {
   static const routeName = '/order-details-screen';
@@ -21,6 +26,11 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with SingleTick
   TabController _tabController;
   var _selectedPaymentTabIndex = 0;
   List _paymentTabList;
+  // Address variables
+  List<AddressModel> _customerAddressList;
+  AddressModel _selectedAddress;
+  String _orderDeliverOption;
+  int _selectedAddressIndex;
   // Credit Card Variables
   String _cardNumber = '';
   String expiryDate = '';
@@ -40,11 +50,115 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with SingleTick
     });
   }
 
-    void _selectPaymentTab(int newIndex) {
+  void _selectPaymentTab(int newIndex) {
     setState(() {
       _selectedPaymentTabIndex = newIndex;
     });
   }
+
+  Widget _customerAddressWidget ({
+    AddressModel selectedAddressModel
+  }) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        Expanded(
+          // width:  230 ,
+          // color: Colors.yellow,
+          // child: GestureDetector(
+
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                selectedAddressModel.definition
+              ),
+              Text(
+                selectedAddressModel.receiver,
+                overflow: TextOverflow.clip,
+              ),
+              Text(
+                selectedAddressModel.addressString,
+                overflow: TextOverflow.clip,
+              ),
+            ],
+          ),
+          // ),
+        ),
+        Container(
+          width: 40,
+          height: double.infinity,
+          decoration: BoxDecoration(
+            // color: Colors.orange,
+            border: Border(
+              left: BorderSide(
+                // color: Color.fromRGBO(rgbBorderValue , rgbBorderValue, rgbBorderValue, 1),
+                color: Colors.grey,
+                width: 1
+              ),
+            )
+          ),
+          // color: ,
+          child: Icon(
+            Icons.keyboard_arrow_down,
+            color: Colors.grey,
+            size: 35,
+          )
+        )
+      ],
+    );
+  }
+
+  Widget _warehouseAddressWidget  () {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        Expanded(
+          // width:  230 ,
+          // color: Colors.yellow,
+          // child: GestureDetector(
+
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                'Tech Store'
+              ),
+              Text(
+                'From Warehouse'
+              ),
+            ],
+          ),
+          // ),
+        ),
+        Container(
+          width: 40,
+          height: double.infinity,
+          decoration: BoxDecoration(
+            // color: Colors.orange,
+            border: Border(
+              left: BorderSide(
+                // color: Color.fromRGBO(rgbBorderValue , rgbBorderValue, rgbBorderValue, 1),
+                color: Colors.grey,
+                width: 1
+              ),
+            )
+          ),
+          // color: ,
+          child: Icon(
+            Icons.keyboard_arrow_down,
+            color: Colors.grey,
+            size: 35,
+          )
+        )
+      ],
+    );
+  }
+
 
   @override
   void didChangeDependencies() {
@@ -63,13 +177,13 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with SingleTick
     super.didChangeDependencies();
   }
 
-
-
-
   
   @override
   void initState() {
     super.initState();
+    
+
+
     _creditCardWidget =   CreditCardWidget(
       cardNumber: _cardNumber,
       expiryDate: expiryDate,
@@ -78,6 +192,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with SingleTick
       showBackView: isCvvFocused,
       animationDuration: Duration(milliseconds: 300),
     );
+    
     _paymentTabList = [
       Text('Transfer'),
       Container(
@@ -128,10 +243,21 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with SingleTick
     );
 
     
-  }
+  } // End of initState
 
   @override
   Widget build(BuildContext context) {
+    _customerAddressList = Provider.of<AuthProvider>(context).customerModel.addressList;
+    _orderDeliverOption = Provider.of<AuthProvider>(context).orderDeliverOption;
+    _selectedAddressIndex = Provider.of<AuthProvider>(context).selectedAddressIndex;
+    if ( _customerAddressList.length > 0
+      || _orderDeliverOption == 'shipment-to-address'
+      || _selectedAddressIndex != null
+    ) {
+      _selectedAddress = _customerAddressList[_selectedAddressIndex];
+    }
+
+
 
 
     return Scaffold(
@@ -203,51 +329,15 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with SingleTick
                           ),
                           // child: GestureDetector(
 
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                Expanded(
-                                  // width:  230 ,
-                                  // color: Colors.yellow,
-                                  // child: GestureDetector(
-
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      Text(
-                                        'Tech Store'
-                                      ),
-                                      Text(
-                                        'From Warehouse'
-                                      ),
-                                    ],
-                                  ),
-                                  // ),
-                                ),
-                                Container(
-                                  width: 40,
-                                  height: double.infinity,
-                                  decoration: BoxDecoration(
-                                    // color: Colors.orange,
-                                    border: Border(
-                                      left: BorderSide(
-                                        // color: Color.fromRGBO(rgbBorderValue , rgbBorderValue, rgbBorderValue, 1),
-                                        color: Colors.grey,
-                                        width: 1
-                                      ),
-                                    )
-                                  ),
-                                  // color: ,
-                                  child: Icon(
-                                    Icons.keyboard_arrow_down,
-                                    color: Colors.grey,
-                                    size: 35,
-                                  )
+                            child: ( _customerAddressList.length == 0 
+                              || _orderDeliverOption == 'from-tech-store-warehouse'
+                              )
+                                ?
+                                _warehouseAddressWidget()
+                                :
+                                _customerAddressWidget(
+                                  selectedAddressModel: _selectedAddress
                                 )
-                              ],
-                            ),
                           // ),
                         ),
                       ),

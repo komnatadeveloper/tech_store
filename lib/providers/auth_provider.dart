@@ -17,7 +17,7 @@ class AuthProvider with ChangeNotifier {
   String _userId;
   CustomerModel _customerModel;
   AddressModel _oneTimeAddress;
-  int _selectedAddressIndex = 0;
+  int _selectedAddressIndex = null;
   String _orderDeliverOption; // 'from-tech-store-warehouse' || 'shipment-to-address'
 
   bool get isAuth {
@@ -108,6 +108,29 @@ class AuthProvider with ChangeNotifier {
              
       );
       _customerModel.addressList = [];
+      if( responseData['customer']['addressList'] != null ) {
+        var rawAddressList = helpers.convertListDynamicToListMap(
+          responseData['customer']['addressList'] as List<dynamic>
+        );
+        for( int i = 0; i < rawAddressList.length; i++ ) {
+          var tempAddressItem = AddressModel(
+            definition: rawAddressList[i]['definition'],
+            receiver: rawAddressList[i]['receiver'],
+            addressString: rawAddressList[i]['addressString'],
+            city: rawAddressList[i]['city'],
+          );
+          if( rawAddressList[i]['_id'] != null ) {
+            tempAddressItem.id = rawAddressList[i]['_id'];
+          }
+          _customerModel.addressList.add(tempAddressItem);
+        }
+        print('_customerModel.addressList.length ->');
+        print(_customerModel.addressList.length);
+      }
+      if( _customerModel.addressList.length > 0 ) {
+        _selectedAddressIndex = 0;
+      }
+
       for(final name in responseData['customer'].keys) {
         // print(name);
         // print(rawItem[name]);
@@ -123,25 +146,25 @@ class AuthProvider with ChangeNotifier {
             print('_customerModel.orders ->');
             print(_customerModel.orders);
             break;
-          case  'addressList':
-            var rawAddressList = helpers.convertListDynamicToListMap(
-              responseData['customer'][name] as List<dynamic>
-            );
-            for( int i = 0; i < rawAddressList.length; i++ ) {
-              var tempAddressItem = AddressModel(
-                definition: rawAddressList[i]['definition'],
-                receiver: rawAddressList[i]['receiver'],
-                addressString: rawAddressList[i]['addressString'],
-                city: rawAddressList[i]['city'],
-              );
-              if( rawAddressList[i]['_id'] != null ) {
-                tempAddressItem.id = rawAddressList[i]['_id'];
-              }
-              _customerModel.addressList.add(tempAddressItem);
-            }
-            print('_customerModel.addressList.length ->');
-            print(_customerModel.addressList.length);
-            break;
+          // case  'addressList':
+          //   var rawAddressList = helpers.convertListDynamicToListMap(
+          //     responseData['customer'][name] as List<dynamic>
+          //   );
+          //   for( int i = 0; i < rawAddressList.length; i++ ) {
+          //     var tempAddressItem = AddressModel(
+          //       definition: rawAddressList[i]['definition'],
+          //       receiver: rawAddressList[i]['receiver'],
+          //       addressString: rawAddressList[i]['addressString'],
+          //       city: rawAddressList[i]['city'],
+          //     );
+          //     if( rawAddressList[i]['_id'] != null ) {
+          //       tempAddressItem.id = rawAddressList[i]['_id'];
+          //     }
+          //     _customerModel.addressList.add(tempAddressItem);
+          //   }
+          //   print('_customerModel.addressList.length ->');
+          //   print(_customerModel.addressList.length);
+          //   break;
           
           default:
           print(responseData['customer'][name]);

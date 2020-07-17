@@ -62,7 +62,9 @@ class CartScreen extends StatelessWidget {
                
             ),
             //---------------------------------
-            Container(
+            if ( 
+              Provider.of<CartProvider>(context).items.length > 0 
+            )  Container(
               height: 60,
               padding: EdgeInsets.symmetric(
                 horizontal: 20
@@ -120,7 +122,7 @@ class CartScreen extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {
-                        Navigator.of(context).pushNamed(
+                        Navigator.of(context).pushReplacementNamed(
                           OrderDetailsScreen.routeName
                         );
                       },

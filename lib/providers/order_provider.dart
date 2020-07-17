@@ -23,7 +23,7 @@ class OrderProvider with ChangeNotifier {
     this.customerModel
   );
   
-  Future<void> payAndOrder ({
+  Future<Map<String, String>> payAndOrder ({
     // String type,
     List<CartItem> items,  // to be updated
     double orderTotalPrice,
@@ -66,10 +66,18 @@ class OrderProvider with ChangeNotifier {
       final responseData = json.decode( res.body ) ;
       print('responseData ->');
       print(responseData);
+      String msg = responseData['msg'] as String;
+      return {
+        'msg': msg
+      };
 
     } catch ( err ) {
       print( 'orderProvider -> payAndOrder -> Errors ->'  );
       print(err);
+      return {
+        'msg': 'There Are Errors'
+      };
+
     }
   } // End of payAndOrder
 

@@ -142,7 +142,16 @@ class AuthProvider with ChangeNotifier {
             print(_customerModel.favorites);
             break;
           case  'orders':
-            _customerModel.orders = helpers.convertDynamicToListString(responseData['customer'][name]);
+            // _customerModel.orders = helpers.convertDynamicToListString(responseData['customer'][name]);
+            _customerModel.orders = [];
+            var rawOrders = helpers.convertListDynamicToListMap(responseData['customer'][name] as List<dynamic>);
+            if( rawOrders.length > 0 ) {
+              for( int i = 0; i < rawOrders.length; i++ ) {
+                _customerModel.orders.add(
+                  rawOrders[i]['orderId'] as String
+                );
+              }
+            }
             print('_customerModel.orders ->');
             print(_customerModel.orders);
             break;

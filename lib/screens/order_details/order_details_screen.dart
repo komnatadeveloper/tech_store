@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tech_store/providers/order_provider.dart';
+import 'dart:async';
 // Models
 import '../../models/customer_model.dart';
 // Credit Card Imports
@@ -305,458 +306,482 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with SingleTick
         title: Text('Order Details'),
         centerTitle: true,
       ),
-      body: Container(
-        height: double.infinity,
-        width: double.infinity,
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              child: Container(
-                // height: double.infinity,
-                // width: double.infinity,
-                color: Colors.grey[400],
-                child:
-                  _isLoading 
-                  ? Center(
-                      child: CircularProgressIndicator(),
-                    )
-                  : SingleChildScrollView(
-                    child: Column(
-                      children: <Widget>[
-                        Container(
-                          width: double.infinity,
-                          child: Card(                
-                            margin: EdgeInsets.only(
-                              top: 10,
-                              left: 12,
-                              right: 12
-                            ),
-                            child: Column(
-                              children: <Widget>[
-                                Container(
-                                  padding: EdgeInsets.only(
-                                    top: 8,
-                                    left: 12
-                                  ),
-                                  alignment: Alignment.topLeft,
-                                  child: Text(
-                                    'Delivery Address',
-                                    style: TextStyle(
-                                      color: Colors.red,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20
-                                    ),
-                                  ),
+      // This Builder is because of Scaffold doesnt exist here
+      body: Builder(
+        builder: (BuildContext context) {
+          return Container(
+            height: double.infinity,
+            width: double.infinity,
+            child: Column(
+              children: <Widget>[
+                Expanded(
+                  child: Container(
+                    // height: double.infinity,
+                    // width: double.infinity,
+                    color: Colors.grey[400],
+                    child:
+                      _isLoading 
+                      ? Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : SingleChildScrollView(
+                        child: Column(
+                          children: <Widget>[
+                            Container(
+                              width: double.infinity,
+                              child: Card(                
+                                margin: EdgeInsets.only(
+                                  top: 10,
+                                  left: 12,
+                                  right: 12
                                 ),
-                                GestureDetector(
-                                  onTap: () {
-                                    print('OrderDetailScreen -> Delivery Address Click');
-                                    Navigator.of(context).pushNamed(
-                                      OrderAddressDetailsScreen.routeName
-                                    );
-                                  },
-                                  child: Container(                      
-                                    height: 80,
-                                    margin: EdgeInsets.only(
-                                      top: 8,
-                                      left: 12,
-                                      right: 12,
-                                      bottom: 8
-                                    ),
-                                    padding: EdgeInsets.only(
-                                      top: 8,
-                                      left: 12,
-                                      bottom: 8
-                                    ),
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: Colors.grey
+                                child: Column(
+                                  children: <Widget>[
+                                    Container(
+                                      padding: EdgeInsets.only(
+                                        top: 8,
+                                        left: 12
                                       ),
-                                      
-                                      borderRadius: BorderRadius.circular(5)
-                                      
-                                      // color: Colors.pink
-                                    ),
-                                    // child: GestureDetector(
-
-                                      child: ( _customerAddressList.length == 0 
-                                        || _orderDeliverOption == 'from-tech-store-warehouse'
-                                        )
-                                          ?
-                                          _warehouseAddressWidget()
-                                          :
-                                          _customerAddressWidget(
-                                            selectedAddressModel: _selectedAddress
-                                          )
-                                    // ),
-                                  ),
-                                ),
-                                Container(
-                                  padding: EdgeInsets.only(
-                                    top: 8,
-                                    left: 12
-                                  ),
-                                  alignment: Alignment.topLeft,
-                                  child: Text(
-                                    'Shipment Company',
-                                    style: TextStyle(
-                                      color: Colors.red,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  alignment: AlignmentDirectional.centerStart,
-                                  margin: EdgeInsets.only(
-                                    left: 12,
-                                    bottom: 12
-                                  ),
-                                  child: DropdownButton(
-                                    items: [
-                                      DropdownMenuItem(
-                                        child: Text('Company 1'),
-                                        value: 0,                            
+                                      alignment: Alignment.topLeft,
+                                      child: Text(
+                                        'Delivery Address',
+                                        style: TextStyle(
+                                          color: Colors.red,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20
+                                        ),
                                       ),
-                                      DropdownMenuItem(    
-                                        child: Text('Company 2'), 
-                                        value: 1,
-                                      ),
-                                    ],
-                                    value: _shipmentCompanyIndex,
-                                    onChanged: (val) {
-                                      setState(() {
-                                        _shipmentCompanyIndex = val;
-                                      });
-                                    },
-                                  ),
-                                ) 
-                              ],
-                            )
-                          ),
-                        ),
-                        // Payment Card
-                        Container(
-                          width: double.infinity,
-                          child: Card(                
-                            margin: EdgeInsets.only(
-                              top: 25,
-                              left: 12,
-                              right: 12,
-                              bottom: 12,
-                            ),
-                            child: Column(
-                              children: <Widget>[
-                                Container(
-                                  padding: EdgeInsets.only(
-                                    top: 8,
-                                    left: 12
-                                  ),
-                                  alignment: Alignment.topLeft,
-                                  child: Text(
-                                    'Payment Method',
-                                    style: TextStyle(
-                                      color: Colors.red,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20
                                     ),
-                                  ),
-                                ),
-                                Container(                      
-                                  height: 80,
-                                  margin: EdgeInsets.only(
-                                    top: 8,
-                                    left: 12,
-                                    right: 12,
-                                    bottom: 8
-                                  ),
-                                  padding: EdgeInsets.only(
-                                    top: 8,
-                                    left: 12,
-                                    bottom: 8
-                                  ),
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: Colors.grey
-                                    ),
-                                    
-                                    borderRadius: BorderRadius.circular(5)
-                                    
-                                    // color: Colors.pink
-                                  ),
-                                  child: TabBar(
-                                    controller: _tabController,
-                                    labelColor: Colors.red,
-                                    indicatorColor: Colors.black,
-                                    onTap: (newIndex) {
-                                      _selectPaymentTab(newIndex);
-                                    },
-
-                                    // labelStyle: TextStyle(
-
-                                    // ),
-                                    unselectedLabelColor: Colors.grey,
-                                    tabs: <Widget>[
-                                      Tab(
-                                        text: 'Transfer',
-
-                                        // child: Text('dsffsdfsdfdsf'),
-
-                                      ),
-                                      Tab(text: 'Credit Card'),
-                                      Tab(text: 'Paypal'),
-                                    ],
-                                  ),                        
-                                ),
-                                _paymentTabList[_selectedPaymentTabIndex],
-                                
-                                SizedBox(height: 12,),
-                                
-                              ],
-                            )
-                          ),
-                        ),
-                        // Summary Card
-                        Container(
-                          child: Card(
-                            child: Column(
-                              children: <Widget>[
-                                Container(
-                                  padding: EdgeInsets.only(
-                                    top: 8,
-                                    left: 12
-                                  ),
-                                  alignment: Alignment.topLeft,
-                                  child: Text(
-                                    'Summary',
-                                    style: TextStyle(
-                                      color: Colors.red,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  height: 0.8,
-                                  margin: EdgeInsets.only(
-                                    top: 8,
-                                    left: 12,
-                                    right: 12,
-                                    bottom: 16
-                                  ),
-                                  color: Colors.grey,
-                                ),
-                                Container(
-                                  margin: EdgeInsets.only(
-                                    left: 12,
-                                    right: 12,
-                                    bottom: 12
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      Text(
-                                        'Cost of products'
-                                      ),
-                                      Consumer<CartProvider>(
-                                        builder: ( ctx2,  cartProvider, child ) => Text(                            
-                                          '\$${cartProvider.totalAmount.toStringAsFixed(2)}',
-                                          style: TextStyle(
-                                            // color: Colors.red,
-                                            // fontSize: 19
-                                            fontWeight: FontWeight.bold
+                                    GestureDetector(
+                                      onTap: () {
+                                        print('OrderDetailScreen -> Delivery Address Click');
+                                        Navigator.of(context).pushNamed(
+                                          OrderAddressDetailsScreen.routeName
+                                        );
+                                      },
+                                      child: Container(                      
+                                        height: 80,
+                                        margin: EdgeInsets.only(
+                                          top: 8,
+                                          left: 12,
+                                          right: 12,
+                                          bottom: 8
+                                        ),
+                                        padding: EdgeInsets.only(
+                                          top: 8,
+                                          left: 12,
+                                          bottom: 8
+                                        ),
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                            color: Colors.grey
                                           ),
+                                          
+                                          borderRadius: BorderRadius.circular(5)
+                                          
+                                          // color: Colors.pink
                                         ),
+                                        // child: GestureDetector(
+
+                                          child: ( _customerAddressList.length == 0 
+                                            || _orderDeliverOption == 'from-tech-store-warehouse'
+                                            )
+                                              ?
+                                              _warehouseAddressWidget()
+                                              :
+                                              _customerAddressWidget(
+                                                selectedAddressModel: _selectedAddress
+                                              )
+                                        // ),
                                       ),
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.only(
-                                    left: 12,
-                                    right: 12,
-                                    bottom: 12
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      Text(
-                                        'Shipment'
+                                    ),
+                                    Container(
+                                      padding: EdgeInsets.only(
+                                        top: 8,
+                                        left: 12
                                       ),
-                                      Text(                            
-                                        '\$${9.99.toStringAsFixed(2)}',
+                                      alignment: Alignment.topLeft,
+                                      child: Text(
+                                        'Shipment Company',
                                         style: TextStyle(
-                                          // color: Colors.red,
-                                          // fontSize: 19
-                                          fontWeight: FontWeight.bold
+                                          color: Colors.red,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20
                                         ),
                                       ),
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.only(
-                                    left: 12,
-                                    right: 12,
-                                    bottom: 12
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      Text(
-                                        'Total'
+                                    ),
+                                    Container(
+                                      alignment: AlignmentDirectional.centerStart,
+                                      margin: EdgeInsets.only(
+                                        left: 12,
+                                        bottom: 12
                                       ),
-                                      Text(                            
-                                        '\$${(9.99 + Provider.of<CartProvider>(context).totalAmount).toStringAsFixed(2)}',
-                                        style: TextStyle(
-                                          // color: Colors.red,
-                                          // fontSize: 19
-                                          fontWeight: FontWeight.bold
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  height: 0.8,
-                                  margin: EdgeInsets.only(
-                                    top: 8,
-                                    left: 12,
-                                    right: 12,
-                                    bottom: 8
-                                  ),
-                                  color: Colors.grey,
-                                ),
-                                Container(
-                                  height: 40,
-                                  margin: EdgeInsets.only(
-                                    bottom: 12
-                                  ),
-                                  child: Row(
-                                    children: <Widget>[
-                                      Checkbox(
-                                        value: _isConditionsAccepted,
-                                        onChanged: ( val ) {
+                                      child: DropdownButton(
+                                        items: [
+                                          DropdownMenuItem(
+                                            child: Text('Company 1'),
+                                            value: 0,                            
+                                          ),
+                                          DropdownMenuItem(    
+                                            child: Text('Company 2'), 
+                                            value: 1,
+                                          ),
+                                        ],
+                                        value: _shipmentCompanyIndex,
+                                        onChanged: (val) {
                                           setState(() {
-                                            _isConditionsAccepted = !_isConditionsAccepted;
+                                            _shipmentCompanyIndex = val;
                                           });
                                         },
                                       ),
-                                      Text('I accept Terms & Conditions.')
-                                    ],
-                                  ),
+                                    ) 
+                                  ],
+                                )
+                              ),
+                            ),
+                            // Payment Card
+                            Container(
+                              width: double.infinity,
+                              child: Card(                
+                                margin: EdgeInsets.only(
+                                  top: 25,
+                                  left: 12,
+                                  right: 12,
+                                  bottom: 12,
                                 ),
-                              ],
+                                child: Column(
+                                  children: <Widget>[
+                                    Container(
+                                      padding: EdgeInsets.only(
+                                        top: 8,
+                                        left: 12
+                                      ),
+                                      alignment: Alignment.topLeft,
+                                      child: Text(
+                                        'Payment Method',
+                                        style: TextStyle(
+                                          color: Colors.red,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20
+                                        ),
+                                      ),
+                                    ),
+                                    Container(                      
+                                      height: 80,
+                                      margin: EdgeInsets.only(
+                                        top: 8,
+                                        left: 12,
+                                        right: 12,
+                                        bottom: 8
+                                      ),
+                                      padding: EdgeInsets.only(
+                                        top: 8,
+                                        left: 12,
+                                        bottom: 8
+                                      ),
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: Colors.grey
+                                        ),
+                                        
+                                        borderRadius: BorderRadius.circular(5)
+                                        
+                                        // color: Colors.pink
+                                      ),
+                                      child: TabBar(
+                                        controller: _tabController,
+                                        labelColor: Colors.red,
+                                        indicatorColor: Colors.black,
+                                        onTap: (newIndex) {
+                                          _selectPaymentTab(newIndex);
+                                        },
+
+                                        // labelStyle: TextStyle(
+
+                                        // ),
+                                        unselectedLabelColor: Colors.grey,
+                                        tabs: <Widget>[
+                                          Tab(
+                                            text: 'Transfer',
+
+                                            // child: Text('dsffsdfsdfdsf'),
+
+                                          ),
+                                          Tab(text: 'Credit Card'),
+                                          Tab(text: 'Paypal'),
+                                        ],
+                                      ),                        
+                                    ),
+                                    _paymentTabList[_selectedPaymentTabIndex],
+                                    
+                                    SizedBox(height: 12,),
+                                    
+                                  ],
+                                )
+                              ),
                             ),
-                          ),
-                        )
-                        
-                      ],
-                    ),
-                ),
-              ),
-            ),
-            // Bottom 
-            Container(
-              height: 60,
-              padding: EdgeInsets.symmetric(
-                horizontal: 20
-              ),
-              decoration: BoxDecoration(
-                border: Border(
-                  top: BorderSide(
-                    color: Colors.grey,
-                    width: 1.8
-                  )
-                )
-              ),
-              width: double.infinity,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    width: 120,
-                    // color: Colors.pink,                    
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          'Total Payment',
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 18,
-                          ),
+                            // Summary Card
+                            Container(
+                              child: Card(
+                                child: Column(
+                                  children: <Widget>[
+                                    Container(
+                                      padding: EdgeInsets.only(
+                                        top: 8,
+                                        left: 12
+                                      ),
+                                      alignment: Alignment.topLeft,
+                                      child: Text(
+                                        'Summary',
+                                        style: TextStyle(
+                                          color: Colors.red,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      height: 0.8,
+                                      margin: EdgeInsets.only(
+                                        top: 8,
+                                        left: 12,
+                                        right: 12,
+                                        bottom: 16
+                                      ),
+                                      color: Colors.grey,
+                                    ),
+                                    Container(
+                                      margin: EdgeInsets.only(
+                                        left: 12,
+                                        right: 12,
+                                        bottom: 12
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: <Widget>[
+                                          Text(
+                                            'Cost of products'
+                                          ),
+                                          Consumer<CartProvider>(
+                                            builder: ( ctx2,  cartProvider, child ) => Text(                            
+                                              '\$${cartProvider.totalAmount.toStringAsFixed(2)}',
+                                              style: TextStyle(
+                                                // color: Colors.red,
+                                                // fontSize: 19
+                                                fontWeight: FontWeight.bold
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Container(
+                                      margin: EdgeInsets.only(
+                                        left: 12,
+                                        right: 12,
+                                        bottom: 12
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: <Widget>[
+                                          Text(
+                                            'Shipment'
+                                          ),
+                                          Text(                            
+                                            '\$${9.99.toStringAsFixed(2)}',
+                                            style: TextStyle(
+                                              // color: Colors.red,
+                                              // fontSize: 19
+                                              fontWeight: FontWeight.bold
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Container(
+                                      margin: EdgeInsets.only(
+                                        left: 12,
+                                        right: 12,
+                                        bottom: 12
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: <Widget>[
+                                          Text(
+                                            'Total'
+                                          ),
+                                          Text(                            
+                                            '\$${(9.99 + Provider.of<CartProvider>(context).totalAmount).toStringAsFixed(2)}',
+                                            style: TextStyle(
+                                              // color: Colors.red,
+                                              // fontSize: 19
+                                              fontWeight: FontWeight.bold
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Container(
+                                      height: 0.8,
+                                      margin: EdgeInsets.only(
+                                        top: 8,
+                                        left: 12,
+                                        right: 12,
+                                        bottom: 8
+                                      ),
+                                      color: Colors.grey,
+                                    ),
+                                    Container(
+                                      height: 40,
+                                      margin: EdgeInsets.only(
+                                        bottom: 12
+                                      ),
+                                      child: Row(
+                                        children: <Widget>[
+                                          Checkbox(
+                                            value: _isConditionsAccepted,
+                                            onChanged: ( val ) {
+                                              setState(() {
+                                                _isConditionsAccepted = !_isConditionsAccepted;
+                                              });
+                                            },
+                                          ),
+                                          Text('I accept Terms & Conditions.')
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            )
+                            
+                          ],
                         ),
-                        Consumer<CartProvider>(
-                          builder: ( ctx2,  cartProvider, child ) => Text(                            
-                            '\$${( 9.99 + cartProvider.totalAmount ).toStringAsFixed(2)}',
-                            style: TextStyle(
-                              color: Colors.red,
-                              fontSize: 19
-                            ),
-                          ),
-                        ),
-                        // Text('\$852.25')
-                      ],
                     ),
                   ),
-                  
-                  Container(
-                    height: 38,
-                    width: 125,
-                    child: RaisedButton(
-                      color: Colors.green,
-                      child: Text(
-                        'Pay and Finish',
-                        style: TextStyle(
-                          color: Colors.white
+                ),
+                // Bottom 
+                Container(
+                  height: 60,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 20
+                  ),
+                  decoration: BoxDecoration(
+                    border: Border(
+                      top: BorderSide(
+                        color: Colors.grey,
+                        width: 1.8
+                      )
+                    )
+                  ),
+                  width: double.infinity,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                        width: 120,
+                        // color: Colors.pink,                    
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              'Total Payment',
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 18,
+                              ),
+                            ),
+                            Consumer<CartProvider>(
+                              builder: ( ctx2,  cartProvider, child ) => Text(                            
+                                '\$${( 9.99 + cartProvider.totalAmount ).toStringAsFixed(2)}',
+                                style: TextStyle(
+                                  color: Colors.red,
+                                  fontSize: 19
+                                ),
+                              ),
+                            ),
+                            // Text('\$852.25')
+                          ],
                         ),
-                      ), 
-                      onPressed:
-                        (
-                          _isConditionsAccepted 
-                          && isCardInfoValid
-                          && !_isLoading
-                        )
-                          ? () {
-                            print('OrderDetailScreen -> Pay&Finish Click -> _cardNumber ->');
-                            print(_cardNumber);
-                            // Navigator.of(context).pushNamed(
-                            //   OrderDetailsScreen.routeName
-                            // );
-                            setState(() {
-                              _isLoading = true;
-                            });
+                      ),
+                      
+                      Container(
+                        height: 38,
+                        width: 125,
+                        child: RaisedButton(
+                          color: Colors.green,
+                          child: Text(
+                            'Pay and Finish',
+                            style: TextStyle(
+                              color: Colors.white
+                            ),
+                          ), 
+                          onPressed:
+                            (
+                              _isConditionsAccepted 
+                              && isCardInfoValid
+                              && !_isLoading
+                            )
+                              ? () {
+                                print('OrderDetailScreen -> Pay&Finish Click -> _cardNumber ->');
+                                print(_cardNumber);
+                                // Navigator.of(context).pushNamed(
+                                //   OrderDetailsScreen.routeName
+                                // );
+                                setState(() {
+                                  _isLoading = true;
+                                });
 
 
-                            Provider.of<OrderProvider>(context).payAndOrder(
-                              items: Provider.of<CartProvider>(context).items,
-                              orderTotalPrice: Provider.of<CartProvider>(context).totalAmount,
-                              address: _selectedAddress,
-                              cardNumber: _cardNumber,
-                              cvvCode: cvvCode,
-                              expiryDate: expiryDate,
-                              cardHolder: cardHolderName
-                            ).then( ( _ )  {
-                              print('value');
-                              setState( () {
-                              _isLoading = false;
-                              });
-                            });
+                                Provider.of<OrderProvider>(context).payAndOrder(
+                                  items: Provider.of<CartProvider>(context).items,
+                                  orderTotalPrice: Provider.of<CartProvider>(context).totalAmount,
+                                  address: _selectedAddress,
+                                  cardNumber: _cardNumber,
+                                  cvvCode: cvvCode,
+                                  expiryDate: expiryDate,
+                                  cardHolder: cardHolderName
+                                ).then( ( res )  {
+                                  Scaffold.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        res['msg'],
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      duration: Duration(seconds: 2),
+                                      backgroundColor: Colors.orange,
+                                    ),                                
+                                  );
+                                  Timer(
+                                    Duration(seconds: 2),
+                                    () {
+                                      print('value');
+                                      Provider.of<CartProvider>(context, listen: false).clearCartItems();
+                                      setState( () {
+                                      _isLoading = false;
+                                      });
+                                      Navigator.of(context).pop();
+                                    }
+                                  ); 
+                                });
 
-                          }
-                          : null
-                    ),
-                  )
-                ],
-              ),
-            )
-            // End of Bottom
-          ],
-        ),
+                              }
+                              : null
+                        ),
+                      )
+                    ],
+                  ),
+                )
+                // End of Bottom
+              ],
+            ),
+          );
+        },
       )
+      
+       
       
        
     );

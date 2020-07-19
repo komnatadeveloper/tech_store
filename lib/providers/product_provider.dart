@@ -21,6 +21,7 @@ class ProductProvider with ChangeNotifier {
   bool _isLoadingFavorites = false;
   bool _isFavoritesFetched = false;
   List<ProductModel> favoriteProducts = [];
+  List<ProductModel> specialPriceItems = [];
   ProductProvider(
     this.authToken,
     this.customerModel,
@@ -28,7 +29,8 @@ class ProductProvider with ChangeNotifier {
     this._isLoadingProducts,
     this._isLoadingFavorites,
     this._isFavoritesFetched,
-    this.favoriteProducts
+    this.favoriteProducts,
+    this.specialPriceItems
   );
   bool get isLoadingProducts  {
     return _isLoadingProducts;
@@ -78,6 +80,15 @@ class ProductProvider with ChangeNotifier {
      _isFavoritesFetched = true;
      notifyListeners();
   } // End of fetchFavoriteProducts
+
+
+  void setSpecialPriceItems (
+    List<ProductModel> specialItemsList
+  ) {
+    specialPriceItems = specialItemsList;
+    notifyListeners();
+  }
+
 
   List<ProductModel> convertResponseToProductList ( http.Response res ) {
     final  extractedData = json.decode(res.body ) as List<dynamic>;
@@ -195,6 +206,7 @@ class ProductProvider with ChangeNotifier {
     try {
       final res = await http.get(url);  
       searchedProductsList = convertResponseToProductList(res);  
+      searchedProductsList = handleSpecialPriceItemsForSearchedItems(searchedProductsList);
     } catch (err) {
       print('ProductProvider -> getProductsByCategory -> errors');
       print(err);
@@ -202,6 +214,118 @@ class ProductProvider with ChangeNotifier {
     _isLoadingProducts = false;
     notifyListeners();
   }  // End of getProductsByCategory
+
+  Future<List<ProductModel>> getProductsByIdList ({
+    List<String> idList
+  }) async {
+    final url = '${constants.apiUrl}/api/customer/product/productList';
+    print('ProductProvider -> getProductsByIdList FIRED');
+    try {
+      final res = await http.post(
+        url,
+        headers: {
+          'token': authToken,
+          'Content-Type': 'application/json'
+        },
+        body: json.encode({
+          'productList':idList
+        })
+      );  
+      var tempProductList = convertResponseToProductList(res);  
+      tempProductList = handleSpecialPriceItemsForSearchedItems(tempProductList);
+      return [...tempProductList];
+    } catch (err) {
+      print('ProductProvider -> getProductsByIdList -> errors');
+      print(err);
+      return [];
+    }
+  }  // End of getProductsByIdList
+
+
+  List<ProductModel> handleSpecialPriceItemsForSearchedItems (
+    List<ProductModel> inputList
+  ) {
+    if( inputList.length > 0 ) {
+      var tempList = [...inputList];
+      for( int i = 0; i < tempList.length; i++ ) {
+        for(  int j = 0; j < customerModel.specialPriceItems.length; j++ ) {
+          if ( tempList[i].id == customerModel.specialPriceItems[j].id ) {
+            // tempList[i].price = customerModel.specialPriceItems[j].price;
+            tempList[i] = ProductModel(
+              id: tempList[i].id,
+              imageList: tempList[i].imageList,
+              brand: tempList[i].brand,
+              productNo: tempList[i].productNo,
+              keyProperties: tempList[i].keyProperties,
+              specifications: tempList[i].specifications,
+              price: customerModel.specialPriceItems[j].price,
+              stockStatus: tempList[i].stockStatus,
+              category: tempList[i].category,
+            );
+          }
+        }
+      }
+      return [...tempList];
+    } else {
+      return [];
+    }
+  }
+
+
+  Future<void> getProducts ({
+    String categoryId = '',
+    String productId = '',
+    String brand = ''
+  }) async {
+    var queryString = '';
+    int queriedParameterCount = 0;
+    if( categoryId != '' ) {
+      if( queriedParameterCount != 0 ) {
+        queryString = queryString + '&';
+      }
+      queryString = queryString + 'categoryId=' + categoryId;
+      queriedParameterCount++;
+    }
+    if( productId != '' ) {
+      if( queriedParameterCount != 0 ) {
+        queryString = queryString + '&';
+      }
+      queryString = queryString + 'productId=' + productId;
+      queriedParameterCount++;
+    }
+    if( brand != '' ) {
+      if( queriedParameterCount != 0 ) {
+        queryString = queryString + '&';
+      }
+      queryString = queryString + 'brand=' + brand;
+      queriedParameterCount++;
+    }
+    if( queriedParameterCount == 0 ) {
+      return;
+    }
+    final url = '${constants.apiUrl}/api/customer/product/get?$queryString';
+    print('ProductProvider -> getProducts FIRED');
+    // print('url ->');
+    // print(url);
+    _isLoadingProducts = true;
+    notifyListeners();
+    try {      
+      final res = await http.get(
+        url,
+        headers: {
+          'token': authToken,
+          'Content-Type': 'application/json'
+        },
+      );  
+      searchedProductsList = convertResponseToProductList(res);  
+      searchedProductsList = handleSpecialPriceItemsForSearchedItems(searchedProductsList);
+    } catch (err) {
+      print('ProductProvider -> getProducts -> errors');
+      print(err);
+    }
+    _isLoadingProducts = false;
+    notifyListeners();
+  }  // End of getProducts
 
 
   Future<void> queryProducts ({
@@ -224,6 +348,7 @@ class ProductProvider with ChangeNotifier {
         },
       );  
       searchedProductsList = convertResponseToProductList(res);  
+      searchedProductsList = handleSpecialPriceItemsForSearchedItems(searchedProductsList);
     } catch (err) {
       print('ProductProvider -> queryProducts -> errors');
       print(err);

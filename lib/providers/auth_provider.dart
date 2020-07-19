@@ -130,6 +130,26 @@ class AuthProvider with ChangeNotifier {
       if( _customerModel.addressList.length > 0 ) {
         _selectedAddressIndex = 0;
       }
+      _customerModel.specialPriceItems = [];
+      if( responseData['customer']['specialPriceItems'] != null ) {
+        print('responseData -> customer -> specialPriceItems ->');
+        print(responseData['customer']['specialPriceItems']);
+        var rawSpecialPriceItems = helpers.convertListDynamicToListMap(
+          responseData['customer']['specialPriceItems'] as List<dynamic>
+        );
+        for( int i = 0; i < rawSpecialPriceItems.length; i++) {
+          _customerModel.specialPriceItems.add(
+            SpecialPriceItemModel(
+              id: rawSpecialPriceItems[i]['productId'],
+              price: double.parse(
+                double.parse(
+                  rawSpecialPriceItems[i]['price'].toString()
+                ).toStringAsFixed(2)
+              )  
+            )
+          );
+        }        
+      }
 
       for(final name in responseData['customer'].keys) {
         // print(name);

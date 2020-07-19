@@ -26,10 +26,24 @@ class DefaultScreen extends StatefulWidget {
 
 // ------------- STATE -----------------
 class _DefaultScreenState extends State<DefaultScreen> {
-  var _isInited = false;
+  // var _isInited = false;
   List<Map<String, Object>> _pages;
   int _selectedPageIndex = 0;
   final _appbarBackgroundColor = Color.fromRGBO(208, 57, 28, 1);
+  bool _isFetchingCategoryList = true;
+  bool _isFetchingFeatureList = true;
+  bool _isFetchingSpecialPriceItems = true;
+  bool get _isInited {
+    if(
+      !_isFetchingCategoryList
+      && !_isFetchingFeatureList
+      && !_isFetchingSpecialPriceItems
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
 
 
@@ -40,45 +54,94 @@ class _DefaultScreenState extends State<DefaultScreen> {
     });
   }
 
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    if( !_isInited ) {
+      Provider.of<CategoryProvider>(context, listen: false).fetchCategoryList()
+        .then((value) {
+          setState(() {            
+            _isFetchingCategoryList = false;
+          });
+        });
+      Provider.of<CategoryProvider>(context, listen: false).fetchFeatureList()
+        .then((value) {
+          setState(() {            
+            _isFetchingFeatureList = false;
+          });
+        });
+      Provider.of<ProductProvider>(context, listen: false)
+        .getProductsByIdList(
+          idList: Provider.of<ProductProvider>(context).customerModel.specialPriceItems.map(
+            (item) => item.id
+          ).toList()
+        ).then( 
+          (value) {
+            Provider.of<ProductProvider>(context, listen: false).setSpecialPriceItems(value);
+            setState(() {              
+              _isFetchingSpecialPriceItems = false;
+            });
+          }
+        );
+      // Provider.of<ProductProvider>(context, listen: false).getProductsByIdList(
+      //   idList: Provider.of<ProductProvider>(context).customerModel.specialPriceItems.map(
+      //     (item) => item.id
+      //   )
+      // ).then( 
+      //     (value) {
+      //       // Provider.of<ProductProvider>(context, listen: false).setSpecialPriceItems(value);
+      //       setState(() {              
+      //         _isFetchingSpecialPriceItems = false;
+      //       });
+      //     }
+      //   );
+            //       setState(() {              
+            //   _isFetchingSpecialPriceItems = false;
+            // });
+
+      _pages = [
+        {
+          'page':HomeScreen(
+            changeTab: _selectPage
+          ), 
+          'title':'Main'
+        },
+        {
+          'page':SearchScreen( ), 
+          'title':'Search'
+        }, 
+        // {
+        //   'page':  Provider.of<ProductProvider>(context).isFavoritesFetched 
+        //     ? FavoritesScreen( )
+        //     : FutureBuilder(
+        //       future: Provider.of<ProductProvider>(context).fetchFavoriteProducts(),
+        //       builder: (_, fetchFavoriteSnapShot ) => fetchFavoriteSnapShot.connectionState == ConnectionState.waiting
+        //       ? Center(
+        //         child: CircularProgressIndicator(),
+        //         )
+        //       : FavoritesScreen(),
+        //     ), 
+        //   'title':'Favorites'
+        // }, 
+        {
+          'page':   FavoritesScreen(),          
+          'title':'Favorites'
+        }, 
+        {
+          'page':AccountScreen( ), 
+          'title':'Account'
+        }, 
+      ];
+    }
+
+    super.didChangeDependencies();
+  }
+
 
   @override
   void initState() {
     // TODO: implement initState
-    Provider.of<CategoryProvider>(context, listen: false).fetchCategoryList();
-
-    _pages = [
-      {
-        'page':HomeScreen(
-          changeTab: _selectPage
-        ), 
-        'title':'Main'
-      },
-      {
-        'page':SearchScreen( ), 
-        'title':'Search'
-      }, 
-      // {
-      //   'page':  Provider.of<ProductProvider>(context).isFavoritesFetched 
-      //     ? FavoritesScreen( )
-      //     : FutureBuilder(
-      //       future: Provider.of<ProductProvider>(context).fetchFavoriteProducts(),
-      //       builder: (_, fetchFavoriteSnapShot ) => fetchFavoriteSnapShot.connectionState == ConnectionState.waiting
-      //       ? Center(
-      //         child: CircularProgressIndicator(),
-      //         )
-      //       : FavoritesScreen(),
-      //     ), 
-      //   'title':'Favorites'
-      // }, 
-      {
-        'page':   FavoritesScreen(),          
-        'title':'Favorites'
-      }, 
-      {
-        'page':AccountScreen( ), 
-        'title':'Account'
-      }, 
-    ];
+    
     super.initState();
   } // End of initState
 
@@ -311,7 +374,11 @@ class _DefaultScreenState extends State<DefaultScreen> {
         selectPage: _selectPage
       ),
 
-      body: _pages[_selectedPageIndex]['page'],
+      body: _isInited 
+        ?  _pages[_selectedPageIndex]['page']
+        : Center(
+          child: CircularProgressIndicator(),
+        ),
 
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,   // if you need more than 3 items this should be fixed

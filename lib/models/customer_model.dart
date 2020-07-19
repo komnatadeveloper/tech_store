@@ -17,6 +17,15 @@ class AddressModel {
   });
 }
 
+class SpecialPriceItemModel {
+  final String id;
+  final double price;
+  SpecialPriceItemModel({
+    this.id,
+    this.price
+  });
+}
+
 
 class CustomerModel {
   final String id;
@@ -30,6 +39,7 @@ class CustomerModel {
   String tel1;
   String tel2;
   List<AddressModel> addressList;
+  List<SpecialPriceItemModel> specialPriceItems;
 
   CustomerModel({
     this.id,

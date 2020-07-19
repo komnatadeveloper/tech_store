@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tech_store/providers/product_provider.dart';
 // import 'dart:math';
 
 // Providers
@@ -181,15 +182,16 @@ class _AuthCardState extends State<AuthCard> with SingleTickerProviderStateMixin
           _authData['password']
         );
       }
+      Navigator.of(context).pushReplacementNamed(
+        DefaultScreen.routeName
+      );
+
     } catch (err) {
       print('AuthScreen -> Submit Button -> errors');
     }
     setState(() {
       _isLoading = false;
     });
-    Navigator.of(context).pushReplacementNamed(
-      DefaultScreen.routeName
-    );
   }
 
   void _switchAuthMode() {
@@ -209,6 +211,8 @@ class _AuthCardState extends State<AuthCard> with SingleTickerProviderStateMixin
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
+
+    
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),

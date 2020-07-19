@@ -45,7 +45,7 @@ class _MyAppState extends State<MyApp> {
         // ),
 
         ChangeNotifierProxyProvider< AuthProvider, CategoryProvider > (
-          create: ( ctx ) => CategoryProvider( null, null, [], []  ),
+          create: ( ctx ) => CategoryProvider( null, null, [], [], []  ),
           update: ( _, authProvider, previousCategoryProvider ) => CategoryProvider(
             authProvider.token,
             authProvider.customerModel,
@@ -55,12 +55,15 @@ class _MyAppState extends State<MyApp> {
             previousCategoryProvider == null
               ? []
               : previousCategoryProvider.specialCategoryOnHomePageList,
+            previousCategoryProvider == null
+              ? []
+              : previousCategoryProvider.featureList,
           ),
         ),
 
         ChangeNotifierProxyProvider< AuthProvider, ProductProvider > (
           create: ( ctx ) => ProductProvider(
-             null, null, [], false, false, false, []  
+             null, null, [], false, false, false, [], []  
             ),
           update: ( _, authProvider, previousProductProvider ) => ProductProvider(
             authProvider.token,
@@ -80,6 +83,9 @@ class _MyAppState extends State<MyApp> {
             previousProductProvider == null
               ? []
               : previousProductProvider.favoriteProducts,
+            previousProductProvider == null
+              ? []
+              : previousProductProvider.specialPriceItems,
           ),
         ),
 

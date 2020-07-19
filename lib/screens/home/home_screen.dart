@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tech_store/providers/product_provider.dart';
 
 // Providers
 import '../../providers/category_provider.dart';
+import '../../providers/product_provider.dart';
+
 // Helpers
 import '../../helpers/helpers.dart' as helper;
+
+// Models
+import 'package:tech_store/models/product.dart';
 
 // Components
 import './features_carousel.dart';
@@ -26,7 +30,24 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
+// -----------------------  STATE  --------------------
 class _HomeScreenState extends State<HomeScreen> {
+  List<ProductModel> _specialProductsList = [];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    // Provider.of<ProductProvider>(context).getProductsByIdList(
+    //   idList: Provider.of<ProductProvider>(context).customerModel.specialPriceItems.map(
+    //     (item) => item.id
+    //   )
+    // ).then( 
+    //     (value) {         
+    //       _specialProductsList = value;
+    //     }
+    // );
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -39,8 +60,15 @@ class _HomeScreenState extends State<HomeScreen> {
             FeaturesCarousel(
               changeTab: widget.changeTab,
             ),
-            SpecialForYouItem(),
-            SpecialForYouItem(),
+            // SpecialForYouItem(),
+            // SpecialForYouItem(),
+            if ( Provider.of<ProductProvider>(context).specialPriceItems.length > 0 
+            ) ...Provider.of<ProductProvider>(context).specialPriceItems.map(
+              (specialPriceItem) => SpecialForYouItem(
+                specialPriceItem
+              )
+            ).toList(),
+
 
             // Most Popular Title
             Container(

@@ -8,6 +8,7 @@ import '../constants/constants.dart' as constants;
 // models
 import '../models/category_model.dart';
 import '../models/customer_model.dart';
+import '../models/feature_model.dart';
 // helpers
 import '../helpers/helpers.dart' as helpers;
 
@@ -18,12 +19,14 @@ class CategoryProvider with ChangeNotifier {
 
   List<MainCategoryModel> _mainCategoryList;
   List<SpecialCategoryOnHomePageModel> _specialCategoryOnHomePageList;
+  List<FeatureModel> _featureList = [];
 
   CategoryProvider(
     this.authToken,
     this.customerModel,
     this._mainCategoryList,
-    this._specialCategoryOnHomePageList
+    this._specialCategoryOnHomePageList,
+    this._featureList
   );
 
 
@@ -34,6 +37,53 @@ class CategoryProvider with ChangeNotifier {
   List<SpecialCategoryOnHomePageModel> get specialCategoryOnHomePageList {
     return [ ..._specialCategoryOnHomePageList ];
   }
+  List<FeatureModel> get featureList {
+    return [ ..._featureList ];
+  }
+
+  Future<void> fetchFeatureList () async {
+    print('CategoryProvider -> fetchFeatureList FIRED ->');
+    final url = '${constants.apiUrl}/api/customer/feature';
+    try {
+      final res = await http.get(
+        url,
+        headers: {
+          'token': authToken,
+          'Content-Type': 'application/json'
+        },        
+      ); 
+      final  extractedData = json.decode(res.body ) as List<dynamic>;
+      print('CategoryProvider -> fetchFeatureList -> extractedData ->');
+      print(extractedData);
+      final rawFeatureData = helpers.convertListDynamicToListMap(extractedData);
+      if( rawFeatureData.length > 0 ) {
+        for( int i = 0; i <  rawFeatureData.length; i++ ) {
+          var tempFeatureItem = FeatureModel(
+            featureType: rawFeatureData[i]['featureType'] as String,
+            imageId: rawFeatureData[i]['imageId'] as String,
+          );
+          switch( tempFeatureItem.featureType ) {
+            case  'category':
+              tempFeatureItem.categoryId = rawFeatureData[i]['categoryId'];
+              break;
+            case  'categoryWithBrand':
+              tempFeatureItem.categoryId = rawFeatureData[i]['categoryId'];
+              tempFeatureItem.brand = rawFeatureData[i]['brand'];
+              break;
+            case  'product':
+              tempFeatureItem.productId = rawFeatureData[i]['productId'];
+              break;
+            default:
+              break;
+          }
+          _featureList.add(tempFeatureItem);
+        }
+      }
+      notifyListeners();
+    } catch ( err ) {
+      print(err);
+    }
+  } //  End of fetchFeatureList
 
   Future<void> fetchCategoryList () async {
     print('CategoryProvider -> fetchCategoryList FIRED ->');

@@ -19,6 +19,7 @@ import './screens/cart/cart_screen.dart';
 import './screens/order_details/order_details_screen.dart';
 import './screens/order_address_details/order_address_details_screen.dart';
 import './screens/create_new_address/create_new_address_screen.dart';
+import './screens/my_orders/my_orders_screen.dart';
 
 
 void main() {
@@ -63,7 +64,7 @@ class _MyAppState extends State<MyApp> {
 
         ChangeNotifierProxyProvider< AuthProvider, ProductProvider > (
           create: ( ctx ) => ProductProvider(
-             null, null, [], false, false, false, [], []  
+             null, null, [], false, false, false, [], [], [] 
             ),
           update: ( _, authProvider, previousProductProvider ) => ProductProvider(
             authProvider.token,
@@ -86,6 +87,9 @@ class _MyAppState extends State<MyApp> {
             previousProductProvider == null
               ? []
               : previousProductProvider.specialPriceItems,
+            previousProductProvider == null
+              ? []
+              : previousProductProvider.mostPopularProductsList,
           ),
         ),
 
@@ -139,6 +143,7 @@ class _MyAppState extends State<MyApp> {
           OrderDetailsScreen.routeName : (ctx) => OrderDetailsScreen(),
           OrderAddressDetailsScreen.routeName : (ctx) => OrderAddressDetailsScreen(),
           CreateNewAddressScreen.routeName : (ctx) => CreateNewAddressScreen(),
+          MyOrdersScreen.routeName : (ctx) => MyOrdersScreen(),
         },
       ),
     );

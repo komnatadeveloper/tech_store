@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 // Providers
 import '../../providers/cart_provider.dart';
-
-
-
 // Screens
 import '../product_detail/product_detail_screen.dart';
-
 // helpers
 import '../../helpers/helpers.dart' as helpers;
 

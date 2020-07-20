@@ -22,6 +22,7 @@ class ProductProvider with ChangeNotifier {
   bool _isFavoritesFetched = false;
   List<ProductModel> favoriteProducts = [];
   List<ProductModel> specialPriceItems = [];
+  List<ProductModel> _mostPopularProductsList = [];
   ProductProvider(
     this.authToken,
     this.customerModel,
@@ -30,7 +31,8 @@ class ProductProvider with ChangeNotifier {
     this._isLoadingFavorites,
     this._isFavoritesFetched,
     this.favoriteProducts,
-    this.specialPriceItems
+    this.specialPriceItems,
+    this._mostPopularProductsList
   );
   bool get isLoadingProducts  {
     return _isLoadingProducts;
@@ -40,6 +42,9 @@ class ProductProvider with ChangeNotifier {
   }
   bool get isFavoritesFetched  {
     return _isFavoritesFetched;
+  }
+  List<ProductModel> get mostPopularProductsList  {
+    return _mostPopularProductsList;
   }
 
 
@@ -214,6 +219,31 @@ class ProductProvider with ChangeNotifier {
     _isLoadingProducts = false;
     notifyListeners();
   }  // End of getProductsByCategory
+
+  Future<void> getMostPopularProducts () async {
+    final url = '${constants.apiUrl}/api/customer/statistic?type=topSellStatistic&populateProducts=yes&maxCount=10';
+    print('ProductProvider -> getMostPopularProducts FIRED -> url -> ' + url.toString());
+    // print('url ->');
+    // print(url);
+    // _isLoadingProducts = true;
+    // notifyListeners();
+    try {
+      final res = await http.get(
+        url,
+        headers: {
+          'token': authToken,
+          'Content-Type': 'application/json'
+        },
+      );  
+      _mostPopularProductsList = convertResponseToProductList(res);  
+      _mostPopularProductsList = handleSpecialPriceItemsForSearchedItems(_mostPopularProductsList);
+    } catch (err) {
+      print('ProductProvider -> getMostPopularProducts -> errors');
+      print(err);
+    }
+    // _isLoadingProducts = false;
+    notifyListeners();
+  }  // End of getMostPopularProducts
 
   Future<List<ProductModel>> getProductsByIdList ({
     List<String> idList

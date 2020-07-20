@@ -158,6 +158,7 @@ class _FavoriteProductItemStatefulState extends State<FavoriteProductItemStatefu
                             fontSize: 14,
                             color: Colors.grey[700]
                           ),
+                          maxLines: 2,
                         ),
                       ),
                       Container(

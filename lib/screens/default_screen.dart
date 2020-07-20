@@ -33,17 +33,20 @@ class _DefaultScreenState extends State<DefaultScreen> {
   bool _isFetchingCategoryList = true;
   bool _isFetchingFeatureList = true;
   bool _isFetchingSpecialPriceItems = true;
+  bool _isFetchingMostPopularProductsList = true;
   bool get _isInited {
     if(
       !_isFetchingCategoryList
       && !_isFetchingFeatureList
       && !_isFetchingSpecialPriceItems
+      && !_isFetchingMostPopularProductsList
     ) {
       return true;
     } else {
       return false;
     }
   }
+  bool _willInitNow = true;
 
 
 
@@ -57,7 +60,12 @@ class _DefaultScreenState extends State<DefaultScreen> {
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
-    if( !_isInited ) {
+    if( !_isInited 
+      && _willInitNow
+    ) {
+      setState(() {
+        _willInitNow = false;
+      });
       Provider.of<CategoryProvider>(context, listen: false).fetchCategoryList()
         .then((value) {
           setState(() {            
@@ -83,6 +91,17 @@ class _DefaultScreenState extends State<DefaultScreen> {
             });
           }
         );
+      Provider.of<ProductProvider>(context, listen: false)
+        .getMostPopularProducts()
+          .then( 
+            ( _ ) {
+              setState(() {              
+                _isFetchingMostPopularProductsList = false;
+                print('MostPopularProductsList length ->');
+                print(Provider.of<ProductProvider>(context).mostPopularProductsList.length);
+              });
+            }
+          );
       // Provider.of<ProductProvider>(context, listen: false).getProductsByIdList(
       //   idList: Provider.of<ProductProvider>(context).customerModel.specialPriceItems.map(
       //     (item) => item.id

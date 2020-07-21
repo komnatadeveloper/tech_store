@@ -30,6 +30,11 @@ dependencies:
   # for TOP slider on home screen
   carousel_slider: ^2.1.0
 
+  # for converting Date Class  to String
+  intl: ^0.16.1
+  # to parse data from API to Date Data Type
+  jiffy: ^3.0.1
+
   # For most popular products slider
   flutter_mobile_carousel: ^1.0.3
 

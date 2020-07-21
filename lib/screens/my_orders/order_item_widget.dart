@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart' as intl;
 // Models
 import '../../models/order_model.dart';
+// Screens
+import '../single_order/single_order_screen.dart';
 
 class OrderItemWidget extends StatelessWidget {
   final _rowVerticalSpace = 3.0;
@@ -15,8 +18,9 @@ class OrderItemWidget extends StatelessWidget {
         margin: EdgeInsets.only(
           left: 12,
           right: 12,
-          bottom: 12
+          bottom: 20
         ),
+        elevation: 5,
         child: Container(
           padding: EdgeInsets.only(
             top: 12,
@@ -44,7 +48,12 @@ class OrderItemWidget extends StatelessWidget {
                     'Order Date:'
                   ),
                   Text(
-                    orderModel.date.toIso8601String()
+                    // orderModel.date.toIso8601String()
+                    intl.DateFormat(
+                      'dd/MM/yyyy'
+                    ).format(
+                      orderModel.date
+                    )
                   ),
                 ],
               ),
@@ -90,7 +99,14 @@ class OrderItemWidget extends StatelessWidget {
                   ],
                 ),
 
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).pushNamed(
+                    SingleOrderScreen.routeName,
+                    arguments: {
+                      'orderModel': orderModel
+                    }
+                  );
+                },
 
               )
 

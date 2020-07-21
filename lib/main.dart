@@ -20,6 +20,7 @@ import './screens/order_details/order_details_screen.dart';
 import './screens/order_address_details/order_address_details_screen.dart';
 import './screens/create_new_address/create_new_address_screen.dart';
 import './screens/my_orders/my_orders_screen.dart';
+import './screens/single_order/single_order_screen.dart';
 
 
 void main() {
@@ -144,6 +145,7 @@ class _MyAppState extends State<MyApp> {
           OrderAddressDetailsScreen.routeName : (ctx) => OrderAddressDetailsScreen(),
           CreateNewAddressScreen.routeName : (ctx) => CreateNewAddressScreen(),
           MyOrdersScreen.routeName : (ctx) => MyOrdersScreen(),
+          SingleOrderScreen.routeName: (ctx) => SingleOrderScreen(),
         },
       ),
     );

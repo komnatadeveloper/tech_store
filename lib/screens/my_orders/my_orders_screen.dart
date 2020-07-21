@@ -27,7 +27,7 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
         _isInited = true;
       });
       Provider.of<OrderProvider>(context).getOrders(
-      date: 'today'
+      date: '1month'
       ).then(( result ) {
         setState(() {
           _orderList = result;

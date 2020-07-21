@@ -78,15 +78,24 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with SingleTick
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(
-                selectedAddressModel.definition
+                selectedAddressModel.definition,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold
+                ),
               ),
               Text(
                 selectedAddressModel.receiver,
+                style: TextStyle(
+                  color: Colors.blue,
+                  decoration: TextDecoration.underline
+                ),
                 overflow: TextOverflow.clip,
               ),
-              Text(
-                selectedAddressModel.addressString,
-                overflow: TextOverflow.clip,
+              Expanded(
+                child: Text(
+                  selectedAddressModel.addressString,
+                  overflow: TextOverflow.clip,
+                ),
               ),
             ],
           ),
@@ -738,7 +747,17 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with SingleTick
                                 Provider.of<OrderProvider>(context).payAndOrder(
                                   items: Provider.of<CartProvider>(context).items,
                                   orderTotalPrice: Provider.of<CartProvider>(context).totalAmount,
-                                  address: _selectedAddress,
+                                  // address: _selectedAddress,
+                                  address: ( _customerAddressList.length == 0 
+                                    || _orderDeliverOption == 'from-tech-store-warehouse'
+                                    ) 
+                                    ? AddressModel(
+                                      definition: 'Tech Store',
+                                      addressString: 'Tech Store WareHouse',
+                                      city: 'Tech Store City',
+                                      receiver: ' - '
+                                    )
+                                    : _selectedAddress,
                                   cardNumber: _cardNumber,
                                   cvvCode: cvvCode,
                                   expiryDate: expiryDate,

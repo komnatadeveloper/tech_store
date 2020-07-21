@@ -1,5 +1,6 @@
 
 import 'package:flutter/foundation.dart';
+import 'package:jiffy/jiffy.dart' as jiffy;
 // HTTP and convert
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -136,7 +137,11 @@ class OrderProvider with ChangeNotifier {
             productNo: tempRawItems[j]['productNo'],
             keyProperties: tempRawItems[j]['keyProperties'],
             mainImageId: tempRawItems[j]['mainImageId'],
-            price: tempRawItems[j]['price'],
+            price:  double.parse(
+              double.parse(
+                tempRawItems[j]['price'].toString()
+              ).toStringAsFixed(2) 
+            ),
             quantity: tempRawItems[j]['quantity'],
           )
         );
@@ -146,9 +151,17 @@ class OrderProvider with ChangeNotifier {
           id: rawResponseData[i]['_id'],
           address: tempAddress,
           customerId: rawResponseData[i]['customerId'],
-          date: DateTime.now(), // to be Updated
+          // date: DateTime.now(), // to be Updated
+          date: jiffy.Jiffy(
+            rawResponseData[i]['date'] as String,
+            // 'dd MMM yyyy hh:mm:ss'
+          ).dateTime,          
           items: tempItems,
-          orderTotalPrice: rawResponseData[i]['orderTotalPrice'],
+          orderTotalPrice: double.parse(
+            double.parse(
+              rawResponseData[i]['orderTotalPrice'].toString()
+            ).toStringAsFixed(2) 
+          ),
         )
       );
     }

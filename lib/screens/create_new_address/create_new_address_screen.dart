@@ -70,6 +70,10 @@ class _CreateNewAddressScreenState extends State<CreateNewAddressScreen> {
                 ),
               ),
               onPressed: () async {
+                if ( !_addAddressFormGlobalKey.currentState.validate() ) {
+                  print('CreateNewAddressScreen -> parameters not validated!');
+                  return;
+                }
                 _addAddressFormGlobalKey.currentState.save();
                 if( _willSaveAddress ) {
                   setState(() {
@@ -130,6 +134,16 @@ class _CreateNewAddressScreenState extends State<CreateNewAddressScreen> {
                       decoration: InputDecoration(
                         labelText: 'Definition'
                       ),
+                      validator: ( val ) {
+                        if ( val.isEmpty 
+                          || Provider.of<AuthProvider>(context).customerModel.addressList.indexWhere(
+                              (element) => element.definition == val
+                            ) >= 0
+                          || val.length < 2
+                        ) {
+                          return 'Definition has problems!';
+                        }
+                      },
                       focusNode: _definitionFocusNode,
                       textInputAction: TextInputAction.next,
                       onFieldSubmitted: ( _ ) {
@@ -150,6 +164,13 @@ class _CreateNewAddressScreenState extends State<CreateNewAddressScreen> {
                       decoration: InputDecoration(
                         labelText: 'Receiver'
                       ),
+                      validator: ( val ) {
+                        if ( val.isEmpty 
+                          || val.length < 2
+                        ) {
+                          return 'Receiver is Empty';
+                        }
+                      },
                       focusNode: _receiverFocusNode,
                       textInputAction: TextInputAction.next,
                       onFieldSubmitted: ( _ ) {
@@ -168,8 +189,15 @@ class _CreateNewAddressScreenState extends State<CreateNewAddressScreen> {
                     ),
                     TextFormField(
                       decoration: InputDecoration(
-                        labelText: 'Address',                      
+                        labelText: 'Address',                                              
                       ),
+                      validator: ( val ) {
+                        if ( val.isEmpty 
+                          || val.length < 8
+                        ) {
+                          return 'Address is too short!';
+                        }
+                      },
                       focusNode: _addressStringFocusNode,
                       maxLines: 4,
                       textInputAction: TextInputAction.newline,
@@ -187,8 +215,14 @@ class _CreateNewAddressScreenState extends State<CreateNewAddressScreen> {
                       decoration: InputDecoration(
                         labelText: 'City',                      
                       ),
-                      focusNode: _cityFocusNode,
-                      
+                      validator: ( val ) {
+                        if ( val.isEmpty 
+                          || val.length < 3
+                        ) {
+                          return 'City name is too short!';
+                        }
+                      },
+                      focusNode: _cityFocusNode,                      
                       onSaved: ( val ) {
                         _formData = AddressModel(
                           definition: _formData.definition,

@@ -33,7 +33,7 @@ class MyApp extends StatefulWidget {
   _MyAppState createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<MyApp> {  
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -111,43 +111,62 @@ class _MyAppState extends State<MyApp> {
         ),
 
       ],
-      child: MaterialApp(
-        title: 'MainDartTitle',
-        theme: ThemeData(
-          // This is the theme of your application.
-          //
-          // Try running your application with "flutter run". You'll see the
-          // application has a blue toolbar. Then, without quitting the app, try
-          // changing the primarySwatch below to Colors.green and then invoke
-          // "hot reload" (press "r" in the console where you ran "flutter run",
-          // or simply save your changes to "hot reload" in a Flutter IDE).
-          // Notice that the counter didn't reset back to zero; the application
-          // is not restarted.
-          primarySwatch: Colors.blue,
-          // This makes the visual density adapt to the platform that you run
-          // the app on. For desktop platforms, the controls will be smaller and
-          // closer together (more dense) than on mobile platforms.
-          visualDensity: VisualDensity.adaptivePlatformDensity,
+      child: Consumer<AuthProvider>(
+        builder: (ctx, authData, _ ) => MaterialApp(
+          title: 'MainDartTitle',
+          theme: ThemeData(
+            // This is the theme of your application.
+            //
+            // Try running your application with "flutter run". You'll see the
+            // application has a blue toolbar. Then, without quitting the app, try
+            // changing the primarySwatch below to Colors.green and then invoke
+            // "hot reload" (press "r" in the console where you ran "flutter run",
+            // or simply save your changes to "hot reload" in a Flutter IDE).
+            // Notice that the counter didn't reset back to zero; the application
+            // is not restarted.
+            primarySwatch: Colors.blue,
+            // This makes the visual density adapt to the platform that you run
+            // the app on. For desktop platforms, the controls will be smaller and
+            // closer together (more dense) than on mobile platforms.
+            visualDensity: VisualDensity.adaptivePlatformDensity,
 
-          buttonTheme: ButtonThemeData(
-            minWidth: 20,
-            height: 15
-          )
+            buttonTheme: ButtonThemeData(
+              minWidth: 20,
+              height: 15
+            )
+          ),
+          // initialRoute: '/',
+          // initialRoute: AuthScreen.routeName,
+          home: authData.isAppInited 
+            ? (authData.token != null) ? DefaultScreen() : AuthScreen()
+            :  FutureBuilder(
+                    future: authData.initialiseApp(),
+                    builder: ( _, authResultSnapShot ) =>
+                    authResultSnapShot.connectionState ==  ConnectionState.waiting
+                      ? Center(child: CircularProgressIndicator(),)
+                      : ( 
+                          authData.token != null 
+                        )
+                          ? DefaultScreen()
+                          : AuthScreen()
+                  ),
+ 
+          
+           
+
+          routes: {
+            AuthScreen.routeName : (ctx) => AuthScreen(),
+            DefaultScreen.routeName : (ctx) => DefaultScreen(),
+            ProductDetailScreen.routeName : (ctx) => ProductDetailScreen(),
+            CartScreen.routeName : (ctx) => CartScreen(),
+            OrderDetailsScreen.routeName : (ctx) => OrderDetailsScreen(),
+            OrderAddressDetailsScreen.routeName : (ctx) => OrderAddressDetailsScreen(),
+            CreateNewAddressScreen.routeName : (ctx) => CreateNewAddressScreen(),
+            MyOrdersScreen.routeName : (ctx) => MyOrdersScreen(),
+            SingleOrderScreen.routeName: (ctx) => SingleOrderScreen(),
+          },
         ),
-        // initialRoute: '/',
-        initialRoute: AuthScreen.routeName,
-        routes: {
-          AuthScreen.routeName : (ctx) => AuthScreen(),
-          DefaultScreen.routeName : (ctx) => DefaultScreen(),
-          ProductDetailScreen.routeName : (ctx) => ProductDetailScreen(),
-          CartScreen.routeName : (ctx) => CartScreen(),
-          OrderDetailsScreen.routeName : (ctx) => OrderDetailsScreen(),
-          OrderAddressDetailsScreen.routeName : (ctx) => OrderAddressDetailsScreen(),
-          CreateNewAddressScreen.routeName : (ctx) => CreateNewAddressScreen(),
-          MyOrdersScreen.routeName : (ctx) => MyOrdersScreen(),
-          SingleOrderScreen.routeName: (ctx) => SingleOrderScreen(),
-        },
-      ),
+      ) 
     );
   }
 }

@@ -41,6 +41,13 @@ class CategoryProvider with ChangeNotifier {
     return [ ..._featureList ];
   }
 
+  void resetCategoryProvider () {
+    _mainCategoryList = null;
+    _specialCategoryOnHomePageList = null;
+    _featureList = [];
+    notifyListeners();
+  }
+
   Future<void> fetchFeatureList () async {
     print('CategoryProvider -> fetchFeatureList FIRED ->');
     final url = '${constants.apiUrl}/api/customer/feature';

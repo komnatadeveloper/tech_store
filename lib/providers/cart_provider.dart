@@ -28,6 +28,11 @@ class CartProvider with ChangeNotifier {
     return double.parse(total.toStringAsFixed(2));
   }
 
+  void resetCartProvider () {
+    _items = [];
+    notifyListeners();
+  }
+
   void addToCart( CartItem cartItem ) {
     // Check if this id already exists
     var index = _items.indexWhere((element) => element.productModel.id == cartItem.productModel.id);

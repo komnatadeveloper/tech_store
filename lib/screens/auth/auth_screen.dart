@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tech_store/providers/product_provider.dart';
 // import 'dart:math';
 
 // Providers
 import '../../providers/auth_provider.dart';
+import '../../providers/product_provider.dart';
 
 // Screens
 import '../default_screen.dart';
@@ -143,11 +143,21 @@ class _AuthCardState extends State<AuthCard> with SingleTickerProviderStateMixin
     _controller.dispose();
   }
 
-  void _showErrorDialog ( String message) {
+  void _showErrorDialog (
+     String message 
+    ) {
+    String messageToShow;
+    if( message == null ) {
+      messageToShow = 'An Error Occured';
+    } else {
+      messageToShow = message;
+    }
     showDialog(
       context: context,
       builder: ( ctx ) => AlertDialog(
-        title: Text('An Error Occured'),
+        title: Text(
+          messageToShow
+        ),
         content: Text( message ),
         actions: <Widget>[
           FlatButton(
@@ -163,31 +173,52 @@ class _AuthCardState extends State<AuthCard> with SingleTickerProviderStateMixin
 
   Future<void> _submit() async {
     print(' AuthScreen -> AuthCard -> Submit Button');
+    if (!_formKey.currentState.validate()) {
+      // Invalid!
+      return;
+    }
     _formKey.currentState.save();
-
     setState(() {
       _isLoading = true;
     });
+    List<dynamic> submitResponse;
     try {
       if (_authMode == AuthMode.Login) {
         // Log user in
-        await Provider.of<AuthProvider>(context, listen: false).signin(
+        submitResponse = await Provider.of<AuthProvider>(context, listen: false).signin(
           _authData['email'],
           _authData['password']
         );
       } else {
         // Sign user up
-        await Provider.of<AuthProvider>(context, listen: false).signup(
+        submitResponse = await Provider.of<AuthProvider>(context, listen: false).signup(
           _authData['email'],
           _authData['password']
         );
       }
-      Navigator.of(context).pushReplacementNamed(
-        DefaultScreen.routeName
+      print('authScreen -> submit -> token -> ');
+      print(
+        Provider.of<AuthProvider>(context).token
       );
+      if( submitResponse != null ) {
+        // So there is an error
+        _showErrorDialog(
+          submitResponse[0]['msg'] as String
+        );
+      }
+      if( Provider.of<AuthProvider>(context).token != null  ) {
+        Provider.of<AuthProvider>(context,listen: false).recordCredentialstoDevice(
+          email: _authData['email'],
+          password: _authData['password']
+        );
+        Navigator.of(context).pushReplacementNamed(
+          DefaultScreen.routeName
+        );
+      }
 
     } catch (err) {
       print('AuthScreen -> Submit Button -> errors');
+      print(err);
     }
     setState(() {
       _isLoading = false;

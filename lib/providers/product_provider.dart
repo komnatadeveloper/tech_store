@@ -49,6 +49,17 @@ class ProductProvider with ChangeNotifier {
 
 
   // ----------------- METHODS  ---------------------
+
+  void resetProductProvider () {
+    _isLoadingProducts = false;
+    _isLoadingFavorites = false;
+    _isFavoritesFetched = false;
+    favoriteProducts = [];
+    specialPriceItems = [];
+    // _mostPopularProductsList = [];
+    notifyListeners();
+  }
+
   Future<void> fetchFavoriteProducts () async {
      final url = '${constants.apiUrl}/api/customer/product/productList';
      _isLoadingFavorites = true;

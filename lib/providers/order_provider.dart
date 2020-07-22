@@ -26,6 +26,8 @@ class OrderProvider with ChangeNotifier {
     this.authToken,
     this.customerModel
   );
+
+  
   
   Future<Map<String, String>> payAndOrder ({
     // String type,

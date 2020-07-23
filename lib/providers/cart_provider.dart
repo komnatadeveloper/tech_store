@@ -28,6 +28,7 @@ class CartProvider with ChangeNotifier {
     return double.parse(total.toStringAsFixed(2));
   }
 
+  // -------- Methods  -----------
   void resetCartProvider () {
     _items = [];
     notifyListeners();
@@ -45,7 +46,8 @@ class CartProvider with ChangeNotifier {
       _items.add( cartItem  );
     }
     notifyListeners();    
-  }
+  } // End of addToCart
+
 
   void removeFromCart ({
     String id
@@ -55,7 +57,7 @@ class CartProvider with ChangeNotifier {
       _items.removeAt(index);
       notifyListeners();
     }
-  }
+  } // End of removeFromCart
 
   void changeItemQuantity ({
     String id,
@@ -68,11 +70,13 @@ class CartProvider with ChangeNotifier {
       quantity: newQuantity,
     );
     notifyListeners();
-  }
+  } // End of changeItemQuantity
+
 
   void clearCartItems () {
     _items = [];
     notifyListeners();
   }
 
-}
+
+} // End of CartProvider

@@ -170,4 +170,4 @@ class OrderProvider with ChangeNotifier {
     return [ ...tempList ];
   } // End of handleConvertResponseToOrderList
 
-}
+} // End of OrderProvider

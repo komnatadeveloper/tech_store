@@ -23,6 +23,7 @@ class ProductProvider with ChangeNotifier {
   List<ProductModel> favoriteProducts = [];
   List<ProductModel> specialPriceItems = [];
   List<ProductModel> _mostPopularProductsList = [];
+  // Constructor
   ProductProvider(
     this.authToken,
     this.customerModel,
@@ -34,6 +35,7 @@ class ProductProvider with ChangeNotifier {
     this.specialPriceItems,
     this._mostPopularProductsList
   );
+  // Getters
   bool get isLoadingProducts  {
     return _isLoadingProducts;
   }
@@ -58,7 +60,8 @@ class ProductProvider with ChangeNotifier {
     specialPriceItems = [];
     // _mostPopularProductsList = [];
     notifyListeners();
-  }
+  } // End of resetProductProvider
+
 
   Future<void> fetchFavoriteProducts () async {
      final url = '${constants.apiUrl}/api/customer/product/productList';
@@ -83,15 +86,12 @@ class ProductProvider with ChangeNotifier {
         );
       }
       favoriteProducts = [ ...orderedFavoriteList ];
-
-
      } catch ( err ) {
       print('ProductProvider -> fetchFavoriteProducts -> errors');
       print(err);
       // _isLoadingFavorites = false;
       // notifyListeners();
     }
-
      _isLoadingFavorites = false;
      _isFavoritesFetched = true;
      notifyListeners();
@@ -206,21 +206,26 @@ class ProductProvider with ChangeNotifier {
     }
     notifyListeners();
     print('productProvider -> compareFavoriteListWithCustomerModel FINISHED');
-  }
+  } // End of compareFavoriteListWithCustomerModel
 
 
   Future<void> getProductsByCategory ({
     String categoryId
   }) async {
-    final url = '${constants.apiUrl}/api/product/product?categoryId=$categoryId';
+    final url = '${constants.apiUrl}/api/customer/productByCategory?categoryId=$categoryId';
     print('ProductProvider -> getProductsByCategory FIRED');
     // print('url ->');
     // print(url);
     _isLoadingProducts = true;
     notifyListeners();
-
     try {
-      final res = await http.get(url);  
+      final res = await http.get(
+        url,
+        headers: {
+          'token': authToken,
+          'Content-Type': 'application/json'
+        },
+      );  
       searchedProductsList = convertResponseToProductList(res);  
       searchedProductsList = handleSpecialPriceItemsForSearchedItems(searchedProductsList);
     } catch (err) {
@@ -234,10 +239,6 @@ class ProductProvider with ChangeNotifier {
   Future<void> getMostPopularProducts () async {
     final url = '${constants.apiUrl}/api/customer/statistic?type=topSellStatistic&populateProducts=yes&maxCount=10';
     print('ProductProvider -> getMostPopularProducts FIRED -> url -> ' + url.toString());
-    // print('url ->');
-    // print(url);
-    // _isLoadingProducts = true;
-    // notifyListeners();
     try {
       final res = await http.get(
         url,
@@ -252,9 +253,9 @@ class ProductProvider with ChangeNotifier {
       print('ProductProvider -> getMostPopularProducts -> errors');
       print(err);
     }
-    // _isLoadingProducts = false;
     notifyListeners();
   }  // End of getMostPopularProducts
+
 
   Future<List<ProductModel>> getProductsByIdList ({
     List<String> idList
@@ -310,7 +311,7 @@ class ProductProvider with ChangeNotifier {
     } else {
       return [];
     }
-  }
+  } // End of handleSpecialPriceItemsForSearchedItems
 
 
   Future<void> getProducts ({
@@ -379,7 +380,6 @@ class ProductProvider with ChangeNotifier {
     // print(url);
     _isLoadingProducts = true;
     notifyListeners();
-
     try {
       final res = await http.post(
         url,

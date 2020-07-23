@@ -13,14 +13,14 @@ import '../models/feature_model.dart';
 import '../helpers/helpers.dart' as helpers;
 
 class CategoryProvider with ChangeNotifier {
-
+  // from AuthState
   final String authToken;
   final CustomerModel customerModel;
-
+  // Own Variables
   List<MainCategoryModel> _mainCategoryList;
   List<SpecialCategoryOnHomePageModel> _specialCategoryOnHomePageList;
   List<FeatureModel> _featureList = [];
-
+  // Contructor
   CategoryProvider(
     this.authToken,
     this.customerModel,
@@ -28,9 +28,7 @@ class CategoryProvider with ChangeNotifier {
     this._specialCategoryOnHomePageList,
     this._featureList
   );
-
-
-
+  // Getters
   List<MainCategoryModel> get mainCategoryList {
     return [ ..._mainCategoryList ];
   }
@@ -41,12 +39,15 @@ class CategoryProvider with ChangeNotifier {
     return [ ..._featureList ];
   }
 
+  // ---------- Methods ----------
+
   void resetCategoryProvider () {
-    _mainCategoryList = null;
-    _specialCategoryOnHomePageList = null;
+    _mainCategoryList = [];
+    _specialCategoryOnHomePageList = [];
     _featureList = [];
     notifyListeners();
-  }
+  }  // End of resetCategoryProvider
+
 
   Future<void> fetchFeatureList () async {
     print('CategoryProvider -> fetchFeatureList FIRED ->');
@@ -92,50 +93,44 @@ class CategoryProvider with ChangeNotifier {
     }
   } //  End of fetchFeatureList
 
+
   Future<void> fetchCategoryList () async {
     print('CategoryProvider -> fetchCategoryList FIRED ->');
     print( authToken );
-    final url = '${constants.apiUrl}/api/category/';
+    final url = '${constants.apiUrl}/api/customer/categories';
     print('url ->');
     print(url);
     try {
-      final res = await http.get(url);
+      final res = await http.get(
+        url,
+        headers: {
+          'token': authToken,
+          'Content-Type': 'application/json'
+        }, 
+      );
       final  extractedData = json.decode(res.body ) as List<dynamic>;
       var mappedList = helpers.convertListDynamicToListMap(extractedData);
-
-      // var mapData = extractedData.cast()
-
-      // print('CategoryProvider -> fetchCategoryList -> res ->');
-      // print(extractedData);
-      // print('CategoryProvider -> fetchCategoryList -> transFormedCategoryList ->');
-      // var mappedData = extractedData as List<Map<String, dynamic>>;
-      // print(handleTransformRawCategory(mappedList ));
       _mainCategoryList = handleTransformRawCategory(mappedList);
       _specialCategoryOnHomePageList = handleTransformRawSpecialCategory(mappedList);
-
       notifyListeners();
-
     } catch (err) {
       print(err);
     }
-  }
+  } // End of fetchCategoryList
+
 
   List<MainCategoryModel> handleTransformRawCategory (List<Map<String, dynamic>> rawCategory) {
     final mainRawCategoryList = rawCategory.where((element) => element['isMainCategory'] == true).toList();
     final secondLevelRawCategoryList = rawCategory.where((element) => element['isSecondLevelCategory'] == true).toList();
-    final thirdLevelRawCategoryList = rawCategory.where((element) => element['isThirdLevelCategory'] == true).toList();
-
-
+    final thirdLevelRawCategoryList = rawCategory.where(
+      (element) => element['isThirdLevelCategory'] == true
+    ).toList();
     List<MainCategoryModel> mainCategoryList = [];
-
     for (int i = 0; i < mainRawCategoryList.length; i++) {
-
       final secondLevelRawChildrenCategories = secondLevelRawCategoryList.where(
         (element) => element['parentList'].indexOf(mainRawCategoryList[i]['_id']) >= 0
       ).toList();
       List<SecondLevelCategoryModel> secondChildrenList = [];
-      
-
       for (int j = 0; j < secondLevelRawChildrenCategories.length; j++) {
         List<ThirdLevelCategoryModel> thirdChildrenList = [];
         final thirdLevelRawChildrenCategories = thirdLevelRawCategoryList.where(
@@ -161,8 +156,7 @@ class CategoryProvider with ChangeNotifier {
             childrenList: [ ...thirdChildrenList ]
           )
         );
-      }
-
+      }  // End of interior for loop
       mainCategoryList.add(
         MainCategoryModel(
           title: mainRawCategoryList[i]['title'],
@@ -172,11 +166,10 @@ class CategoryProvider with ChangeNotifier {
           childrenList: [...secondChildrenList]
         )
       );
-
-    }
-
+    } // End of exterior for loop
     return [...mainCategoryList];
-  }
+  } // End of handleTransformRawCategory
+
 
   List<SpecialCategoryOnHomePageModel> handleTransformRawSpecialCategory (List<Map<String, dynamic>> rawCategory) {
     final specialOnHomePageRawCategoryList = rawCategory.where(
@@ -195,8 +188,8 @@ class CategoryProvider with ChangeNotifier {
       );
     }
     return [ ...tempSpecialList ];
-  }
+  } // End of handleTransformRawSpecialCategory
 
 
 
-}
+} // End of CategoryProvider

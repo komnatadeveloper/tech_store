@@ -200,11 +200,15 @@ class _CartProductItemState extends State<CartProductItem> {
                                           ),
                                         ),
                                         SizedBox(width: 20),
-                                        Text(
-                                          widget.cartItem.productModel.productNo,
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            color: Colors.grey[700]
+                                        Expanded(
+                                          child: Text(
+                                            widget.cartItem.productModel.productNo,
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.grey[700]
+                                            ),
+                                            overflow: TextOverflow.clip,
+                                            maxLines: 1,
                                           ),
                                         ),
                                       ],
@@ -469,6 +473,7 @@ class _CartProductItemState extends State<CartProductItem> {
                                           ),
                                         ),
                                         // SizedBox(width: 20),
+
                                         Text(
                                           widget.cartItem.productModel.productNo,
                                           style: TextStyle(

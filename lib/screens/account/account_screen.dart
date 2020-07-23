@@ -73,6 +73,7 @@ class AccountScreen extends StatelessWidget {
                   ).removeCredentialsFromDevice();
                   Provider.of<CartProvider>(ctx,listen:false).resetCartProvider();
                   Provider.of<ProductProvider>(ctx,listen:false).resetProductProvider();
+                  Provider.of<CategoryProvider>(context, listen: false).resetCategoryProvider();
                   Navigator.of(ctx).pushReplacementNamed(
                     AuthScreen.routeName
                   );

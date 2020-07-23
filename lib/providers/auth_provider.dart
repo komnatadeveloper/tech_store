@@ -21,7 +21,7 @@ class AuthProvider with ChangeNotifier {
   int _selectedAddressIndex = null;
   String _orderDeliverOption; // 'from-tech-store-warehouse' || 'shipment-to-address'
   bool isAppInited = false;
-
+  // Getters
   bool get isAuth {
     return _token != null;
   }
@@ -43,6 +43,8 @@ class AuthProvider with ChangeNotifier {
   String get orderDeliverOption {
     return _orderDeliverOption;
   }
+
+  //  -------------Methods-------------------
   void setOrderDeliveryOption (
     String newDeliveryOption
   ) {
@@ -57,6 +59,7 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
+
   void resetAuthProvider () {
     _token = null;
     _userId = null;
@@ -66,6 +69,7 @@ class AuthProvider with ChangeNotifier {
     _orderDeliverOption = null;
     notifyListeners();
   }
+
 
   Future<void> initialiseApp ( ) async {
     print('authRouter -> initialiseApp FIRED');
@@ -82,6 +86,7 @@ class AuthProvider with ChangeNotifier {
     notifyListeners();
   }
 
+
   Future<void> recordCredentialstoDevice ({
     String email,
     String password,
@@ -97,6 +102,7 @@ class AuthProvider with ChangeNotifier {
       throw err;
     }
   }
+
 
   Future<void> removeCredentialsFromDevice () async {
     try {
@@ -334,7 +340,6 @@ class AuthProvider with ChangeNotifier {
           );
         }        
       }
-
       for(final name in responseData['customer'].keys) {
         // print(name);
         // print(rawItem[name]);
@@ -359,26 +364,6 @@ class AuthProvider with ChangeNotifier {
             print('_customerModel.orders ->');
             print(_customerModel.orders);
             break;
-          // case  'addressList':
-          //   var rawAddressList = helpers.convertListDynamicToListMap(
-          //     responseData['customer'][name] as List<dynamic>
-          //   );
-          //   for( int i = 0; i < rawAddressList.length; i++ ) {
-          //     var tempAddressItem = AddressModel(
-          //       definition: rawAddressList[i]['definition'],
-          //       receiver: rawAddressList[i]['receiver'],
-          //       addressString: rawAddressList[i]['addressString'],
-          //       city: rawAddressList[i]['city'],
-          //     );
-          //     if( rawAddressList[i]['_id'] != null ) {
-          //       tempAddressItem.id = rawAddressList[i]['_id'];
-          //     }
-          //     _customerModel.addressList.add(tempAddressItem);
-          //   }
-          //   print('_customerModel.addressList.length ->');
-          //   print(_customerModel.addressList.length);
-          //   break;
-          
           default:
           print(responseData['customer'][name]);
         }
@@ -396,9 +381,9 @@ class AuthProvider with ChangeNotifier {
     } catch ( err ) {
       print( 'authProvider -> signin -> Errors ->'  );
       print(err);
-    }
-    
+    }    
   }  // End of signin
+
 
   // add product to favorites
   Future<void> addRemoveProductToFavorites (String id) async {
@@ -421,7 +406,8 @@ class AuthProvider with ChangeNotifier {
       print( 'authProvider -> addRemoveProductToFavorites -> Errors ->'  );
       print(err);
     }
-  }
+  } // End of addRemoveProductToFavorites
+  
 
   Future<void> addAddress ({
     AddressModel addressModel

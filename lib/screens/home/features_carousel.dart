@@ -1,5 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:provider/provider.dart';
+import 'package:tech_store/providers/product_provider.dart';
+// Models
+import '../../models/feature_model.dart';
+// Providers
+import '../../providers/category_provider.dart';
+// helpers
+import '../../helpers/helpers.dart' as helpers;
+
 
 
 
@@ -8,8 +17,11 @@ import '../../dummy_data.dart' as dummy;
 
 class FeaturesCarousel extends StatefulWidget {
   final Function changeTab;
+  // final  FeatureModel featureList;
+
   FeaturesCarousel({
-    this.changeTab
+    this.changeTab,
+    // this.featureList
   });
 
   @override
@@ -24,6 +36,7 @@ class _FeaturesCarouselState extends State<FeaturesCarousel> {
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
+    var _featureList = Provider.of<CategoryProvider>(context).featureList;
 
     final List<String> imgList = dummy.dummyFeaturesList;
 
@@ -35,7 +48,8 @@ class _FeaturesCarouselState extends State<FeaturesCarousel> {
       children: <Widget>[
         CarouselSlider(
           options: CarouselOptions(
-            height: 200.0,
+            // height: 200.0,
+            height: MediaQuery.of(context).size.width * (3 / 5),
             enlargeCenterPage: true,
             viewportFraction: 1.0,
             onPageChanged: (index, reason) {
@@ -44,11 +58,19 @@ class _FeaturesCarouselState extends State<FeaturesCarousel> {
               });
             }
           ),
-          items: imgList.map((i) {
+          items: _featureList.map((i) {
             return Builder(
               builder: (BuildContext ctx) {
                 return GestureDetector(
                   onTap: () {
+                    Provider.of<ProductProvider>(
+                      context,
+                      listen: false
+                    ).getProducts(
+                      categoryId: i.categoryId == null ? '' : i.categoryId,
+                      productId: i.productId == null ? '' : i.productId,
+                      brand: i.brand == null ? '' : i.brand,
+                    );
                     widget.changeTab(1);
                   },
                   child: Container(
@@ -58,7 +80,7 @@ class _FeaturesCarouselState extends State<FeaturesCarousel> {
                       // color: Colors.amber
                     ),
                     child: Image.network(
-                      i,
+                      helpers.imageUrlHelper( imageId: i.imageId),
                       fit: BoxFit.cover
                     )
 
@@ -70,8 +92,10 @@ class _FeaturesCarouselState extends State<FeaturesCarousel> {
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: imgList.map((url) {
-            int index = imgList.indexOf(url);
+          children: _featureList.map((featureItem) {
+            int index = _featureList.indexWhere(
+              (element) => element.imageId == featureItem.imageId
+            );
             return Container(
               width: 8.0,
               height: 8.0,

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import './search_product_item.dart';
 import '../../models/product.dart';
-
+// Provider
+import '../../providers/product_provider.dart';
 
 
 
@@ -18,7 +20,7 @@ class SearchScreen extends StatefulWidget {
 // -------------------  STATE  -------------------------
 class _SearchScreenState extends State<SearchScreen> {
 
-  List<ProductModel> _productList = [];
+  List<ProductModel> _productList;
 
   List<ProductModel> handleProductListInit () {
     List<ProductModel> tempList = [];
@@ -65,16 +67,16 @@ class _SearchScreenState extends State<SearchScreen> {
         print(imageUrl);
         print(price);
 
-        tempList.add(
-          ProductModel(
-            id: id,
-            brand: brand,
-            keyProperties: keyProperties,
-            productNo: productNo,
-            imageUrl: imageUrl,
-            price: price
-          )
-        );
+        // tempList.add(
+        //   ProductModel(
+        //     id: id,
+        //     brand: brand,
+        //     keyProperties: keyProperties,
+        //     productNo: productNo,
+        //     imageUrl: imageUrl,
+        //     price: price
+        //   )
+        // );
 
 
         //------------------------------------------------------- 
@@ -87,9 +89,9 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   void initState() {
-    setState(() {
-      _productList = handleProductListInit();
-    });
+    // setState(() {
+    //   _productList = handleProductListInit();
+    // });
     
     // TODO: implement initState
     
@@ -97,8 +99,20 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    _productList = Provider.of<ProductProvider>(context).searchedProductsList;
+    super.didChangeDependencies();
+
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Container (
+
+    if(Provider.of<ProductProvider>(context).isLoadingProducts) {
+      return Center(child: CircularProgressIndicator(),);
+    }
+    return Container ( 
       height: double.infinity,
       color: Colors.grey[400],      
       child: ListView.builder(

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+// Screens
+import '../order_details/order_details_screen.dart';
+
 // Providers
 import '../../providers/cart_provider.dart';
 
@@ -59,7 +62,9 @@ class CartScreen extends StatelessWidget {
                
             ),
             //---------------------------------
-            Container(
+            if ( 
+              Provider.of<CartProvider>(context).items.length > 0 
+            )  Container(
               height: 60,
               padding: EdgeInsets.symmetric(
                 horizontal: 20
@@ -116,7 +121,11 @@ class CartScreen extends StatelessWidget {
                           color: Colors.white
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).pushReplacementNamed(
+                          OrderDetailsScreen.routeName
+                        );
+                      },
                     ),
                   )
                 ],

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 // dummy
 import '../../dummy_data.dart' as dummy;
-
+// Providers
+import '../../providers/product_provider.dart';
 // Screens
 import '../product_detail/product_detail_screen.dart';
 // Components
@@ -18,14 +20,15 @@ class MostPopularProductsListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var _mostPopularProductsList = Provider.of<ProductProvider>(context).mostPopularProductsList;
     return Container(
       height: 120,
       width: double.infinity,
       child: ListView.builder(        
         itemBuilder: (_, index) => MostPopularProductItem(
-          imageUrl: imgList[index],
+          productModel: _mostPopularProductsList[index],
         ),
-        itemCount: imgList.length,
+        itemCount: _mostPopularProductsList.length,
         scrollDirection: Axis.horizontal,
       )
     );

@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
-
+// Models
+import '../../models/product.dart';
+// helpers
+import '../../helpers/helpers.dart' as helpers;
 // Screens
 import '../product_detail/product_detail_screen.dart';
 
 class SpecialForYouItem extends StatelessWidget {
+  final ProductModel productModel;
+  SpecialForYouItem(
+    this.productModel
+  );
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -24,7 +31,10 @@ class SpecialForYouItem extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Image.network(
-              'https://images.unsplash.com/photo-1519985176271-adb1088fa94c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=a0c8d632e977f94e5d312d9893258f59&auto=format&fit=crop&w=1355&q=80',
+              // 'https://images.unsplash.com/photo-1519985176271-adb1088fa94c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=a0c8d632e977f94e5d312d9893258f59&auto=format&fit=crop&w=1355&q=80',
+              helpers.mainImageUrlHelper(
+                productModel: productModel
+              ),
               fit: BoxFit.cover,
               width: 60,
               height: double.infinity,
@@ -40,7 +50,7 @@ class SpecialForYouItem extends StatelessWidget {
                 ),
                 child: Center(
                   child: Text(
-                    'SA400S37 has a special price \$50.50 for you',
+                    '${productModel.productNo} has a special price \$${productModel.price.toStringAsFixed(2)} for you',
                     maxLines: 2,
                     style: TextStyle(
                       color: Colors.green
@@ -69,7 +79,10 @@ class SpecialForYouItem extends StatelessWidget {
                 child: Text('View'),
                 onPressed: () {
                   Navigator.of(context).pushNamed(
-                    ProductDetailScreen.routeName
+                    ProductDetailScreen.routeName,
+                    arguments: {
+                      'productModel': productModel
+                    }
                   );
                 },
                 

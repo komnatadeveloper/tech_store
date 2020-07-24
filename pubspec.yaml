@@ -25,12 +25,23 @@ dependencies:
     sdk: flutter
 
   provider: ^3.2.0
+  http: ^0.12.1
+
+  # to record Login user and pwd
+  shared_preferences: ^0.5.8
 
   # for TOP slider on home screen
   carousel_slider: ^2.1.0
 
+  # for converting Date Class  to String
+  intl: ^0.16.1
+  # to parse data from API to Date Data Type
+  jiffy: ^3.0.1
+
   # For most popular products slider
   flutter_mobile_carousel: ^1.0.3
+
+  flutter_credit_card: ^0.1.3
 
 
 

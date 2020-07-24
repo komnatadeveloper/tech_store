@@ -1,21 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tech_store/providers/auth_provider.dart';
+import 'package:tech_store/providers/product_provider.dart';
+// Models
+import '../../models/product.dart';
 //Providers
 import '../../providers/cart_provider.dart';
-
+import '../../providers/cart_provider.dart';
+// helpers
+import '../../helpers/helpers.dart' as helpers;
 // Screens
 import '../product_detail/product_detail_screen.dart';
 
+
 class FavoriteProductItem  extends StatelessWidget {
+  final ProductModel productModel;
+  FavoriteProductItem(
+    this.productModel
+  );
   @override
   Widget build(BuildContext context) {
     return FavoriteProductItemStateful(
-      
+      productModel
     );
   }
 }
 
 class FavoriteProductItemStateful extends StatefulWidget {
+  final ProductModel productModel;
+  FavoriteProductItemStateful(
+    this.productModel
+  );
   @override
   _FavoriteProductItemStatefulState createState() => _FavoriteProductItemStatefulState();
 }
@@ -42,7 +57,12 @@ class _FavoriteProductItemStatefulState extends State<FavoriteProductItemStatefu
     return GestureDetector(
       onTap: () {
         print( 'ProductItemCard ->  GestureDetector -> onTap' );
-        Navigator.of(context).pushNamed( ProductDetailScreen.routeName );
+        Navigator.of(context).pushNamed(
+          ProductDetailScreen.routeName,
+          arguments: {
+            'productModel': widget.productModel
+          }
+        );
       },
       child: Card(
         margin: EdgeInsets.only(
@@ -77,7 +97,7 @@ class _FavoriteProductItemStatefulState extends State<FavoriteProductItemStatefu
                   
                   children: <Widget>[
                     Image.network(
-                      'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1502&q=80',
+                      helpers.mainImageUrlHelper( productModel: widget.productModel ),
                       width: 80,
                       height: 80,
                       fit: BoxFit.cover,
@@ -87,7 +107,8 @@ class _FavoriteProductItemStatefulState extends State<FavoriteProductItemStatefu
                       height: 45,
                       alignment: Alignment.center,
                       child: Text(
-                        'In Stock',
+                        // In Stock,
+                        widget.productModel.stockStatus.stockQuantity.toString(),
                         style: TextStyle(
                           color: Colors.green[500]
                         ),
@@ -111,7 +132,7 @@ class _FavoriteProductItemStatefulState extends State<FavoriteProductItemStatefu
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        'ProductBrand',
+                        widget.productModel.brand,
                         style: TextStyle(
                           fontSize: 16,
                           color: Colors.blue[700]
@@ -123,7 +144,7 @@ class _FavoriteProductItemStatefulState extends State<FavoriteProductItemStatefu
                           bottom: 5
                         ),
                         child: Text(
-                          'ProductCode',
+                          widget.productModel.productNo,
                           style: TextStyle(
                             fontSize: 14,
                             color: Colors.grey[700]
@@ -132,11 +153,12 @@ class _FavoriteProductItemStatefulState extends State<FavoriteProductItemStatefu
                       ),
                       Expanded(
                         child: Text(
-                          'CI7-8700 3.20 Ghz 16GB 240GB SSD Free Dos Mini PC',
+                          widget.productModel.keyProperties,
                           style: TextStyle(
                             fontSize: 14,
                             color: Colors.grey[700]
                           ),
+                          maxLines: 2,
                         ),
                       ),
                       Container(
@@ -158,7 +180,7 @@ class _FavoriteProductItemStatefulState extends State<FavoriteProductItemStatefu
                           bottom:10
                         ),
                         child: Text(
-                          'Price: \$725.85',
+                          'Price: \$${widget.productModel.price.toStringAsFixed(2)}',
                           style: TextStyle(
                             fontSize: 15,
                             color: Colors.red[700]
@@ -245,6 +267,12 @@ class _FavoriteProductItemStatefulState extends State<FavoriteProductItemStatefu
                           //           quantity: int.parse(_quantityTextController.text)
                           //     )
                           // );
+                          Provider.of<CartProvider>(context).addToCart(
+                            CartItem(
+                              productModel: widget.productModel,
+                              quantity: int.parse(_quantityTextController.text)
+                            )
+                          );
                           Scaffold.of(context).hideCurrentSnackBar();
                           Scaffold.of(context).showSnackBar(
                             SnackBar(
@@ -312,8 +340,10 @@ class _FavoriteProductItemStatefulState extends State<FavoriteProductItemStatefu
                                         ),
                                       ),
                                       textColor: Colors.blue,
-                                      onPressed: () {
+                                      onPressed: () async {
                                         print('FavoriteProductItem -> Remove Button -> AlertDialog -> Yes');
+                                        await Provider.of<AuthProvider>(context, listen: false).addRemoveProductToFavorites(widget.productModel.id);
+                                        Provider.of<ProductProvider>(context, listen: false).compareFavoriteListWithCustomerModel();
                                         Navigator.of(ctx).pop();
                                       },
                                     ),

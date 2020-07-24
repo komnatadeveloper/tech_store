@@ -4,6 +4,10 @@ import 'package:carousel_slider/carousel_slider.dart';
 import '../../dummy_data.dart' as dummyData;
 
 class CarouselWithArrows extends StatefulWidget {
+  final List<String> imageList;
+  CarouselWithArrows({
+    this.imageList
+  });
   @override
   _CarouselWithArrowsState createState() => _CarouselWithArrowsState();
 }
@@ -12,14 +16,14 @@ class CarouselWithArrows extends StatefulWidget {
 // -----------STATE-------------------
 class _CarouselWithArrowsState extends State<CarouselWithArrows> {
   int _current = 0;
-  List<String> imgList;
+  // List<String> imgList;
   final double ARROW_ICON_SIZE = 18.0;
   CarouselController buttonCarouselController = CarouselController();
 
   @override
   void initState() {
     // TODO: implement initState
-    imgList = dummyData.dummySampleProductDetailsItem['imageUrlList'];
+    // imgList = dummyData.dummySampleProductDetailsItem['imageUrlList'];
     super.initState();
   }
 
@@ -59,7 +63,7 @@ class _CarouselWithArrowsState extends State<CarouselWithArrows> {
                     });
                   }
                 ),
-                items: imgList.map((i) {
+                items: widget.imageList.map((i) {
                   return Builder(
                     builder: (BuildContext ctx) {
                       return Container(
@@ -96,8 +100,8 @@ class _CarouselWithArrowsState extends State<CarouselWithArrows> {
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: imgList.map((url) {
-            int index = imgList.indexOf(url);
+          children: widget.imageList.map((url) {
+            int index = widget.imageList.indexOf(url);
             return Container(
               width: 8.0,
               height: 8.0,

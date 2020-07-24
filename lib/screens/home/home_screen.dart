@@ -1,4 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+// Providers
+import '../../providers/category_provider.dart';
+import '../../providers/product_provider.dart';
+
+// Helpers
+import '../../helpers/helpers.dart' as helper;
+
+// Models
+import 'package:tech_store/models/product.dart';
 
 // Components
 import './features_carousel.dart';
@@ -19,7 +30,24 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
+// -----------------------  STATE  --------------------
 class _HomeScreenState extends State<HomeScreen> {
+  List<ProductModel> _specialProductsList = [];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    // Provider.of<ProductProvider>(context).getProductsByIdList(
+    //   idList: Provider.of<ProductProvider>(context).customerModel.specialPriceItems.map(
+    //     (item) => item.id
+    //   )
+    // ).then( 
+    //     (value) {         
+    //       _specialProductsList = value;
+    //     }
+    // );
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -32,8 +60,15 @@ class _HomeScreenState extends State<HomeScreen> {
             FeaturesCarousel(
               changeTab: widget.changeTab,
             ),
-            SpecialForYouItem(),
-            SpecialForYouItem(),
+            // SpecialForYouItem(),
+            // SpecialForYouItem(),
+            if ( Provider.of<ProductProvider>(context).specialPriceItems.length > 0 
+            ) ...Provider.of<ProductProvider>(context).specialPriceItems.map(
+              (specialPriceItem) => SpecialForYouItem(
+                specialPriceItem
+              )
+            ).toList(),
+
 
             // Most Popular Title
             Container(
@@ -56,23 +91,49 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
 
             // Picture Below will be Discounts Picture
-            Container(
-              margin: EdgeInsets.symmetric(vertical: 20),
-              child: GestureDetector(
-                onTap: ( ) {
-                  widget.changeTab(1);
-                },
-                child: Image.network(
-                  'https://gloimg.gbtcdn.com/soa/gb/pdm-provider-img/straight-product-img/20180914/T017597/T0175970025/source-img/160240-3829.jpg',
-                  width: double.infinity,
-                  height: 200,
-                  fit: BoxFit.cover,
+            // Container(
+            //   margin: EdgeInsets.symmetric(vertical: 20),
+            //   child: GestureDetector(
+            //     onTap: ( ) {
+            //       widget.changeTab(1);
+            //     },
+            //     child: Image.network(
+            //       'https://gloimg.gbtcdn.com/soa/gb/pdm-provider-img/straight-product-img/20180914/T017597/T0175970025/source-img/160240-3829.jpg',
+            //       width: double.infinity,
+            //       height: 200,
+            //       fit: BoxFit.cover,
+            //     ),
+            //   ),
+            // ),
+
+            // Picture Below will be Discounts Picture
+            ...Provider.of<CategoryProvider>(context).specialCategoryOnHomePageList.map(
+              (specialCategoryItem) => Container(
+                margin: EdgeInsets.symmetric(vertical: 20),
+                child: GestureDetector(
+                  onTap: ( ) {
+                    widget.changeTab(1);
+                    Provider.of<ProductProvider>(
+                      context,
+                      listen: false
+                    ).getProductsByCategory(
+                      categoryId: specialCategoryItem.id
+                    );
+                  },
+                  child: Image.network(
+                    helper.imageUrlHelper(imageId: specialCategoryItem.imageId),
+                    width: double.infinity,
+                    height: 200,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
-            ),
+            ).toList(),
+            
 
             ProductGroupsCard(
-              changeTab: widget.changeTab
+              changeTab: widget.changeTab,
+              mainCategoryList: Provider.of<CategoryProvider>(context).mainCategoryList,
             )
 
           ],

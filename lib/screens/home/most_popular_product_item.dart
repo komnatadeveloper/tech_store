@@ -2,11 +2,17 @@ import 'package:flutter/material.dart';
 
 // Screens
 import '../product_detail/product_detail_screen.dart';
+// Models
+import '../../models/product.dart';
+// helpers
+import '../../helpers/helpers.dart' as helpers;
 
 class MostPopularProductItem extends StatefulWidget {
-  final String imageUrl;
+  // final String imageUrl;
+  final ProductModel productModel;
   MostPopularProductItem({
-    this.imageUrl
+    // this.imageUrl,
+    this.productModel
   });
   @override
   _MostPopularProductItemState createState() => _MostPopularProductItemState();
@@ -36,7 +42,10 @@ class _MostPopularProductItemState extends State<MostPopularProductItem> {
           // padding: const EdgeInsets.all(8.0),
           onTap: () {
             Navigator.of(context).pushNamed(
-              ProductDetailScreen.routeName
+              ProductDetailScreen.routeName,
+              arguments: {
+                'productModel': widget.productModel
+              }
             );
           },
           child: AnimatedOpacity(
@@ -47,7 +56,9 @@ class _MostPopularProductItemState extends State<MostPopularProductItem> {
               width: 180,
               color: Colors.white,
               child: Image.network(
-                widget.imageUrl,
+                helpers.mainImageUrlHelper(
+                  productModel:  widget.productModel
+                ),
                 fit: BoxFit.fitHeight,
                 alignment: Alignment.center,                
               ),

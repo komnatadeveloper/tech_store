@@ -13,7 +13,6 @@ Thus, you may clone, build, directly signup & order if you want to try.
 - Auth Screen for Signup and Signin
 <div style="display:flex; flex-direction:column; ">
   <img src="lib/photosforreadmemd/Screenshot_1595632263.png" width=250>
-  <div width=300></div>
   <img src="lib/photosforreadmemd/Screenshot_1595632283.png" width=250>
 </div>
 

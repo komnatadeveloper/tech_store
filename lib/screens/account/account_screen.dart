@@ -77,6 +77,7 @@ class AccountScreen extends StatelessWidget {
                   Navigator.of(ctx).pushReplacementNamed(
                     AuthScreen.routeName
                   );
+                  Provider.of<AuthProvider>(context, listen: false).resetAuthProvider();
                 },
               ),
             ],

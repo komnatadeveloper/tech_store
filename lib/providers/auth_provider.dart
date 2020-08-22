@@ -447,6 +447,9 @@ class AuthProvider with ChangeNotifier {
         tempAddressList.add(tempAddressItem);
       }
       _customerModel.addressList = tempAddressList;
+      if( _selectedAddressIndex == null ) {
+        _selectedAddressIndex = 0;
+      }
       notifyListeners();
       print( 'authProvider -> addAddress -> _customerModel.addressList.length ->'  );
       print(_customerModel.addressList.length);

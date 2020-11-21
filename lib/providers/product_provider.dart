@@ -14,8 +14,8 @@ import '../models/customer_model.dart';
 class ProductProvider with ChangeNotifier { 
   List<ProductModel> searchedProductsList = [];
   // From AuthProvider
-  final String authToken;
-  final CustomerModel customerModel;
+  String authToken;
+  CustomerModel customerModel;
   // Own variables
   bool _isLoadingProducts = false;
   bool _isLoadingFavorites = false;
@@ -23,18 +23,28 @@ class ProductProvider with ChangeNotifier {
   List<ProductModel> favoriteProducts = [];
   List<ProductModel> specialPriceItems = [];
   List<ProductModel> _mostPopularProductsList = [];
-  // Constructor
-  ProductProvider(
-    this.authToken,
-    this.customerModel,
-    this.searchedProductsList,
-    this._isLoadingProducts,
-    this._isLoadingFavorites,
-    this._isFavoritesFetched,
-    this.favoriteProducts,
-    this.specialPriceItems,
-    this._mostPopularProductsList
-  );
+
+  void update (
+    String authToken,
+    CustomerModel customerModel,
+    List<ProductModel> searchedProductsList,
+    bool _isLoadingProducts,
+    bool _isLoadingFavorites,
+    bool _isFavoritesFetched,
+    List<ProductModel> favoriteProducts,
+    List<ProductModel> specialPriceItems,
+    List<ProductModel> _mostPopularProductsList
+  ) {
+    this.authToken = authToken;
+    this.customerModel = customerModel;
+    this.searchedProductsList = searchedProductsList;
+    this._isLoadingProducts = _isLoadingProducts;
+    this._isLoadingFavorites = _isLoadingFavorites;
+    this._isFavoritesFetched = _isFavoritesFetched;
+    this.favoriteProducts = favoriteProducts;
+    this.specialPriceItems = specialPriceItems;
+    this._mostPopularProductsList = _mostPopularProductsList;
+  }
   // Getters
   bool get isLoadingProducts  {
     return _isLoadingProducts;

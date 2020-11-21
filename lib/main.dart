@@ -62,12 +62,11 @@ class _MyAppState extends State<MyApp> {
               : previousCategoryProvider.featureList,
           ),
         ),
-
+        
         ChangeNotifierProxyProvider< AuthProvider, ProductProvider > (
-          create: ( ctx ) => ProductProvider(
-             null, null, [], false, false, false, [], [], [] 
-            ),
-          update: ( _, authProvider, previousProductProvider ) => ProductProvider(
+          create: ( _ ) => ProductProvider(),
+          update: ( _, authProvider, previousProductProvider ) => previousProductProvider
+          ..update(
             authProvider.token,
             authProvider.customerModel,
             previousProductProvider == null

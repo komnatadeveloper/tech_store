@@ -22,8 +22,17 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
-    if( !Provider.of<ProductProvider>(context).isFavoritesFetched ) {
-      Provider.of<ProductProvider>(context).fetchFavoriteProducts();
+    print('FavoriteScreen -> didChangeDependencies FIRED');
+    if( 
+      !Provider.of<ProductProvider>(context).isFavoritesFetched 
+      && !Provider.of<ProductProvider>(context).isLoadingFavorites
+    ) {
+      Future.delayed(
+        Duration(milliseconds: 1),
+        () {
+          Provider.of<ProductProvider>(context).fetchFavoriteProducts();
+        }
+      );
     }
     super.didChangeDependencies();
   }

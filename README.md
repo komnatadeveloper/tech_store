@@ -1,4 +1,4 @@
-# tech_store
+# Tech Store - Updated to Flutter 2.0
 
 This is a Flutter Mobile App for an electronics & computer store (or any other use)
 

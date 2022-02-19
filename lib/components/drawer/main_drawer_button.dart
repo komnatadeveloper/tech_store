@@ -16,9 +16,9 @@ class MainDrawerButton extends StatefulWidget {
 
 
   MainDrawerButton({
-    this.transformedDrawerMenuItem,
-    this.handleClickButton,
-    this.subItemList,
+    required this.transformedDrawerMenuItem,
+    required this.handleClickButton,
+    required this.subItemList,
     // this.isSubItemsVisible
   });
 
@@ -33,12 +33,12 @@ class _MainDrawerButtonState extends State<MainDrawerButton> with SingleTickerPr
 
   final rgbBorderValue = 20;
 
-  Animation<Offset> _slideAnimation;
-  AnimationController _animationController;
+  late Animation<Offset> _slideAnimation;
+  late AnimationController _animationController;
   bool _isSubItemsVisible = false;
   var _animationDuration = 450;
 
-  Animation<RelativeRect> _testRelativeRectAnimation;
+  // Animation<RelativeRect> _testRelativeRectAnimation;
 
   
   @override

@@ -23,7 +23,7 @@ import './most_popular_products_listview.dart';
 class HomeScreen extends StatefulWidget {
   final Function changeTab;
   HomeScreen({
-    this.changeTab
+    required this.changeTab
   });
 
   @override

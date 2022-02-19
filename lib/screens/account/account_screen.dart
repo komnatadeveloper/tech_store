@@ -90,7 +90,7 @@ class AccountScreen extends StatelessWidget {
 
   Widget _accountScreenItem (
     String title,
-    Function handleTap
+    VoidCallback handleTap
   ) {
     return GestureDetector(
       onTap: handleTap,

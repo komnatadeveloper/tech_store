@@ -21,10 +21,10 @@ class OrderAddressDetailsScreen extends StatefulWidget {
 //   -------------------------------    STATE    ---------------------------------
 class _OrderAddressDetailsScreenState extends State<OrderAddressDetailsScreen> {
   final _appbarBackgroundColor = Color.fromRGBO(208, 57, 28, 1);
-  String _deliverOption;  // 'from-tech-store-warehouse' || 'shipment-to-address'
-   List<AddressModel> _customerAddressList;
+  String? _deliverOption;  // 'from-tech-store-warehouse' || 'shipment-to-address'
+   List<AddressModel> _customerAddressList = [];
   //  int _selectedAddressIndex = 0;
-   AddressModel _selectedAddress;
+   AddressModel? _selectedAddress;
   @override
   void initState() {
     // TODO: implement initState
@@ -37,7 +37,7 @@ class _OrderAddressDetailsScreenState extends State<OrderAddressDetailsScreen> {
   }
 
   Widget _customerAddressItemWidget ({
-    AddressModel addressModel
+    required AddressModel addressModel
   }) {
     return Container(
       margin: EdgeInsets.only(
@@ -56,7 +56,7 @@ class _OrderAddressDetailsScreenState extends State<OrderAddressDetailsScreen> {
           children: <Widget>[
             Radio(
               value: addressModel.definition,
-              groupValue: _selectedAddress.definition,
+              groupValue: _selectedAddress!.definition,
               onChanged: ( val ) {
                 print(val);
                 print('OrderAddressDetailsScreen -> _customerAddressItemWidget -> CLICK');
@@ -84,12 +84,16 @@ class _OrderAddressDetailsScreenState extends State<OrderAddressDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    _deliverOption =  Provider.of<AuthProvider>(context).orderDeliverOption;
-    _customerAddressList = Provider.of<AuthProvider>(context).customerModel.addressList;
+    _deliverOption =  Provider.of<AuthProvider>(context).orderDeliverOption!;
+    if (Provider.of<AuthProvider>(context).customerModel != null ) {
+      _customerAddressList = Provider.of<AuthProvider>(context).customerModel!.addressList;
+    }
     if ( _customerAddressList.length != 0 ) {
-      _selectedAddress = _customerAddressList[
-        Provider.of<AuthProvider>(context).selectedAddressIndex
-      ];
+      if ( Provider.of<AuthProvider>(context).selectedAddressIndex != null ) {
+        _selectedAddress = _customerAddressList[
+          Provider.of<AuthProvider>(context).selectedAddressIndex!
+        ];
+      } 
     }
     return Scaffold(
       appBar: AppBar(
@@ -112,15 +116,17 @@ class _OrderAddressDetailsScreenState extends State<OrderAddressDetailsScreen> {
                   bottom: 20
                 ),
                 width: double.infinity,
-                child: RaisedButton.icon(
+                child: ElevatedButton.icon(
                   icon: Icon(
                     Icons.add,
                     size: 30,
                   ),
                   label: Text('Add New Address'),
-                  color: Colors.grey,
-                  padding: EdgeInsets.symmetric(
-                    vertical: 12
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.grey,
+                    padding: EdgeInsets.symmetric(
+                      vertical: 12
+                    ),
                   ),
                   onPressed: () {
                     Navigator.of(context).pushNamed(
@@ -219,11 +225,13 @@ class _OrderAddressDetailsScreenState extends State<OrderAddressDetailsScreen> {
                   bottom: 20
                 ),
                 width: double.infinity,
-                child: RaisedButton(
-                  padding: EdgeInsets.symmetric(
-                    vertical: 10
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(
+                      vertical: 10
+                    ),
+                    primary: Colors.white,
                   ),
-                  color: Colors.white,
                   child: Text(
                     'No Addresses. Please Add!',
                     style: TextStyle(

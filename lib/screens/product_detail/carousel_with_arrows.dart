@@ -6,7 +6,7 @@ import '../../dummy_data.dart' as dummyData;
 class CarouselWithArrows extends StatefulWidget {
   final List<String> imageList;
   CarouselWithArrows({
-    this.imageList
+    required this.imageList
   });
   @override
   _CarouselWithArrowsState createState() => _CarouselWithArrowsState();

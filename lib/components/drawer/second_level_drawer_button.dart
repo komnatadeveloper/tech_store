@@ -12,15 +12,15 @@ import '../../helpers/color_helper.dart' as colorHelper;
 
 class SecondLevelDrawerButton extends StatefulWidget {
   final SecondLevelCategoryModel secondLevelCategory;
-  final Function handleClickButton;
+  final Function? handleClickButton;
   final Function selectPage;
   // final bool isSubItemsVisible;
   
 
 
   SecondLevelDrawerButton({
-    this.secondLevelCategory,
-    this.selectPage,
+    required this.secondLevelCategory,
+    required this.selectPage,
     this.handleClickButton
     // this.isSubItemsVisible
   });
@@ -36,12 +36,12 @@ class _SecondLevelDrawerButtonState extends State<SecondLevelDrawerButton> with 
 
   final rgbBorderValue = 20;
 
-  Animation<Offset> _slideAnimation;
-  AnimationController _animationController;
+  late Animation<Offset> _slideAnimation;
+  late AnimationController _animationController;
   bool _isSubItemsVisible = false;
   var _animationDuration = 450;
 
-  Animation<RelativeRect> _testRelativeRectAnimation;
+  // Animation<RelativeRect> _testRelativeRectAnimation;
 
   
   @override
@@ -79,14 +79,16 @@ class _SecondLevelDrawerButtonState extends State<SecondLevelDrawerButton> with 
       child: SlideTransition(
         position: _slideAnimation,      
         child: Column(
-          children: widget.secondLevelCategory.childrenList.length > 0 && _isSubItemsVisible
-            ? widget.secondLevelCategory.childrenList.map(
-              (subItem) =>  FlatButton(
-                // animationDuration: Duration(seconds: 2),      
-                padding: EdgeInsets.zero,
-                // elevation: 5,
-                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                // color: Color.fromRGBO(rgbValue , rgbValue, rgbValue, 1),
+          children: widget.secondLevelCategory.childrenList != null && widget.secondLevelCategory.childrenList!.length > 0 && _isSubItemsVisible
+            ? widget.secondLevelCategory.childrenList!.map(
+              (subItem) =>  TextButton(
+                style: TextButton.styleFrom(
+                  // animationDuration: Duration(seconds: 2),      
+                  padding: EdgeInsets.zero,
+                  // elevation: 5,
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  // color: Color.fromRGBO(rgbValue , rgbValue, rgbValue, 1),
+                ),
                 child:  Container(
                 padding: EdgeInsetsDirectional.only(
                   top: 10,
@@ -156,7 +158,7 @@ class _SecondLevelDrawerButtonState extends State<SecondLevelDrawerButton> with 
   }
 
   IconData get  mainButtonIcon {
-    if( widget.secondLevelCategory.childrenList.length > 0     
+    if(widget.secondLevelCategory.childrenList != null && widget.secondLevelCategory.childrenList!.length > 0     
     ) {
       if( _isSubItemsVisible )  {
         // return Icons.maximize;
@@ -183,12 +185,14 @@ class _SecondLevelDrawerButtonState extends State<SecondLevelDrawerButton> with 
 
     return Column(
       children: <Widget>[
-          RaisedButton(
-          animationDuration: Duration(milliseconds: 800),      
-          padding: EdgeInsets.zero,
-          elevation: 5,
-          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          color: Color.fromRGBO(rgbValue , rgbValue, rgbValue, 1),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              animationDuration: Duration(milliseconds: 800),      
+              padding: EdgeInsets.zero,
+              elevation: 5,
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              primary: Color.fromRGBO(rgbValue , rgbValue, rgbValue, 1),
+            ),
           child:  Container(
           padding: EdgeInsetsDirectional.only(
             top: 10,
@@ -244,16 +248,17 @@ class _SecondLevelDrawerButtonState extends State<SecondLevelDrawerButton> with 
 
             // ----------------------------------------------------------------
             if(
-              widget.secondLevelCategory.childrenList.length > 0               
+              widget.secondLevelCategory.childrenList != null 
+              &&          widget.secondLevelCategory.childrenList!.length > 0               
             ) {
               if (  !_isSubItemsVisible ) {
-                print(widget.secondLevelCategory.childrenList.length);
+                print(widget.secondLevelCategory.childrenList!.length);
                 setState(() {
                   _isSubItemsVisible = true;
                 });
                 _animationController.forward();
               } else {
-                print(widget.secondLevelCategory.childrenList.length);
+                print(widget.secondLevelCategory.childrenList!.length);
                 setState(() {
                   _isSubItemsVisible = false;
                 });

@@ -27,7 +27,7 @@ class DefaultScreen extends StatefulWidget {
 // ------------- STATE -----------------
 class _DefaultScreenState extends State<DefaultScreen> {
   // var _isInited = false;
-  List<Map<String, Object>> _pages;
+  late List<Map<String, dynamic>> _pages;
   int _selectedPageIndex = 0;
   final _appbarBackgroundColor = Color.fromRGBO(208, 57, 28, 1);
   bool _isFetchingCategoryList = true;
@@ -80,7 +80,7 @@ class _DefaultScreenState extends State<DefaultScreen> {
         });
       Provider.of<ProductProvider>(context, listen: false)
         .getProductsByIdList(
-          idList: Provider.of<ProductProvider>(context).customerModel.specialPriceItems.map(
+          idList: Provider.of<ProductProvider>(context).customerModel!.specialPriceItems.map(
             (item) => item.id
           ).toList()
         ).then( 
@@ -98,7 +98,7 @@ class _DefaultScreenState extends State<DefaultScreen> {
               setState(() {              
                 _isFetchingMostPopularProductsList = false;
                 print('MostPopularProductsList length ->');
-                print(Provider.of<ProductProvider>(context).mostPopularProductsList.length);
+                print(Provider.of<ProductProvider>(context, listen: false).mostPopularProductsList.length);
               });
             }
           );
@@ -323,7 +323,7 @@ class _DefaultScreenState extends State<DefaultScreen> {
                     Consumer<CartProvider>(
                       builder: (_, cartProvider, customChild) => cartProvider.items.length > 0
                        ? Badge(
-                          child: customChild,
+                          child: customChild!,
                           value: cartProvider.items.length.toString(),
                         )
                       : _goToCartButton( context ),

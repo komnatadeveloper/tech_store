@@ -20,37 +20,38 @@ class SearchScreen extends StatefulWidget {
 // -------------------  STATE  -------------------------
 class _SearchScreenState extends State<SearchScreen> {
 
-  List<ProductModel> _productList;
+  List<ProductModel> _productList = [];
 
   List<ProductModel> handleProductListInit () {
     List<ProductModel> tempList = [];
-    dummy.dummyProductList.forEach(
+    List<Map<String, dynamic>> dummyProductList = dummy.dummyProductList;
+    dummyProductList.forEach(
       (rawItem)  {
-        String id;
-        String brand;
-        String productNo;
-        String keyProperties;
-        String imageUrl;
-        double price;
+        String? id;
+        String? brand;
+        String? productNo;
+        String? keyProperties;
+        String? imageUrl;
+        double? price;
         for(final name in rawItem.keys) {
           // print(name);
           // print(rawItem[name]);
           
           switch (name) {
             case  'id':
-              id = rawItem[name];
+              id = rawItem[name]!;
               break;
             case  'brand':
-              brand = rawItem[name];
+              brand = rawItem[name]!;
               break;
             case  'productNo':
-              productNo = rawItem[name];
+              productNo = rawItem[name]!;
               break;
             case  'keyProperties':
-              keyProperties = rawItem[name];
+              keyProperties = rawItem[name]!;
               break;
             case  'imageUrl':
-              imageUrl = rawItem[name];
+              imageUrl = rawItem[name]!;
               break;
             case  'price':
               // price = double.parse(rawItem[name]);

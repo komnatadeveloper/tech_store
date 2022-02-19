@@ -47,7 +47,7 @@ class _TechnicalSpecificationsState extends State<TechnicalSpecifications> {
         tempList.add(
           _specificationRow( 
               name,
-              element[name]
+              element[name]!
           )        
         );
       }
@@ -73,7 +73,7 @@ class _TechnicalSpecificationsState extends State<TechnicalSpecifications> {
         tempList.add(
           _specificationRow( 
               name,
-              element[name]
+              element[name]!
           )        
         );
       }

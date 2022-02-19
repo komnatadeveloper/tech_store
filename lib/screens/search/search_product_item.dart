@@ -22,9 +22,9 @@ class SearchProductItem  extends StatelessWidget {
   final bool isLastItem;
 
   SearchProductItem({
-    this.productModel,
-    this.isFirstItem,
-    this.isLastItem
+    required this.productModel,
+    required this.isFirstItem,
+    required this.isLastItem
   });
 
   @override
@@ -43,9 +43,9 @@ class SearchProductItemStateful extends StatefulWidget {
   final bool isLastItem;
 
   SearchProductItemStateful({
-    this.productModel,
-    this.isFirstItem,
-    this.isLastItem
+    required this.productModel,
+    required this.isFirstItem,
+    required this.isLastItem
   });
   @override
   _SearchProductItemStatefulState createState() => _SearchProductItemStatefulState();
@@ -57,7 +57,7 @@ class _SearchProductItemStatefulState extends State<SearchProductItemStateful> {
   final cardHeight = 135.0;
   final rightWidth = 50.0;
   final rightPaddingAll = 8.0;
-  TextEditingController _quantityTextController;
+  late TextEditingController _quantityTextController;
 
   var _cardOpacity  = 1.0;
 
@@ -353,8 +353,8 @@ class _SearchProductItemStatefulState extends State<SearchProductItemStateful> {
                                       quantity: int.parse(_quantityTextController.text)
                                     )
                               );
-                              Scaffold.of(context).hideCurrentSnackBar();
-                              Scaffold.of(context).showSnackBar(
+                              ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                              ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text(
                                   'Added Item to the Cart',

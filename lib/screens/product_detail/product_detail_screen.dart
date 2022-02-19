@@ -27,8 +27,8 @@ class ProductDetailScreen extends StatefulWidget {
 // ----------------------------  STATE  ---------------------------------
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
   final _appbarBackgroundColor = Color.fromRGBO(208, 57, 28, 1);
-  TextEditingController _quantityTextController;
-  ProductModel _productModel;
+  late TextEditingController _quantityTextController;
+  ProductModel? _productModel;
 
   @override
   void initState() {
@@ -41,7 +41,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   @override
   void didChangeDependencies() {
     print('ProductDetailScreen -> initState');
-    final routeArgs = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
+    final routeArgs = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     print('routeArgs ->');
     print(routeArgs);
     if(routeArgs['productModel'] != null) {
@@ -87,7 +87,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               Consumer<CartProvider>(
                 builder: (_, cartProvider, customChild) => cartProvider.items.length > 0
                   ? Badge(
-                    child: customChild,
+                    child: customChild!,
                     value: cartProvider.items.length.toString(),
                   )
                 : _goToCartButton( context ),
@@ -111,7 +111,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     ),
                     child: Text(
                       // dummyData.dummySampleProductDetailsItem['brand'],
-                      _productModel.brand,
+                      _productModel!.brand,
                       style: TextStyle(
                         color: Color.fromRGBO(164, 41, 48, 1)
                       ),
@@ -120,21 +120,21 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   Expanded(                    
                     child: Text(
                       // dummyData.dummySampleProductDetailsItem['productNo']
-                      _productModel.productNo
+                      _productModel!.productNo
                     ),
                   ),
                   Consumer<AuthProvider> (
                     builder: (ctx, authProvider, child ) => IconButton(
                       icon: Icon(
                         Icons.star,
-                        color: authProvider.customerModel.favorites.indexOf(_productModel.id) >= 0 
+                        color: authProvider.customerModel!.favorites.indexOf(_productModel!.id) >= 0 
                           ? Colors.blue
                           : Colors.black,
                       ),
                       onPressed: () async {
                         print('Add to favorites');
-                        await Provider.of<AuthProvider>(context).addRemoveProductToFavorites(
-                          _productModel.id
+                        await Provider.of<AuthProvider>(context, listen: false).addRemoveProductToFavorites(
+                          _productModel!.id
                         );
                         Provider.of<ProductProvider>(context,listen: false).compareFavoriteListWithCustomerModel();
 
@@ -164,15 +164,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 ),
                 child: Text(
                   // dummyData.dummySampleProductDetailsItem['keyProperties'],
-                  _productModel.keyProperties,
+                  _productModel!.keyProperties,
                   style: TextStyle(
                     fontSize: 22
                   ),
                 ),
               ), 
               carousel.CarouselWithArrows(
-                imageList: List.generate(_productModel.imageList.length, (index) => helpers.imageUrlHelper(
-                  imageId: _productModel.imageList[index].imageId
+                imageList: List.generate(_productModel!.imageList.length, (index) => helpers.imageUrlHelper(
+                  imageId: _productModel!.imageList[index].imageId
                 )),
               ),
               SizedBox(height: 20),
@@ -191,7 +191,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           SizedBox(width: 30),
                           Text(
                             // dummyData.dummySampleProductDetailsItem['stockStatus'],
-                            _productModel.stockStatus.stockQuantity.toString(),
+                            _productModel!.stockStatus.stockQuantity.toString(),
                             style: TextStyle(
                               color: Colors.green,
                               fontSize: 16
@@ -222,7 +222,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           SizedBox(width: 30),
                           Text(
                             // '\$${dummyData.dummySampleProductDetailsItem['price'].toString()}',
-                            '\$${_productModel.price.toStringAsFixed(2)}',
+                            '\$${_productModel!.price.toStringAsFixed(2)}',
                             style: TextStyle(
                               color: Colors.red,
                               fontSize: 16
@@ -272,22 +272,24 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 return Container(
                                   height: 35,
                                   padding: EdgeInsets.symmetric(horizontal: 20),
-                                  child: RaisedButton.icon(
+                                  child: ElevatedButton.icon(
                                     icon: Icon(Icons.shopping_cart),
                                     label: Text('Add to Cart'),
-                                    color: Colors.green,
-                                    textColor: Colors.white,
+                                    style: ElevatedButton.styleFrom(
+                                      primary: Colors.green,
+                                      onPrimary: Colors.white,
+                                    ),
                                     onPressed: () {
                                       Provider.of<CartProvider>(context, listen: false).addToCart(
                                         CartItem(
-                                          productModel: _productModel,
+                                          productModel: _productModel!,
                                           quantity: int.parse(_quantityTextController.text),
                                           
                                           
                                         )
                                       );
-                                      Scaffold.of(ctx).hideCurrentSnackBar();
-                                      Scaffold.of(ctx).showSnackBar(
+                                      ScaffoldMessenger.of(ctx).hideCurrentSnackBar();
+                                      ScaffoldMessenger.of(ctx).showSnackBar(
                                         SnackBar(
                                           content: Text(
                                             'Added Item to the Cart',
@@ -312,9 +314,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               ),
               // TechnicalSpecifications(dummyData.dummySampleProductDetailsItem['specifications'])
               TechnicalSpecifications(
-                List.generate(_productModel.specifications.length, (index) => 
+                List.generate(_productModel!.specifications.length, (index) => 
                   {
-                    _productModel.specifications[index].key : _productModel.specifications[index].value
+                    _productModel!.specifications[index].key : _productModel!.specifications[index].value
                   }
                 )
               )

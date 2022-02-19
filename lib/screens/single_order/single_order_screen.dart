@@ -17,14 +17,14 @@ class _SingleOrderScreenState extends State<SingleOrderScreen> {
   final _appbarBackgroundColor = Color.fromRGBO(208, 57, 28, 1);
   final _rowVerticalSpace = 3.0;
   bool _isInited = false;
-  OrderModel _orderModel;
+  late OrderModel _orderModel;
   
 
   @override
   void didChangeDependencies() {
     if( !_isInited ) {
       print('SingleOrderScreen -> didChangeDependencies');
-      final routeArgs = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
+      final routeArgs = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
       print('routeArgs ->');
       print(routeArgs);
       if(routeArgs['orderModel'] != null) {

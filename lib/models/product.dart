@@ -25,8 +25,8 @@ class ProductImageModel {
   final String imageId;
 
   ProductImageModel({
-    this.isMain,
-    this.imageId
+    required this.isMain,
+    required this.imageId
   });
 }
 
@@ -34,8 +34,8 @@ class ProductSpecificationModel {
   final String key;
   final String value;
   ProductSpecificationModel({
-    this.key,
-    this.value
+    required this.key,
+    required this.value
   });
 }
 
@@ -43,8 +43,8 @@ class ProductStockModel {
   final int stockQuantity;
   final bool isOnOrder;
   ProductStockModel({
-    this.stockQuantity,
-    this.isOnOrder
+    required this.stockQuantity,
+    required this.isOnOrder
   });
 }
 
@@ -62,17 +62,17 @@ class ProductModel {
   // final int quantity;
 
   ProductModel( {
-    @required  this.id,
-    @required  this.imageList,
-    @required  this.brand,
-    @required  this.productNo,
-    @required  this.keyProperties,
-    @required  this.specifications,
-    // @required  this.imageUrl,
-    // @required  this.quantity,
-    @required  this.price,
-    @required  this.stockStatus,
-    @required  this.category,
+    required  this.id,
+    required  this.imageList,
+    required  this.brand,
+    required  this.productNo,
+    required  this.keyProperties,
+    required  this.specifications,
+    // required  this.imageUrl,
+    // required  this.quantity,
+    required  this.price,
+    required  this.stockStatus,
+    required  this.category,
 
   });
 }

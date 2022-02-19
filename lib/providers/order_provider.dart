@@ -18,8 +18,8 @@ import '../models/address_model.dart' as address;
 
 class OrderProvider with ChangeNotifier {
 
-  final String authToken;
-  final CustomerModel customerModel;
+  final String? authToken;
+  final CustomerModel? customerModel;
 
   OrderProvider(
     // from authProvider
@@ -31,20 +31,23 @@ class OrderProvider with ChangeNotifier {
   
   Future<Map<String, String>> payAndOrder ({
     // String type,
-    List<CartItem> items,  // to be updated
-    double orderTotalPrice,
-    AddressModel address,
-    String cardNumber,
-    String cvvCode,
-    String expiryDate,
-    String cardHolder
+    required List<CartItem> items,  // to be updated
+    required double orderTotalPrice,
+    required AddressModel address,
+    required String cardNumber,
+    required String cvvCode,
+    required String expiryDate,
+    required String cardHolder
   }) async {
     try {
+      if ( authToken == null ) {
+        throw Exception('payAndOrder -> No AuthToken!');
+      }
       final url = '${constants.apiUrl}/api/customer/order/add';
       final res = await http.post(
-        url,
+        Uri.parse(url),
         headers: {
-          'token': authToken,
+          'token': authToken!,
           'Content-Type': 'application/json'
         },
         body: json.encode({
@@ -87,15 +90,18 @@ class OrderProvider with ChangeNotifier {
 
 
   Future<List<order.OrderModel>>  getOrders ({
-    String date
+    required String date
   }) async {
     print('orderProvider -> getOrders FIRED');
     try {
+      if ( authToken == null ) {
+        throw Exception('getOrders -> No AuthToken!');
+      }
       final url = '${constants.apiUrl}/api/customer/order/get?date=$date';
       final res = await http.get(
-        url,
+        Uri.parse(url),
         headers: {
-          'token': authToken,
+          'token': authToken!,
           'Content-Type': 'application/json'
         },
       ); 

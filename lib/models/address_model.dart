@@ -5,9 +5,9 @@ class AddressModel {
   final String city;
 
   AddressModel({
-    this.definition,
-    this.receiver,
-    this.addressString,
-    this.city
+    required this.definition,
+    required this.receiver,
+    required this.addressString,
+    required this.city
   });
 }

@@ -34,6 +34,8 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
       case 3:
         return '3months';
         break;
+      default:
+        return 'today';
     }
 
   }
@@ -111,11 +113,13 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                           ),
                         ],
                         value: _dateSelectionIndex,
-                        onChanged: (val) {
-                          setState(() {
-                            _dateSelectionIndex = val;
-                            _isLoading = true;
-                          });
+                        onChanged: (int?  val) {
+                          if ( val != null ) {
+                            setState(() {
+                              _dateSelectionIndex = val;
+                              _isLoading = true;
+                            });
+                          }
                           print('orderDateRange -> $orderDateRange');
                           Provider.of<OrderProvider>(context, listen: false).getOrders(
                             date: orderDateRange

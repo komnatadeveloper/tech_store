@@ -7,7 +7,7 @@ import '../../helpers/helpers.dart' as helpers;
 class ProductItem extends StatelessWidget {
   final OrderItemModel orderItemModel;
   ProductItem({
-    this.orderItemModel
+    required this.orderItemModel
   });
 
   @override

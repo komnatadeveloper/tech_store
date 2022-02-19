@@ -70,11 +70,13 @@ class _CreateNewAddressScreenState extends State<CreateNewAddressScreen> {
                 ),
               ),
               onPressed: () async {
-                if ( !_addAddressFormGlobalKey.currentState.validate() ) {
+                
+                if (_addAddressFormGlobalKey.currentState == null
+                  || !_addAddressFormGlobalKey.currentState!.validate() ) {
                   print('CreateNewAddressScreen -> parameters not validated!');
                   return;
                 }
-                _addAddressFormGlobalKey.currentState.save();
+                _addAddressFormGlobalKey.currentState!.save();
                 if( _willSaveAddress ) {
                   setState(() {
                     _isLoading = true;                  
@@ -135,8 +137,8 @@ class _CreateNewAddressScreenState extends State<CreateNewAddressScreen> {
                         labelText: 'Definition'
                       ),
                       validator: ( val ) {
-                        if ( val.isEmpty 
-                          || Provider.of<AuthProvider>(context).customerModel.addressList.indexWhere(
+                        if ( val == null || val.isEmpty 
+                          || Provider.of<AuthProvider>(context).customerModel!.addressList.indexWhere(
                               (element) => element.definition == val
                             ) >= 0
                           || val.length < 2
@@ -152,12 +154,14 @@ class _CreateNewAddressScreenState extends State<CreateNewAddressScreen> {
                         );
                       },
                       onSaved: ( val ) {
-                        _formData = AddressModel(
-                          definition: val,
-                          receiver: _formData.receiver,
-                          addressString: _formData.addressString,
-                          city: _formData.city
-                        );
+                        if ( val != null) {
+                          _formData = AddressModel(
+                            definition: val,
+                            receiver: _formData.receiver,
+                            addressString: _formData.addressString,
+                            city: _formData.city
+                          );
+                        }
                       },
                     ),
                     TextFormField(
@@ -165,9 +169,7 @@ class _CreateNewAddressScreenState extends State<CreateNewAddressScreen> {
                         labelText: 'Receiver'
                       ),
                       validator: ( val ) {
-                        if ( val.isEmpty 
-                          || val.length < 2
-                        ) {
+                        if ( val == null ||  val.isEmpty  || val.length < 2 ) {
                           return 'Receiver is Empty';
                         }
                       },
@@ -179,12 +181,14 @@ class _CreateNewAddressScreenState extends State<CreateNewAddressScreen> {
                         );
                       },
                       onSaved: ( val ) {
-                        _formData = AddressModel(
-                          definition: _formData.definition,
-                          receiver: val,
-                          addressString: _formData.addressString,
-                          city: _formData.city
-                        );
+                        if ( val != null) {
+                          _formData = AddressModel(
+                            definition: _formData.definition,
+                            receiver: val,
+                            addressString: _formData.addressString,
+                            city: _formData.city
+                          );
+                        }
                       },
                     ),
                     TextFormField(
@@ -192,7 +196,7 @@ class _CreateNewAddressScreenState extends State<CreateNewAddressScreen> {
                         labelText: 'Address',                                              
                       ),
                       validator: ( val ) {
-                        if ( val.isEmpty 
+                        if ( val == null || val.isEmpty 
                           || val.length < 8
                         ) {
                           return 'Address is too short!';
@@ -203,12 +207,14 @@ class _CreateNewAddressScreenState extends State<CreateNewAddressScreen> {
                       textInputAction: TextInputAction.newline,
                       
                       onSaved: ( val ) {
-                        _formData = AddressModel(
-                          definition: _formData.definition,
-                          receiver: _formData.receiver,
-                          addressString: val,
-                          city: _formData.city
-                        );
+                        if ( val != null) {
+                          _formData = AddressModel(
+                            definition: _formData.definition,
+                            receiver: _formData.receiver,
+                            addressString: val,
+                            city: _formData.city
+                          );
+                        }
                       },
                     ),
                     TextFormField(
@@ -216,7 +222,7 @@ class _CreateNewAddressScreenState extends State<CreateNewAddressScreen> {
                         labelText: 'City',                      
                       ),
                       validator: ( val ) {
-                        if ( val.isEmpty 
+                        if ( val == null ||  val.isEmpty 
                           || val.length < 3
                         ) {
                           return 'City name is too short!';
@@ -224,12 +230,14 @@ class _CreateNewAddressScreenState extends State<CreateNewAddressScreen> {
                       },
                       focusNode: _cityFocusNode,                      
                       onSaved: ( val ) {
-                        _formData = AddressModel(
-                          definition: _formData.definition,
-                          receiver: _formData.receiver,
-                          addressString: _formData.addressString,
-                          city: val
-                        );
+                        if ( val != null ) {
+                          _formData = AddressModel(
+                            definition: _formData.definition,
+                            receiver: _formData.receiver,
+                            addressString: _formData.addressString,
+                            city: val
+                          );
+                        }
                       },
                     ),
 

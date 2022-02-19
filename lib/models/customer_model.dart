@@ -7,13 +7,13 @@ class AddressModel {
   final String receiver;
   final String addressString;
   final String city;
-  String id;
+  String? id;
 
   AddressModel({
-    this.definition,
-    this.receiver,
-    this.addressString,
-    this.city
+    required this.definition,
+    required this.receiver,
+    required this.addressString,
+    required this.city,
   });
 }
 
@@ -21,8 +21,8 @@ class SpecialPriceItemModel {
   final String id;
   final double price;
   SpecialPriceItemModel({
-    this.id,
-    this.price
+    required this.id,
+    required this.price
   });
 }
 
@@ -33,17 +33,19 @@ class CustomerModel {
   final double balance;
   List<String> orders = [];
   List<String> favorites = [];
-  String name;
-  String middleName;
-  String surName;
-  String tel1;
-  String tel2;
+  String? name;
+  String? middleName;
+  String? surName;
+  String? tel1;
+  String? tel2;
   List<AddressModel> addressList;
   List<SpecialPriceItemModel> specialPriceItems;
 
   CustomerModel({
-    this.id,
-    this.email,
-    this.balance
+    required this.id,
+    required this.email,
+    this.balance = 0,
+    this.addressList = const [],
+    this.specialPriceItems = const []
   });
 }

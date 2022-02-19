@@ -9,7 +9,7 @@ class OrderItemWidget extends StatelessWidget {
   final _rowVerticalSpace = 3.0;
   final OrderModel orderModel;
   OrderItemWidget({
-    this.orderModel
+    required this.orderModel
   });
   @override
   Widget build(BuildContext context) {

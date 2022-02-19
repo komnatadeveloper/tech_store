@@ -65,7 +65,7 @@ class _MyAppState extends State<MyApp> {
         
         ChangeNotifierProxyProvider< AuthProvider, ProductProvider > (
           create: ( _ ) => ProductProvider(),
-          update: ( _, authProvider, previousProductProvider ) => previousProductProvider
+          update: ( _, authProvider, previousProductProvider ) => previousProductProvider!
           ..update(
             authProvider.token,
             authProvider.customerModel,

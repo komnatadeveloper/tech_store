@@ -36,13 +36,13 @@ List<String> convertDynamicToListString ( dynamic input ) {
   return list;
 }
 
-String mainImageUrlHelper ({ProductModel productModel}) {
+String mainImageUrlHelper ({ required ProductModel productModel}) {
   return constants.apiUrl + '/api/product/images/' +  productModel.imageList.firstWhere(
     (element) => element.isMain
   ).imageId;
 }
 
-String imageUrlHelper  ({ String imageId }) {
+String imageUrlHelper  ({required String imageId }) {
   return constants.apiUrl + '/api/product/images/' + imageId;
 }
 

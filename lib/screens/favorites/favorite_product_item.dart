@@ -41,7 +41,7 @@ class _FavoriteProductItemStatefulState extends State<FavoriteProductItemStatefu
   final cardHeight = 135.0;
   final rightWidth = 50.0;
   final rightPaddingAll = 8.0;
-  TextEditingController _quantityTextController;
+  late TextEditingController _quantityTextController;
 
   @override
   void initState() {
@@ -273,8 +273,8 @@ class _FavoriteProductItemStatefulState extends State<FavoriteProductItemStatefu
                               quantity: int.parse(_quantityTextController.text)
                             )
                           );
-                          Scaffold.of(context).hideCurrentSnackBar();
-                          Scaffold.of(context).showSnackBar(
+                          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                          ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(
                                 'Added Item to the Cart',

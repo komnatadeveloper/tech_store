@@ -29,7 +29,7 @@ class _CartProductItemState extends State<CartProductItem> {
   final rightPaddingAll = 8.0;
   var _isInited = false;
 
-  TextEditingController _quantityTextController;
+  late TextEditingController _quantityTextController;
 
   @override
   void initState() {
@@ -82,14 +82,16 @@ class _CartProductItemState extends State<CartProductItem> {
                   Navigator.of(ctx).pop();
                 },
               ),
-              FlatButton(
+              TextButton(
                 child: Text(
                   'Yes',
                   style: TextStyle(
                     fontSize: 21
                   ),
                 ),
-                textColor: Colors.blue,
+                style: TextButton.styleFrom(
+                  primary:  Colors.blue,
+                ),
                 onPressed: () {
                   print('CartProductItem -> Remove Button -> AlertDialog -> Yes');
                   Provider.of<CartProvider>(context, listen: false).removeFromCart(
@@ -109,7 +111,7 @@ class _CartProductItemState extends State<CartProductItem> {
   @override
   Widget build(BuildContext context) {
     if( _isInited ) {
-      _quantityTextController.text = Provider.of<CartProvider>(context)
+      _quantityTextController.text = Provider.of<CartProvider>(context, listen: false)
         .items.firstWhere((element) => element.productModel.id == widget.cartItem.productModel.id ).quantity.toString();
     }
     print('cartProductItem -> MediaQuery.of(context).size.width ->');
@@ -307,16 +309,19 @@ class _CartProductItemState extends State<CartProductItem> {
                               child: Container(
                                 decoration: BoxDecoration(
                                   border: Border.all(
-                                    color: Colors.grey[200],                                  
+                                    color: Colors.grey[200]!,                                  
                                     width: 2.5
                                   )
                                 ),
                                 child: Row(
                                   children: <Widget>[
-                                    RaisedButton(
-                                      padding: EdgeInsets.all(5),
-                                      color: Colors.grey[300],
-                                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                    ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+
+                                        padding: EdgeInsets.all(5),
+                                        primary: Colors.grey[300],
+                                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                      ),
                                       child: Icon(Icons.remove),
                                       onPressed: () {
                                         if( widget.cartItem.quantity == 1 ) {
@@ -535,7 +540,7 @@ class _CartProductItemState extends State<CartProductItem> {
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
                                     border: Border.all(
-                                      color: Colors.grey[200],                                  
+                                      color: Colors.grey[200]!,                                  
                                       width: 2.5
                                     ),
                                     // color: Colors.yellow
@@ -543,10 +548,13 @@ class _CartProductItemState extends State<CartProductItem> {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: <Widget>[
-                                      RaisedButton(
-                                        padding: EdgeInsets.all(5),
-                                        color: Colors.grey[300],
-                                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                      ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+
+                                          padding: EdgeInsets.all(5),
+                                          primary: Colors.grey[300],
+                                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                        ),
                                         child: Icon(Icons.remove),
                                         onPressed: () {
                                           if( widget.cartItem.quantity == 1 ) {
@@ -583,10 +591,13 @@ class _CartProductItemState extends State<CartProductItem> {
                                           },                                
                                         )
                                       ),
-                                      RaisedButton(
-                                        padding: EdgeInsets.all(5),
-                                        color: Colors.grey[300],
-                                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                      ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+
+                                          padding: EdgeInsets.all(5),
+                                          primary: Colors.grey[300],
+                                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                        ),
                                         child: Icon(Icons.add),
                                         onPressed: () {
                                           Provider.of<CartProvider>(context, listen: false)

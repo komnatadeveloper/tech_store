@@ -9,8 +9,8 @@ class CartItem {
   final ProductModel productModel;
   final int quantity;
   CartItem( {
-    @required  this.productModel,
-    @required  this.quantity,
+    required  this.productModel,
+    required  this.quantity,
   });
 }
 
@@ -50,7 +50,7 @@ class CartProvider with ChangeNotifier {
 
 
   void removeFromCart ({
-    String id
+    required String id
   }) {
     var index = _items.indexWhere((element) => element.productModel.id == id);
     if( index >= 0 ) {
@@ -60,8 +60,8 @@ class CartProvider with ChangeNotifier {
   } // End of removeFromCart
 
   void changeItemQuantity ({
-    String id,
-    int newQuantity
+    required String id,
+    required int newQuantity
   }) {
     var index = _items.indexWhere((element) => element.productModel.id == id);
     // _items.replaceRange(index, index+1, replacement)

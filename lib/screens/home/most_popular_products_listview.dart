@@ -11,7 +11,7 @@ import '../product_detail/product_detail_screen.dart';
 import './most_popular_product_item.dart';
 
 class MostPopularProductsListView extends StatelessWidget {
-  final Function changeTab;
+  final Function? changeTab;
   MostPopularProductsListView({
     this.changeTab   // just in case. Maybe it will be necessary
   });

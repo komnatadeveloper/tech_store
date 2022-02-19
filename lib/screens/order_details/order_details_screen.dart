@@ -24,18 +24,19 @@ class OrderDetailsScreen extends StatefulWidget {
 
 // -----------------------   STATE   --------------------------------
 class _OrderDetailsScreenState extends State<OrderDetailsScreen> with SingleTickerProviderStateMixin {
+  final GlobalKey<FormState> _formKey = GlobalKey();
   final _appbarBackgroundColor = Color.fromRGBO(208, 57, 28, 1);
   var _shipmentCompanyIndex = 0;
-  TabController _tabController;
+  late TabController _tabController;
   var _selectedPaymentTabIndex = 0;
-  List _paymentTabList;
+  late List _paymentTabList;
   bool _isConditionsAccepted = false;
   var _isLoading = false;
   // Address variables
-  List<AddressModel> _customerAddressList;
-  AddressModel _selectedAddress;
-  String _orderDeliverOption;
-  int _selectedAddressIndex;
+  // List<AddressModel> _customerAddressList;
+  AddressModel? _selectedAddress;
+  // String _orderDeliverOption;
+  int? _selectedAddressIndex;
   // Credit Card Variables
   String _cardNumber = '';
   String expiryDate = '';
@@ -43,8 +44,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with SingleTick
   String cvvCode = '';
   bool isCvvFocused = false;
   // End of Credit Card Variables
-  CreditCardModel _creditCardModel;
-  CreditCardWidget _creditCardWidget;
+  CreditCardModel? _creditCardModel;
+  CreditCardWidget? _creditCardWidget;
   void onCreditCardModelChange(CreditCardModel creditCardModel) {
     setState(() {
       _cardNumber = creditCardModel.cardNumber;
@@ -62,7 +63,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with SingleTick
   }
 
   Widget _customerAddressWidget ({
-    AddressModel selectedAddressModel
+    required AddressModel selectedAddressModel
   }) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -185,6 +186,9 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with SingleTick
         cvvCode: cvvCode,
         showBackView: isCvvFocused,
         animationDuration: Duration(milliseconds: 300),
+        onCreditCardWidgetChange: ( creditCardBrand) {
+          print(' HANDLE THIS PLEASE. THIS IS A FLUTTER 2.0 UPDATE ONLY');
+        },
       );
     });
 
@@ -205,6 +209,9 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with SingleTick
       cvvCode: cvvCode,
       showBackView: isCvvFocused,
       animationDuration: Duration(milliseconds: 300),
+      onCreditCardWidgetChange: ( creditCardBrand) {
+        print(' HANDLE THIS PLEASE. THIS IS A FLUTTER 2.0 UPDATE ONLY');
+      },
     );
     
     _paymentTabList = [
@@ -232,6 +239,12 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with SingleTick
                 Expanded(
                   child: SingleChildScrollView(
                     child: CreditCardForm(
+                      formKey: _formKey,
+                      cardNumber: _cardNumber,
+                      cvvCode: cvvCode,
+                      expiryDate: expiryDate,
+                      cardHolderName: cardHolderName,
+                      themeColor: Colors.blueAccent,
                       onCreditCardModelChange: (val) {
                         setState(() {                          
                           _creditCardWidget = CreditCardWidget(
@@ -241,6 +254,9 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with SingleTick
                             cvvCode : val.cvvCode,
                             showBackView: false,
                             animationDuration: Duration(milliseconds: 300),
+                            onCreditCardWidgetChange: ( creditCardBrand) {
+                              print(' HANDLE THIS PLEASE. THIS IS A FLUTTER 2.0 UPDATE ONLY');
+                            },
                           );
                         });
                         print('onCreditCardModelChange -> val ->');
@@ -286,14 +302,16 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with SingleTick
 
   @override
   Widget build(BuildContext context) {
-    _customerAddressList = Provider.of<AuthProvider>(context).customerModel.addressList;
-    _orderDeliverOption = Provider.of<AuthProvider>(context).orderDeliverOption;
-    _selectedAddressIndex = Provider.of<AuthProvider>(context).selectedAddressIndex;
+    List<AddressModel> _customerAddressList = Provider.of<AuthProvider>(context).customerModel == null  
+      ? []
+      : Provider.of<AuthProvider>(context).customerModel!.addressList;
+    String? _orderDeliverOption = Provider.of<AuthProvider>(context).orderDeliverOption;
+    _selectedAddressIndex = Provider.of<AuthProvider>(context).selectedAddressIndex ?? 0;
     if ( _customerAddressList.length > 0
       || _orderDeliverOption == 'shipment-to-address'
       || _selectedAddressIndex != null
     ) {
-      _selectedAddress = _customerAddressList[_selectedAddressIndex];
+      _selectedAddress = _customerAddressList[_selectedAddressIndex!];
     }
     bool  isCardInfoValid = false;
     if( 
@@ -399,7 +417,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with SingleTick
                                               _warehouseAddressWidget()
                                               :
                                               _customerAddressWidget(
-                                                selectedAddressModel: _selectedAddress
+                                                selectedAddressModel: _selectedAddress!
                                               )
                                         // ),
                                       ),
@@ -437,10 +455,12 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with SingleTick
                                           ),
                                         ],
                                         value: _shipmentCompanyIndex,
-                                        onChanged: (val) {
-                                          setState(() {
-                                            _shipmentCompanyIndex = val;
-                                          });
+                                        onChanged: ( int? val) {
+                                          if ( val != null ) {
+                                            setState(() {
+                                              _shipmentCompanyIndex = val;
+                                            });
+                                          }
                                         },
                                       ),
                                     ) 
@@ -719,8 +739,10 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with SingleTick
                       Container(
                         height: 38,
                         width: 125,
-                        child: RaisedButton(
-                          color: Colors.green,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.green,  
+                          ),
                           child: Text(
                             'Pay and Finish',
                             style: TextStyle(
@@ -744,9 +766,9 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with SingleTick
                                 });
 
 
-                                Provider.of<OrderProvider>(context).payAndOrder(
-                                  items: Provider.of<CartProvider>(context).items,
-                                  orderTotalPrice: Provider.of<CartProvider>(context).totalAmount,
+                                Provider.of<OrderProvider>(context, listen: false).payAndOrder(
+                                  items: Provider.of<CartProvider>(context, listen: false).items,
+                                  orderTotalPrice: Provider.of<CartProvider>(context, listen: false).totalAmount,
                                   // address: _selectedAddress,
                                   address: ( _customerAddressList.length == 0 
                                     || _orderDeliverOption == 'from-tech-store-warehouse'
@@ -757,16 +779,16 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with SingleTick
                                       city: 'Tech Store City',
                                       receiver: ' - '
                                     )
-                                    : _selectedAddress,
+                                    : _selectedAddress!,
                                   cardNumber: _cardNumber,
                                   cvvCode: cvvCode,
                                   expiryDate: expiryDate,
                                   cardHolder: cardHolderName
                                 ).then( ( res )  {
-                                  Scaffold.of(context).showSnackBar(
+                                  ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                       content: Text(
-                                        res['msg'],
+                                        res['msg']!,
                                         textAlign: TextAlign.center,
                                       ),
                                       duration: Duration(seconds: 2),

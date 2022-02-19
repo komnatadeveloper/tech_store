@@ -14,8 +14,8 @@ import '../models/customer_model.dart';
 class ProductProvider with ChangeNotifier { 
   List<ProductModel> searchedProductsList = [];
   // From AuthProvider
-  String authToken;
-  CustomerModel customerModel;
+  String? authToken;
+  CustomerModel? customerModel;
   // Own variables
   bool _isLoadingProducts = false;
   bool _isLoadingFavorites = false;
@@ -25,8 +25,8 @@ class ProductProvider with ChangeNotifier {
   List<ProductModel> _mostPopularProductsList = [];
 
   void update (
-    String authToken,
-    CustomerModel customerModel,
+    String? authToken,
+    CustomerModel? customerModel,
     List<ProductModel> searchedProductsList,
     bool _isLoadingProducts,
     bool _isLoadingFavorites,
@@ -79,20 +79,20 @@ class ProductProvider with ChangeNotifier {
      notifyListeners();
      try {
       final res = await http.post(
-        url,
+        Uri.parse(url),
         body: json.encode({
-          'productList': customerModel.favorites
+          'productList': customerModel!.favorites
         }),
         headers: {
-          'token': authToken,
+          'token': authToken!,
           'Content-Type': 'application/json'
         },
       );
       var unorderedFavoriteList =  convertResponseToProductList(res);
       List<ProductModel> orderedFavoriteList = [];
-      for(int i = 0; i < customerModel.favorites.length; i++ ) {
+      for(int i = 0; i < customerModel!.favorites.length; i++ ) {
         orderedFavoriteList.add(
-          unorderedFavoriteList.firstWhere((element) => element.id == customerModel.favorites[i])
+          unorderedFavoriteList.firstWhere((element) => element.id == customerModel!.favorites[i])
         );
       }
       favoriteProducts = [ ...orderedFavoriteList ];
@@ -175,25 +175,25 @@ class ProductProvider with ChangeNotifier {
   void compareFavoriteListWithCustomerModel () {
     print('productProvider -> compareFavoriteListWithCustomerModel FIRED');
     var doListsMatch = true;
-    if( customerModel.favorites.length != favoriteProducts.length  ) {
+    if( customerModel!.favorites.length != favoriteProducts.length  ) {
       doListsMatch = false;
     } else {
-      for( int i = 0; i < customerModel.favorites.length; i++ ) {
-        if(customerModel.favorites[i] != favoriteProducts[i].id) {
+      for( int i = 0; i < customerModel!.favorites.length; i++ ) {
+        if(customerModel!.favorites[i] != favoriteProducts[i].id) {
           doListsMatch = false;
         }
       }
     }
     // We removed items from favorites and maybe we may remove from list without sending any request to server
     if( !doListsMatch 
-        && customerModel.favorites.length < favoriteProducts.length
-        && customerModel.favorites.length  > 0
+        && customerModel!.favorites.length < favoriteProducts.length
+        && customerModel!.favorites.length  > 0
         ) {
       List<int> removedIndexesList = [];
       int customerListIndex = 0;
       int favoriteListIndex = 0;
       for( int i = 0; i < favoriteProducts.length; i++ ) {
-        if( favoriteProducts[favoriteListIndex].id == customerModel.favorites[customerListIndex] ) {
+        if( favoriteProducts[favoriteListIndex].id == customerModel!.favorites[customerListIndex] ) {
           customerListIndex++;
           favoriteListIndex++;
         } else {
@@ -206,11 +206,11 @@ class ProductProvider with ChangeNotifier {
       }
     } else if(
       !doListsMatch 
-      && customerModel.favorites.length  == 0
+      && customerModel!.favorites.length  == 0
     ) {
       favoriteProducts = [];
     } else if( !doListsMatch 
-        && customerModel.favorites.length > favoriteProducts.length
+        && customerModel!.favorites.length > favoriteProducts.length
         )  {
       _isFavoritesFetched = false;
     }
@@ -220,7 +220,7 @@ class ProductProvider with ChangeNotifier {
 
 
   Future<void> getProductsByCategory ({
-    String categoryId
+    required String categoryId
   }) async {
     final url = '${constants.apiUrl}/api/customer/productByCategory?categoryId=$categoryId';
     print('ProductProvider -> getProductsByCategory FIRED');
@@ -230,9 +230,9 @@ class ProductProvider with ChangeNotifier {
     notifyListeners();
     try {
       final res = await http.get(
-        url,
+        Uri.parse(url),
         headers: {
-          'token': authToken,
+          'token': authToken!,
           'Content-Type': 'application/json'
         },
       );  
@@ -251,9 +251,9 @@ class ProductProvider with ChangeNotifier {
     print('ProductProvider -> getMostPopularProducts FIRED -> url -> ' + url.toString());
     try {
       final res = await http.get(
-        url,
+        Uri.parse(url),
         headers: {
-          'token': authToken,
+          'token': authToken!,
           'Content-Type': 'application/json'
         },
       );  
@@ -268,15 +268,15 @@ class ProductProvider with ChangeNotifier {
 
 
   Future<List<ProductModel>> getProductsByIdList ({
-    List<String> idList
+    required List<String> idList
   }) async {
     final url = '${constants.apiUrl}/api/customer/product/productList';
     print('ProductProvider -> getProductsByIdList FIRED');
     try {
       final res = await http.post(
-        url,
+        Uri.parse(url),
         headers: {
-          'token': authToken,
+          'token': authToken!,
           'Content-Type': 'application/json'
         },
         body: json.encode({
@@ -300,8 +300,8 @@ class ProductProvider with ChangeNotifier {
     if( inputList.length > 0 ) {
       var tempList = [...inputList];
       for( int i = 0; i < tempList.length; i++ ) {
-        for(  int j = 0; j < customerModel.specialPriceItems.length; j++ ) {
-          if ( tempList[i].id == customerModel.specialPriceItems[j].id ) {
+        for(  int j = 0; j < customerModel!.specialPriceItems.length; j++ ) {
+          if ( tempList[i].id == customerModel!.specialPriceItems[j].id ) {
             // tempList[i].price = customerModel.specialPriceItems[j].price;
             tempList[i] = ProductModel(
               id: tempList[i].id,
@@ -310,7 +310,7 @@ class ProductProvider with ChangeNotifier {
               productNo: tempList[i].productNo,
               keyProperties: tempList[i].keyProperties,
               specifications: tempList[i].specifications,
-              price: customerModel.specialPriceItems[j].price,
+              price: customerModel!.specialPriceItems[j].price,
               stockStatus: tempList[i].stockStatus,
               category: tempList[i].category,
             );
@@ -363,9 +363,9 @@ class ProductProvider with ChangeNotifier {
     notifyListeners();
     try {      
       final res = await http.get(
-        url,
+        Uri.parse(url),
         headers: {
-          'token': authToken,
+          'token': authToken!,
           'Content-Type': 'application/json'
         },
       );  
@@ -381,7 +381,7 @@ class ProductProvider with ChangeNotifier {
 
 
   Future<void> queryProducts ({
-    String search
+    required String search
   }) async {
     final url = '${constants.apiUrl}/api/customer/product/query?search=$search';
     print('ProductProvider -> queryProducts -> url ->');
@@ -392,9 +392,9 @@ class ProductProvider with ChangeNotifier {
     notifyListeners();
     try {
       final res = await http.post(
-        url,
+        Uri.parse(url),
         headers: {
-          'token': authToken,
+          'token': authToken!,
           'Content-Type': 'application/json'
         },
       );  

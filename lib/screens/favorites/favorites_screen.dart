@@ -30,7 +30,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
       Future.delayed(
         Duration(milliseconds: 1),
         () {
-          Provider.of<ProductProvider>(context).fetchFavoriteProducts();
+          Provider.of<ProductProvider>(context, listen: false).fetchFavoriteProducts();
         }
       );
     }

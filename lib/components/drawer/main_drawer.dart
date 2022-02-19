@@ -26,7 +26,7 @@ class MainDrawer extends StatefulWidget {
   final Function selectPage;
 
   MainDrawer({
-    this.selectPage
+    required this.selectPage
   });
 
   @override
@@ -39,16 +39,16 @@ class _MainDrawerState extends State<MainDrawer> {
   List<TransformedDrawerMenuItem> _transformedChildrenList = [];
   List<TransformedDrawerMenuItem> _transformedChildrenList2 = [];
   // List<TransformedDrawerMenuItem> _filteredItemsList = [];
-  String _currentMenuId;
+  late String _currentMenuId;
   bool _isHeaderExists = false;
   List _visibleSubItemsList = [];
 
   var _showMainItems = true;
-  String _mainCategoryId;
+  String? _mainCategoryId;
 
 
   void goToSecondLevel ({
-    String mainCategoryId,    
+    String? mainCategoryId,    
   }) {
     setState(() {
       _mainCategoryId = mainCategoryId;
@@ -81,8 +81,8 @@ class _MainDrawerState extends State<MainDrawer> {
   }
 
   bool doesItemHaveChildren ({
-    List<DrawerMenuItem> inputList,
-    String id
+    required List<DrawerMenuItem> inputList,
+    required String id
   }) {
     final index = inputList.indexWhere(
       (element) => element.parentId == id 
@@ -94,9 +94,9 @@ class _MainDrawerState extends State<MainDrawer> {
   }
 
   List<TransformedDrawerMenuItem> handleCalculateTransformedChildrenList ({
-     List<DrawerMenuItem> inputList,
-     List<DrawerMenuItem> allItemsList,
-     String id
+     required List<DrawerMenuItem> inputList,
+     required List<DrawerMenuItem> allItemsList,
+     required String id
   }) {
     if( _isHeaderExists ) {
       // if _isHeaderExists, so _currentMenuId is not NULL
@@ -131,9 +131,9 @@ class _MainDrawerState extends State<MainDrawer> {
   }
 
   List<TransformedDrawerMenuItem> handleCalculateTransformedChildrenList2 ({
-     List<DrawerMenuItem> inputList,
-     List<DrawerMenuItem> allItemsList,
-     String id
+     required List<DrawerMenuItem> inputList,
+     required List<DrawerMenuItem> allItemsList,
+     required String id
   }) {
     if( _isHeaderExists ) {
       // if _isHeaderExists, so _currentMenuId is not NULL
@@ -176,7 +176,7 @@ class _MainDrawerState extends State<MainDrawer> {
 
 
   void handleClickButton ( {
-    String id,
+    required String id,
     bool isHeaderButton = false,
     bool isSubItem = false,
     // bool isSubItemsVisible = false,

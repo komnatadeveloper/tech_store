@@ -14,8 +14,8 @@ import '../helpers/helpers.dart' as helpers;
 
 class CategoryProvider with ChangeNotifier {
   // from AuthState
-  final String authToken;
-  final CustomerModel customerModel;
+  final String? authToken;
+  final CustomerModel? customerModel;
   // Own Variables
   List<MainCategoryModel> _mainCategoryList;
   List<SpecialCategoryOnHomePageModel> _specialCategoryOnHomePageList;
@@ -50,13 +50,16 @@ class CategoryProvider with ChangeNotifier {
 
 
   Future<void> fetchFeatureList () async {
+    if ( authToken == null ) {
+      throw Exception('No AuthToken!');
+    }
     print('CategoryProvider -> fetchFeatureList FIRED ->');
     final url = '${constants.apiUrl}/api/customer/feature';
     try {
       final res = await http.get(
-        url,
+        Uri.parse(url),
         headers: {
-          'token': authToken,
+          'token': authToken!,
           'Content-Type': 'application/json'
         },        
       ); 
@@ -97,14 +100,17 @@ class CategoryProvider with ChangeNotifier {
   Future<void> fetchCategoryList () async {
     print('CategoryProvider -> fetchCategoryList FIRED ->');
     print( authToken );
+    if ( authToken == null ) {
+      throw Exception('No AuthToken!');
+    }
     final url = '${constants.apiUrl}/api/customer/categories';
     print('url ->');
     print(url);
     try {
       final res = await http.get(
-        url,
+        Uri.parse(url),
         headers: {
-          'token': authToken,
+          'token': authToken!,
           'Content-Type': 'application/json'
         }, 
       );

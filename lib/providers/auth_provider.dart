@@ -14,33 +14,33 @@ import '../helpers/helpers.dart' as helpers;
 
 class AuthProvider with ChangeNotifier { 
 
-  String _token;
-  String _userId;
-  CustomerModel _customerModel;
-  AddressModel _oneTimeAddress;
-  int _selectedAddressIndex = null;
-  String _orderDeliverOption; // 'from-tech-store-warehouse' || 'shipment-to-address'
+  String? _token;
+  String? _userId;
+  CustomerModel? _customerModel;
+  AddressModel? _oneTimeAddress;
+  int? _selectedAddressIndex ;
+  String? _orderDeliverOption; // 'from-tech-store-warehouse' || 'shipment-to-address'
   bool isAppInited = false;
   // Getters
   bool get isAuth {
     return _token != null;
   }
-  String get token {
+  String? get token {
     return _token;
   }
-  CustomerModel get customerModel {
+  CustomerModel? get customerModel {
     return _customerModel;
   }
-  int get selectedAddressIndex {
+  int? get selectedAddressIndex {
     return _selectedAddressIndex ;
   }
   void setSelectedAddressIndex (int newIndex) {
-    if( _customerModel.addressList.length > newIndex  ) {
+    if( _customerModel!.addressList.length > newIndex  ) {
       _selectedAddressIndex = newIndex;
       notifyListeners();
     }
   }
-  String get orderDeliverOption {
+  String? get orderDeliverOption {
     return _orderDeliverOption;
   }
 
@@ -79,8 +79,8 @@ class AuthProvider with ChangeNotifier {
       return;
     }
     await signin(
-      initialSharedPrefsData['email'] , 
-      initialSharedPrefsData['password'] 
+      initialSharedPrefsData['email']! , 
+      initialSharedPrefsData['password']! 
     );
     isAppInited = true;
     notifyListeners();
@@ -88,8 +88,8 @@ class AuthProvider with ChangeNotifier {
 
 
   Future<void> recordCredentialstoDevice ({
-    String email,
-    String password,
+    required String email,
+    required String password,
   }) async {
     try {
       final prefs = await SharedPreferences.getInstance();
@@ -118,7 +118,7 @@ class AuthProvider with ChangeNotifier {
 
   
   // Get Initial Data From Device
-  Future<Map<String, String>> getInitDataFromDb ()  async{
+  Future<Map<String, String>?> getInitDataFromDb ()  async{
     print('authProvider -> getInitDataFromDb FIRED');
     final prefs = await SharedPreferences.getInstance();
     // If First Use of App
@@ -126,8 +126,8 @@ class AuthProvider with ChangeNotifier {
       return null;
     } else {  // NOT FIRST USE OF APP 
       final extractedUserData = json.decode(
-        prefs.getString('komnataTechStore')
-      ) as Map<String, Object>;
+        prefs.getString('komnataTechStore')!
+      ) as Map<String, dynamic>;
       var email = extractedUserData['email'] as String;
       var password = extractedUserData['password'] as String;
       return {
@@ -142,11 +142,11 @@ class AuthProvider with ChangeNotifier {
 
 
   // signup
-  Future<List<dynamic>> signup (String email, String password) async {
+  Future<List<dynamic>?> signup (String email, String password) async {
     const url = constants.apiUrl + '/api/customer/auth/signup';
     try {
       final res = await http.post(
-        url,
+        Uri.parse(url),
         body: json.encode({
           'email': email.trim(),
           'password': password
@@ -169,7 +169,7 @@ class AuthProvider with ChangeNotifier {
         balance: double.parse(double.parse(balance.toString()).toStringAsFixed(2))
              
       );
-      _customerModel.addressList = [];
+      _customerModel!.addressList = [];
       if( responseData['customer']['addressList'] != null ) {
         var rawAddressList = helpers.convertListDynamicToListMap(
           responseData['customer']['addressList'] as List<dynamic>
@@ -184,15 +184,15 @@ class AuthProvider with ChangeNotifier {
           if( rawAddressList[i]['_id'] != null ) {
             tempAddressItem.id = rawAddressList[i]['_id'];
           }
-          _customerModel.addressList.add(tempAddressItem);
+          _customerModel!.addressList.add(tempAddressItem);
         }
         print('_customerModel.addressList.length ->');
-        print(_customerModel.addressList.length);
+        print(_customerModel!.addressList.length);
       }
-      if( _customerModel.addressList.length > 0 ) {
+      if( _customerModel!.addressList.length > 0 ) {
         _selectedAddressIndex = 0;
       }
-      _customerModel.specialPriceItems = [];
+      _customerModel!.specialPriceItems = [];
       if( responseData['customer']['specialPriceItems'] != null ) {
         print('responseData -> customer -> specialPriceItems ->');
         print(responseData['customer']['specialPriceItems']);
@@ -200,7 +200,7 @@ class AuthProvider with ChangeNotifier {
           responseData['customer']['specialPriceItems'] as List<dynamic>
         );
         for( int i = 0; i < rawSpecialPriceItems.length; i++) {
-          _customerModel.specialPriceItems.add(
+          _customerModel!.specialPriceItems.add(
             SpecialPriceItemModel(
               id: rawSpecialPriceItems[i]['productId'],
               price: double.parse(
@@ -218,23 +218,23 @@ class AuthProvider with ChangeNotifier {
         
         switch (name) {
           case  'favorites':
-            _customerModel.favorites = helpers.convertDynamicToListString(responseData['customer'][name]) ;
+            _customerModel!.favorites = helpers.convertDynamicToListString(responseData['customer'][name]) ;
             print('_customerModel.favorites ->');
-            print(_customerModel.favorites);
+            print(_customerModel!.favorites);
             break;
           case  'orders':
             // _customerModel.orders = helpers.convertDynamicToListString(responseData['customer'][name]);
-            _customerModel.orders = [];
+            _customerModel!.orders = [];
             var rawOrders = helpers.convertListDynamicToListMap(responseData['customer'][name] as List<dynamic>);
             if( rawOrders.length > 0 ) {
               for( int i = 0; i < rawOrders.length; i++ ) {
-                _customerModel.orders.add(
+                _customerModel!.orders.add(
                   rawOrders[i]['orderId'] as String
                 );
               }
             }
             print('_customerModel.orders ->');
-            print(_customerModel.orders);
+            print(_customerModel!.orders);
             break;
           
           default:
@@ -242,14 +242,14 @@ class AuthProvider with ChangeNotifier {
         }
         
       }
-      _orderDeliverOption = _customerModel.addressList.length == 0 
+      _orderDeliverOption = _customerModel!.addressList.length == 0 
         ? 'from-tech-store-warehouse' 
         : 'shipment-to-address';
       
       // _customerModel.favorites = responseData['customer']['favorites'];
       notifyListeners();
       print('userId ->');
-      print( customerModel.id );
+      print( customerModel!.id );
       return null; 
     } catch ( err ) {
       print( 'authProvider -> signup -> Errors ->'  );
@@ -259,14 +259,14 @@ class AuthProvider with ChangeNotifier {
 
 
   // signin
-  Future<List<dynamic>> signin (String email, String password) async {
+  Future<List<dynamic>?> signin (String email, String password) async {
     print('AuthProvider -> singin -> email, password ->');
     try {
       print( email  );
       print( password );
       const url = constants.apiUrl + '/api/customer/auth/signin';
       final res = await http.post(
-        url,
+        Uri.parse(url),
         body: json.encode({
           'email': email.trim(),
           'password': password
@@ -297,7 +297,7 @@ class AuthProvider with ChangeNotifier {
         balance: double.parse(double.parse(balance.toString()).toStringAsFixed(2))
              
       );
-      _customerModel.addressList = [];
+      _customerModel!.addressList = [];
       if( responseData['customer']['addressList'] != null ) {
         var rawAddressList = helpers.convertListDynamicToListMap(
           responseData['customer']['addressList'] as List<dynamic>
@@ -312,15 +312,15 @@ class AuthProvider with ChangeNotifier {
           if( rawAddressList[i]['_id'] != null ) {
             tempAddressItem.id = rawAddressList[i]['_id'];
           }
-          _customerModel.addressList.add(tempAddressItem);
+          _customerModel!.addressList.add(tempAddressItem);
         }
         print('_customerModel.addressList.length ->');
-        print(_customerModel.addressList.length);
+        print(_customerModel!.addressList.length);
       }
-      if( _customerModel.addressList.length > 0 ) {
+      if( _customerModel!.addressList.length > 0 ) {
         _selectedAddressIndex = 0;
       }
-      _customerModel.specialPriceItems = [];
+      _customerModel!.specialPriceItems = [];
       if( responseData['customer']['specialPriceItems'] != null ) {
         print('responseData -> customer -> specialPriceItems ->');
         print(responseData['customer']['specialPriceItems']);
@@ -328,7 +328,7 @@ class AuthProvider with ChangeNotifier {
           responseData['customer']['specialPriceItems'] as List<dynamic>
         );
         for( int i = 0; i < rawSpecialPriceItems.length; i++) {
-          _customerModel.specialPriceItems.add(
+          _customerModel!.specialPriceItems.add(
             SpecialPriceItemModel(
               id: rawSpecialPriceItems[i]['productId'],
               price: double.parse(
@@ -346,37 +346,37 @@ class AuthProvider with ChangeNotifier {
         
         switch (name) {
           case  'favorites':
-            _customerModel.favorites = helpers.convertDynamicToListString(responseData['customer'][name]) ;
+            _customerModel!.favorites = helpers.convertDynamicToListString(responseData['customer'][name]) ;
             print('_customerModel.favorites ->');
-            print(_customerModel.favorites);
+            print(_customerModel!.favorites);
             break;
           case  'orders':
             // _customerModel.orders = helpers.convertDynamicToListString(responseData['customer'][name]);
-            _customerModel.orders = [];
+            _customerModel!.orders = [];
             var rawOrders = helpers.convertListDynamicToListMap(responseData['customer'][name] as List<dynamic>);
             if( rawOrders.length > 0 ) {
               for( int i = 0; i < rawOrders.length; i++ ) {
-                _customerModel.orders.add(
+                _customerModel!.orders.add(
                   rawOrders[i]['orderId'] as String
                 );
               }
             }
             print('_customerModel.orders ->');
-            print(_customerModel.orders);
+            print(_customerModel!.orders);
             break;
           default:
           print(responseData['customer'][name]);
         }
         
       }
-      _orderDeliverOption = _customerModel.addressList.length == 0 
+      _orderDeliverOption = _customerModel!.addressList.length == 0 
         ? 'from-tech-store-warehouse' 
         : 'shipment-to-address';
       
       // _customerModel.favorites = responseData['customer']['favorites'];
       notifyListeners();
       print('userId ->');
-      print( customerModel.id );
+      print( customerModel!.id );
       return null; 
     } catch ( err ) {
       print( 'authProvider -> signin -> Errors ->'  );
@@ -390,17 +390,18 @@ class AuthProvider with ChangeNotifier {
     print('AuthProvider -> addRemoveProductToFavorites ->id ->');
     print(id);
     try {
+      if ( token == null ) {   return; }
       var url = constants.apiUrl + '/api/customer/product/addToFav/$id';
       final res = await http.post(
-        url,
+        Uri.parse(url),
         headers: {
-          'token': token
+          'token': token! 
         }
       );
       final responseData = json.decode( res.body ) ;
       print('responseData ->');
       print(responseData);
-      _customerModel.favorites = helpers.convertDynamicToListString(responseData['favorites']);
+      _customerModel!.favorites = helpers.convertDynamicToListString(responseData['favorites']);
       notifyListeners();
     } catch (err) {
       print( 'authProvider -> addRemoveProductToFavorites -> Errors ->'  );
@@ -410,14 +411,15 @@ class AuthProvider with ChangeNotifier {
   
 
   Future<void> addAddress ({
-    AddressModel addressModel
+    required AddressModel addressModel
   }) async {
     try {
+      if ( token == null ) {   return; }
       var url = constants.apiUrl + '/api/customer/address/add';
       final res = await http.post(
-        url,
+        Uri.parse(url),
         headers: {
-          'token': token,
+          'token': token!,
           'Content-Type': 'application/json'
         },
         body: json.encode({
@@ -446,13 +448,13 @@ class AuthProvider with ChangeNotifier {
         }
         tempAddressList.add(tempAddressItem);
       }
-      _customerModel.addressList = tempAddressList;
+      _customerModel!.addressList = tempAddressList;
       if( _selectedAddressIndex == null ) {
         _selectedAddressIndex = 0;
       }
       notifyListeners();
       print( 'authProvider -> addAddress -> _customerModel.addressList.length ->'  );
-      print(_customerModel.addressList.length);
+      print(_customerModel!.addressList.length);
     } catch (err) {
       print( 'authProvider -> addAddress -> Errors ->'  );
       print(err);

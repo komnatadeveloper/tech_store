@@ -11,13 +11,13 @@ class OrderItemModel {
   final int quantity;
   OrderItemModel(
     {
-      this.productId,
-      this.brand,
-      this.productNo,
-      this.keyProperties,
-      this.mainImageId,
-      this.price,
-      this.quantity
+      required this.productId,
+      required this.brand,
+      required this.productNo,
+      required this.keyProperties,
+      required this.mainImageId,
+      required this.price,
+      required this.quantity
     }
   );
 }
@@ -30,11 +30,11 @@ class OrderModel {
   final DateTime date;
   final double orderTotalPrice;
   OrderModel({
-    this.id,  // orderId
-    this.customerId,
-    this.address,
-    this.items,
-    this.date,
-    this.orderTotalPrice,
+    required this.id,  // orderId
+    required this.customerId,
+    required this.address,
+    required this.items,
+    required this.date,
+    required this.orderTotalPrice,
   });
 }

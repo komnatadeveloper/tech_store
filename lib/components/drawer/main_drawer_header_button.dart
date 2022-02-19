@@ -17,19 +17,21 @@ class MainDrawerHeaderButton extends StatelessWidget {
   // final String  parentId;    // if no parent this will be -2 "minus 2"
 
   MainDrawerHeaderButton({
-    this.mainCategory,
-    this.handleClickButton
+    required this.mainCategory,
+    required this.handleClickButton
   });
 
 
   @override
   Widget build(BuildContext context) {
-    return RaisedButton(
-      animationDuration: Duration(seconds: 2),      
-      padding: EdgeInsets.zero,
-      elevation: 5,
-      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-      color: Color.fromRGBO(rgbValue , rgbValue, rgbValue, 1),
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        animationDuration: Duration(seconds: 2),      
+        padding: EdgeInsets.zero,
+        elevation: 5,
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        primary: Color.fromRGBO(rgbValue , rgbValue, rgbValue, 1),
+      ),
       child:  Container(
       padding: EdgeInsetsDirectional.only(
         top: 10,

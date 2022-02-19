@@ -12,10 +12,10 @@ class ProductGroupItem extends StatefulWidget {
   final String categoryId;
 
   ProductGroupItem({
-    this.imageUrl,
-    this.title,
-    this.changeTab,
-    this.categoryId,
+    required this.imageUrl,
+    required this.title,
+    required this.changeTab,
+    required this.categoryId,
   });
 
   @override

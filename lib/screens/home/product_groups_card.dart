@@ -15,8 +15,8 @@ class ProductGroupsCard extends StatelessWidget {
   final Function changeTab;
   final List<MainCategoryModel> mainCategoryList;
   ProductGroupsCard({
-    this.changeTab,
-    this.mainCategoryList
+    required this.changeTab,
+    required this.mainCategoryList
   });
 
   // List<Map<String, String>> _dummyProductsGroupList = dummy.dummyProductGroupList;

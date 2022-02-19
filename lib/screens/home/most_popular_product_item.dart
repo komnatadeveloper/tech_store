@@ -12,7 +12,7 @@ class MostPopularProductItem extends StatefulWidget {
   final ProductModel productModel;
   MostPopularProductItem({
     // this.imageUrl,
-    this.productModel
+    required this.productModel
   });
   @override
   _MostPopularProductItemState createState() => _MostPopularProductItemState();

@@ -33,8 +33,8 @@ class AuthScreen extends StatelessWidget {
                 colors: [
                   // Color.fromRGBO(215, 117, 255, 1).withOpacity(0.5),
                   // Color.fromRGBO(255, 188, 117, 1).withOpacity(0.9),
-                  Colors.red[700],
-                  Colors.red[500]
+                  Colors.red.shade700,
+                  Colors.red.shade500
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
@@ -58,7 +58,7 @@ class AuthScreen extends StatelessWidget {
                       child: Text(
                         'Tech Store',
                         style: TextStyle(
-                          color: Theme.of(context).accentTextTheme.headline6.color,
+                          color: Theme.of(context).textTheme.headline6?.color,
                           fontSize: 50,
                           fontFamily: 'Anton',
                           fontWeight: FontWeight.normal,
@@ -82,7 +82,7 @@ class AuthScreen extends StatelessWidget {
 
 class AuthCard extends StatefulWidget {
   const AuthCard({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -98,9 +98,9 @@ class _AuthCardState extends State<AuthCard> with SingleTickerProviderStateMixin
   };
   var _isLoading = false;
   final _passwordController = TextEditingController();
-  AnimationController _controller;
-  Animation<Offset> _slideAnimation;
-  Animation<double> _opacityAnimation;
+  late AnimationController _controller;
+  late Animation<Offset> _slideAnimation;
+  late Animation<double> _opacityAnimation;
 
   @override
   void initState() {
@@ -139,8 +139,8 @@ class _AuthCardState extends State<AuthCard> with SingleTickerProviderStateMixin
   @override
   void dispose() {
     // TODO: implement dispose
+    _controller.dispose();    
     super.dispose();
-    _controller.dispose();
   }
 
   void _showErrorDialog (
@@ -160,7 +160,7 @@ class _AuthCardState extends State<AuthCard> with SingleTickerProviderStateMixin
         ),
         content: Text( message ),
         actions: <Widget>[
-          FlatButton(
+          TextButton(
             child: Text('OK'),
             onPressed: () {
               Navigator.of(ctx).pop();
@@ -173,32 +173,32 @@ class _AuthCardState extends State<AuthCard> with SingleTickerProviderStateMixin
 
   Future<void> _submit() async {
     print(' AuthScreen -> AuthCard -> Submit Button');
-    if (!_formKey.currentState.validate()) {
+    if (_formKey.currentState == null || !_formKey.currentState!.validate()) {
       // Invalid!
       return;
     }
-    _formKey.currentState.save();
+    _formKey.currentState!.save();
     setState(() {
       _isLoading = true;
     });
-    List<dynamic> submitResponse;
+    List<dynamic>? submitResponse;
     try {
       if (_authMode == AuthMode.Login) {
         // Log user in
         submitResponse = await Provider.of<AuthProvider>(context, listen: false).signin(
-          _authData['email'],
-          _authData['password']
+          _authData['email']!,
+          _authData['password']!
         );
       } else {
         // Sign user up
         submitResponse = await Provider.of<AuthProvider>(context, listen: false).signup(
-          _authData['email'],
-          _authData['password']
+          _authData['email']!,
+          _authData['password']!
         );
       }
       print('authScreen -> submit -> token -> ');
       print(
-        Provider.of<AuthProvider>(context).token
+        Provider.of<AuthProvider>(context, listen: false).token
       );
       if( submitResponse != null ) {
         // So there is an error
@@ -206,10 +206,10 @@ class _AuthCardState extends State<AuthCard> with SingleTickerProviderStateMixin
           submitResponse[0]['msg'] as String
         );
       }
-      if( Provider.of<AuthProvider>(context).token != null  ) {
+      if( Provider.of<AuthProvider>(context, listen: false).token != null  ) {
         Provider.of<AuthProvider>(context,listen: false).recordCredentialstoDevice(
-          email: _authData['email'],
-          password: _authData['password']
+          email: _authData['email']!,
+          password: _authData['password']!
         );
         Navigator.of(context).pushReplacementNamed(
           DefaultScreen.routeName
@@ -267,12 +267,14 @@ class _AuthCardState extends State<AuthCard> with SingleTickerProviderStateMixin
                 decoration: InputDecoration(labelText: 'E-Mail'),
                 keyboardType: TextInputType.emailAddress,
                 validator: (value) {
-                  if (value.isEmpty || !value.contains('@')) {
+                  if (value == null || value.isEmpty || !value.contains('@')) {
                     return 'Invalid email!';
                   }
                 },
                 onSaved: (value) {
-                  _authData['email'] = value;
+                  if ( value != null ) {
+                    _authData['email'] = value;
+                  }
                 },
               ),
               TextFormField(
@@ -280,11 +282,12 @@ class _AuthCardState extends State<AuthCard> with SingleTickerProviderStateMixin
                 obscureText: true,
                 controller: _passwordController,
                 validator: (value) {
-                  if (value.isEmpty || value.length < 5) {
+                  if (value == null || value.isEmpty || value.length < 5) {
                     return 'Password is too short!';
                   }
                 },
                 onSaved: (value) {
+                  if ( value != null ) 
                   _authData['password'] = value;
                 },
               ),
@@ -322,25 +325,30 @@ class _AuthCardState extends State<AuthCard> with SingleTickerProviderStateMixin
               if (_isLoading)
                 CircularProgressIndicator()
               else
-                RaisedButton(
+                ElevatedButton(
                   child:
                       Text(_authMode == AuthMode.Login ? 'LOGIN' : 'SIGN UP'),
                   onPressed: _submit,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
+                  style: ElevatedButton.styleFrom(
+
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 30.0, vertical: 8.0),
+                    primary: Theme.of(context).primaryColor,
+                    onPrimary: Theme.of(context).primaryTextTheme.button?.color,
                   ),
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 30.0, vertical: 8.0),
-                  color: Theme.of(context).primaryColor,
-                  textColor: Theme.of(context).primaryTextTheme.button.color,
                 ),
-              FlatButton(
+              TextButton(
                 child: Text(
                     '${_authMode == AuthMode.Login ? 'SIGNUP' : 'LOGIN'} INSTEAD'),
                 onPressed: _switchAuthMode,
-                padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 4),
-                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                textColor: Theme.of(context).primaryColor,
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 4),
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  primary: Theme.of(context).primaryColor,
+                ),
               ),
             ],
           ),

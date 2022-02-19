@@ -7,9 +7,9 @@ class DrawerMenuItem {
   final String  parentId;    // if no parent this will be -2 "minus 2"
 
   DrawerMenuItem({
-    this.id,
-    this.title,
-    this.parentId
+    required this.id,
+    required this.title,
+    required this.parentId
   });
 }
 
@@ -21,9 +21,9 @@ class TransformedDrawerMenuItem {
   final bool isSubItem;
 
   TransformedDrawerMenuItem({
-    this.drawerMenuItem,
-    this.hasChildren,
-    this.isSubItem
+    required this.drawerMenuItem,
+    required this.hasChildren,
+    required this.isSubItem
   });
 
 }

@@ -20,7 +20,7 @@ class FeaturesCarousel extends StatefulWidget {
   // final  FeatureModel featureList;
 
   FeaturesCarousel({
-    this.changeTab,
+    required this.changeTab,
     // this.featureList
   });
 
@@ -67,9 +67,9 @@ class _FeaturesCarouselState extends State<FeaturesCarousel> {
                       context,
                       listen: false
                     ).getProducts(
-                      categoryId: i.categoryId == null ? '' : i.categoryId,
-                      productId: i.productId == null ? '' : i.productId,
-                      brand: i.brand == null ? '' : i.brand,
+                      categoryId: i.categoryId  ?? '' ,
+                      productId: i.productId ?? '' ,
+                      brand: i.brand  ?? '',
                     );
                     widget.changeTab(1);
                   },

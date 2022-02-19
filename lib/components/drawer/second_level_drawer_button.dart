@@ -278,7 +278,7 @@ class _SecondLevelDrawerButtonState extends State<SecondLevelDrawerButton> with 
               widget.selectPage(1); // 1 is Search Tab in DefaultScreen
               Navigator.of(context).pop();
 
-              Provider.of<ProductProvider>(context).getProductsByCategory(
+              Provider.of<ProductProvider>(context, listen: false).getProductsByCategory(
                 categoryId: widget.secondLevelCategory.id
               );
             }

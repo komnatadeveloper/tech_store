@@ -417,26 +417,26 @@ class _DefaultScreenState extends State<DefaultScreen> {
               Icons.home,
               // size: 12,
             ),
-            title: Text('Main')
+            label: 'Main' // Text('Main')
           ),
           BottomNavigationBarItem(
             backgroundColor: Theme.of(context).primaryColor,
             icon: Icon(Icons.search ,
               // size: 12,
             ),
-            title: Text('Search')
+            label: 'Search'  // Text('Search')
           ),
           BottomNavigationBarItem(
             backgroundColor: Theme.of(context).primaryColor,
             icon: Icon(Icons.star,
               // size: 12,
             ),
-            title: Text('Favorites')
+            label:  'Favorites'  // Text('Favorites')
           ),
           BottomNavigationBarItem(
             backgroundColor: Theme.of(context).primaryColor,
             icon: Icon(Icons.person),
-            title: Text('Account')
+            label: 'Account'  // Text('Account')
           ),
         ],
       ),

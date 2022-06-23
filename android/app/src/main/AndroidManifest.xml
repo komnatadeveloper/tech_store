@@ -8,9 +8,10 @@
     <!-- komnataDeveloper for internet connection on release etc -->
     <uses-permission android:name="android.permission.INTERNET"/>
     <application
-        android:name="io.flutter.app.FlutterApplication"
+        
         android:label="tech_store"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+    >
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
